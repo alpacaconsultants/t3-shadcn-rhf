@@ -1,0 +1,12 @@
+./**/.turbo
+./**/.yarn
+./**/.sst
+./node_modules
+./**/node_modules
+./**/out
+./**/src
+./.yarn
+./apps/sst-app
+!./.yarn/releases/**
+!./.yarn/plugins/**
+!./node_modules/.yarn-state.yml

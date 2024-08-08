@@ -1,0 +1,23 @@
+{
+  "name": "@ts-journey/sst-app",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "deploy": "sst deploy",
+    "lint": "eslint \"./**/*.ts\" --fix",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@ts-journey/api": "workspace:^",
+    "@ts-journey/common": "workspace:^",
+    "@ts-journey/next-app": "workspace:^",
+    "@ts-journey/vite-app": "workspace:^",
+    "aws-cdk-lib": "2.91.0",
+    "constructs": "10.2.69",
+    "sst": "2.24.20"
+  },
+  "devDependencies": {
+    "eslint": "^8.46.0"
+  }
+}
