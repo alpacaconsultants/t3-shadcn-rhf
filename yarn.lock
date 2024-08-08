@@ -1254,6 +1254,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@strixy/common@workspace:packages/common":
+  version: 0.0.0-use.local
+  resolution: "@strixy/common@workspace:packages/common"
+  dependencies:
+    "@types/jest": ^29.5.12
+    "@types/node": ^22.1.0
+    aws-sdk: 2.1670.0
+    eslint: ^9.8.0
+    json-beautify: ^1.1.1
+    npm-run-all: ^4.1.5
+    ts-node: ^10.9.2
+    tsc-alias: ^1.8.10
+    tsconfig-paths-jest: ^0.0.1
+    typescript: ^5.5.4
+  languageName: unknown
+  linkType: soft
+
 "@strixy/web-app@workspace:apps/web-app":
   version: 0.0.0-use.local
   resolution: "@strixy/web-app@workspace:apps/web-app"
@@ -1386,23 +1403,6 @@ __metadata:
   checksum: bef920481582de6bc69fd1ef689b5209599485ec0d4f0b51d63e284a3b995c211a9a5a135bc0a6efaba5e6cf202ebe6758140de45ee4ccb1b84d6fc8a5865211
   languageName: node
   linkType: hard
-
-"@ts-journey/common@workspace:packages/common":
-  version: 0.0.0-use.local
-  resolution: "@ts-journey/common@workspace:packages/common"
-  dependencies:
-    "@types/jest": ^29.5.12
-    "@types/node": ^22.1.0
-    aws-sdk: 2.1670.0
-    eslint: ^9.8.0
-    json-beautify: ^1.1.1
-    npm-run-all: ^4.1.5
-    ts-node: ^10.9.2
-    tsc-alias: ^1.8.10
-    tsconfig-paths-jest: ^0.0.1
-    typescript: ^5.5.4
-  languageName: unknown
-  linkType: soft
 
 "@tsconfig/node10@npm:^1.0.7":
   version: 1.0.9
@@ -8172,6 +8172,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"strixy@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "strixy@workspace:."
+  dependencies:
+    "@commitlint/cli": ^19.4.0
+    "@commitlint/config-conventional": ^19.2.2
+    commitlint-config-jira: ^1.6.4
+    commitlint-plugin-function-rules: ^4.0.0
+    commitlint-plugin-jira-rules: ^1.6.4
+    current-git-branch: ^1.1.0
+    eslint: ^9.8.0
+    husky: ^9.1.4
+    npm-run-all: ^4.1.5
+    prettier: ^3.3.3
+    ts-node: ^10.9.2
+    tsconfig: "*"
+    turbo: ^2.0.12
+    typescript: ^5.5.4
+  languageName: unknown
+  linkType: soft
+
 "styled-jsx@npm:5.1.1":
   version: 5.1.1
   resolution: "styled-jsx@npm:5.1.1"
@@ -8308,27 +8329,6 @@ __metadata:
   checksum: c746ddabfdffbf16cb0b0db32bb287236a19e583057f8649ee7c49995bb776e1d3ef384685181c11a1a480369e022ca97512cb08c517b2d2bd82c83754c97012
   languageName: node
   linkType: hard
-
-"ts-journey@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "ts-journey@workspace:."
-  dependencies:
-    "@commitlint/cli": ^19.4.0
-    "@commitlint/config-conventional": ^19.2.2
-    commitlint-config-jira: ^1.6.4
-    commitlint-plugin-function-rules: ^4.0.0
-    commitlint-plugin-jira-rules: ^1.6.4
-    current-git-branch: ^1.1.0
-    eslint: ^9.8.0
-    husky: ^9.1.4
-    npm-run-all: ^4.1.5
-    prettier: ^3.3.3
-    ts-node: ^10.9.2
-    tsconfig: "*"
-    turbo: ^2.0.12
-    typescript: ^5.5.4
-  languageName: unknown
-  linkType: soft
 
 "ts-node@npm:^10.9.2":
   version: 10.9.2
