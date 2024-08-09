@@ -12,7 +12,8 @@
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start",
-    "deploy": "sst deploy"
+    "deploy": "sst deploy",
+    "open:next:build": "open-next build"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.1.0",
@@ -25,6 +26,7 @@
     "geist": "^1.3.0",
     "next": "^14.2.4",
     "next-auth": "^4.24.7",
+    "open-next": "^3.0.8",
     "postgres": "^3.4.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

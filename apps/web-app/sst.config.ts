@@ -4,11 +4,15 @@ export default $config({
   app(input) {
     return {
       name: 'strixy',
-      removal: input?.stage === 'production' ? 'retain' : 'remove',
       home: 'aws',
     };
   },
   async run() {
-    new sst.aws.Nextjs('web-app');
+    const domainName = $app.stage === 'prod' ? 'strixy.ai' : $app.stage + '.strixy.ai';
+
+    new sst.aws.Nextjs('WebApp', {
+      buildCommand: 'yarn open:next:build',
+      // domain: { name: domainName }
+    });
   },
 });
