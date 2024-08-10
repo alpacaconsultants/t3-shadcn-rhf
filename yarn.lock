@@ -22,9 +22,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth/core@npm:0.34.2":
-  version: 0.34.2
-  resolution: "@auth/core@npm:0.34.2"
+"@auth/core@npm:0.34.1":
+  version: 0.34.1
+  resolution: "@auth/core@npm:0.34.1"
   dependencies:
     "@panva/hkdf": ^1.1.1
     "@types/cookie": 0.6.0
@@ -44,16 +44,16 @@ __metadata:
       optional: true
     nodemailer:
       optional: true
-  checksum: 7107a231654b95b4ad55cc84c8e47c412ec22be8dcc676d5fca88bb22b0098447b563c452b74a7a0c3557d3871867f4ced600e0308bdf00b1750686077d2efd8
+  checksum: 05bc9facc5253157f7e6c16240cf4745a57fbbdae27e9825af3b8f1650ca0bf362f4923adbc0e188e186fbd9d26f3084cb96ca0900a5db2585c0eb17054a6587
   languageName: node
   linkType: hard
 
-"@auth/drizzle-adapter@npm:^1.1.0":
-  version: 1.4.2
-  resolution: "@auth/drizzle-adapter@npm:1.4.2"
+"@auth/drizzle-adapter@npm:1.4.1":
+  version: 1.4.1
+  resolution: "@auth/drizzle-adapter@npm:1.4.1"
   dependencies:
-    "@auth/core": 0.34.2
-  checksum: 974ce9b4ba46e374f2fc4ce86b087d446a5425d215c9e4ac7a097310fee5049a9c27c492da755cca0782f3959c8a7a2885105f5859d6e1fae9a9f67486240ee2
+    "@auth/core": 0.34.1
+  checksum: 8b3ac30df4f86972681e07a5a7c76417958c6f28a7d7a524e796bd61c53250d063be195104fc180fa3dc2cea908e588bf88f5431b8427c07c91142db4cd5c09a
   languageName: node
   linkType: hard
 
@@ -3927,7 +3927,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@strixy/web-app@workspace:apps/web-app"
   dependencies:
-    "@auth/drizzle-adapter": ^1.1.0
+    "@auth/drizzle-adapter": 1.4.1
     "@t3-oss/env-nextjs": ^0.10.1
     "@tanstack/react-query": ^5.50.0
     "@trpc/client": ^11.0.0-rc.446

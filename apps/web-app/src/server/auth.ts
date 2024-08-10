@@ -43,12 +43,12 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   },
-  // adapter: DrizzleAdapter(db, {
-  //   usersTable: users,
-  //   accountsTable: accounts,
-  //   sessionsTable: sessions,
-  //   verificationTokensTable: verificationTokens,
-  // }) as Adapter,
+  adapter: DrizzleAdapter(db, {
+    usersTable: users,
+    accountsTable: accounts,
+    sessionsTable: sessions,
+    verificationTokensTable: verificationTokens,
+  }) as Adapter,
   providers: [
     // DiscordProvider({
     //   clientId: env.DISCORD_CLIENT_ID,
