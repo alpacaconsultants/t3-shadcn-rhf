@@ -1,4 +1,5 @@
-/// <reference path="./.sst/platform/config.d.ts" />
+/* eslint-disable @typescript-eslint/triple-slash-reference */
+/// <reference path="./config.d.ts" />
 
 export default $config({
   app(input) {
