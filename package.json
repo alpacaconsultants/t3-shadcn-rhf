@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
-    "deploy:dev": "turbo run deploy -- --stage dev",
-    "deploy:prod": "turbo run deploy -- --stage prod",
+    "deploy:dev": "ENV=dev turbo run deploy",
+    "deploy:prod": "ENV=prod turbo run deploy",
     "pre:deploy": "turbo run pre:deploy",
     "build:deploy": "run-s build deploy",
     "lint": "turbo run lint",
