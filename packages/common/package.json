@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "@strixy/eslint-config": "*",
+    "@strixy/tsconfig": "*",
     "@types/jest": "^29.5.12",
     "@types/node": "^22.1.0",
     "eslint": "^8.50.0",
