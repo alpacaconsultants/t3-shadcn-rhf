@@ -53,3 +53,5 @@ export const env = createEnv({
    */
   emptyStringAsUndefined: true,
 });
+
+console.log('URL!!!!!!!', process.env.NEXTAUTH_URL);

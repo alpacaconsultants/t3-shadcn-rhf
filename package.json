@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
-    "deploy:dev": "turbo run deploy -- --stage dev",
+    "deploy:dev": "NODE_ENV=development turbo run deploy -- --stage dev",
+    "deploy:prod": "NODE_ENV=production turbo run deploy -- --stage prod",
     "build:deploy": "run-s build deploy",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
