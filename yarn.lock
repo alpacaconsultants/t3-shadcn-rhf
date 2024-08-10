@@ -3945,10 +3945,8 @@ __metadata:
     "@types/react-dom": ^18.3.0
     "@typescript-eslint/eslint-plugin": ^7.1.1
     "@typescript-eslint/parser": ^7.1.1
-    dotenv-cli: ^7.4.2
     drizzle-kit: ^0.21.4
     drizzle-orm: ^0.30.10
-    env-cmd: ^10.1.0
     eslint: ^8.57.0
     eslint-config-next: ^14.2.4
     eslint-plugin-drizzle: ^0.2.3
@@ -5325,13 +5323,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:^4.0.0":
-  version: 4.1.1
-  resolution: "commander@npm:4.1.1"
-  checksum: d7b9913ff92cae20cb577a4ac6fcc121bd6223319e54a40f51a14740a681ad5c574fd29a57da478a5f234a6fa6c52cbf0b7c641353e03c648b1ae85ba670b977
-  languageName: node
-  linkType: hard
-
 "commander@npm:^9.0.0, commander@npm:^9.4.1":
   version: 9.5.0
   resolution: "commander@npm:9.5.0"
@@ -5790,38 +5781,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv-cli@npm:^7.4.2":
-  version: 7.4.2
-  resolution: "dotenv-cli@npm:7.4.2"
-  dependencies:
-    cross-spawn: ^7.0.3
-    dotenv: ^16.3.0
-    dotenv-expand: ^10.0.0
-    minimist: ^1.2.6
-  bin:
-    dotenv: cli.js
-  checksum: 48d887ea9be08f7453dc87d6c938311989e951d0b43028eadcbaff3be1ca56180f8c38b8f932fc2e59f0210e59f4b5c59cf8a34da3e6c92f63fe6d7ce4f09f65
-  languageName: node
-  linkType: hard
-
-"dotenv-expand@npm:^10.0.0":
-  version: 10.0.0
-  resolution: "dotenv-expand@npm:10.0.0"
-  checksum: 2a38b470efe0abcb1ac8490421a55e1d764dc9440fd220942bce40965074f3fb00b585f4346020cb0f0f219966ee6b4ee5023458b3e2953fe5b3214de1b314ee
-  languageName: node
-  linkType: hard
-
 "dotenv@npm:16.0.3":
   version: 16.0.3
   resolution: "dotenv@npm:16.0.3"
   checksum: afcf03f373d7a6d62c7e9afea6328e62851d627a4e73f2e12d0a8deae1cd375892004f3021883f8aec85932cd2834b091f568ced92b4774625b321db83b827f8
-  languageName: node
-  linkType: hard
-
-"dotenv@npm:^16.3.0":
-  version: 16.4.5
-  resolution: "dotenv@npm:16.4.5"
-  checksum: 301a12c3d44fd49888b74eb9ccf9f07a1f5df43f489e7fcb89647a2edcd84c42d6bc349dc8df099cd18f07c35c7b04685c1a4f3e6a6a9e6b30f8d48c15b7f49c
   languageName: node
   linkType: hard
 
@@ -5988,18 +5951,6 @@ __metadata:
     graceful-fs: ^4.2.4
     tapable: ^2.2.0
   checksum: fbd8cdc9263be71cc737aa8a7d6c57b43d6aa38f6cc75dde6fcd3598a130cc465f979d2f4d01bb3bf475acb43817749c79f8eef9be048683602ca91ab52e4f11
-  languageName: node
-  linkType: hard
-
-"env-cmd@npm:^10.1.0":
-  version: 10.1.0
-  resolution: "env-cmd@npm:10.1.0"
-  dependencies:
-    commander: ^4.0.0
-    cross-spawn: ^7.0.0
-  bin:
-    env-cmd: bin/env-cmd.js
-  checksum: efef55074250f14cfc0b80c98dd98f1f056a80e1f3c7db14097ceefdd2d56c766bbb83b54c22932112707f41b36ce2e923f8015d69e62a75c12d98640b972e75
   languageName: node
   linkType: hard
 

@@ -13,7 +13,7 @@ export default $config({
     const NODE_ENV = $app.stage === 'prod' ? 'production' : 'development';
 
     new sst.aws.Nextjs('WebApp', {
-      buildCommand: `NODE_ENV=${NODE_ENV} yarn open:next:build`,
+      buildCommand: 'echo buildeded by turbo',
       // domain: { name: domainName }
     });
   },

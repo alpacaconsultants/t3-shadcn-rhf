@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "env-cmd -f .env.$ENV next build || next build",
+    "next:build": "cp .env.$ENV .env.production && next build || next build",
+    "build": "open-next build",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
@@ -13,8 +14,7 @@
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start",
-    "deploy": "sst deploy --stage $ENV",
-    "pre:deploy": "open-next build"
+    "deploy": "sst deploy --stage $ENV"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "1.4.1",
@@ -43,9 +43,7 @@
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.1.1",
     "@typescript-eslint/parser": "^7.1.1",
-    "dotenv-cli": "^7.4.2",
     "drizzle-kit": "^0.21.4",
-    "env-cmd": "^10.1.0",
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.2.4",
     "eslint-plugin-drizzle": "^0.2.3",

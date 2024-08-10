@@ -159,5 +159,7 @@ dist
 **/.env.prod
 **/.env.dev
 
+**/.env.production
+
 
 .turbo
