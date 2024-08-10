@@ -1,17 +1,17 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["./.env.*local"],
-
+  "globalEnv": ["NODE_ENV"],
   "tasks": {
     "build": {
-      "inputs": [".env.local", ".env.production", ".env"],
+      "inputs": [".env.local", ".env.production", ".env.development", ".env"],
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
     },
     "pre:deploy": {
       "dependsOn": ["build"],
-      "inputs": ["dist/**"],
-      "outputs": ["out/**"]
+      "inputs": [".env.local", ".env.production", ".env", ".env.development", "dist/**"],
+      "outputs": [".open-next/**"]
     },
     "deploy": {
       "dependsOn": ["^pre:deploy"],
