@@ -3923,6 +3923,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@strixy/local-db@workspace:utils/local-db":
+  version: 0.0.0-use.local
+  resolution: "@strixy/local-db@workspace:utils/local-db"
+  languageName: unknown
+  linkType: soft
+
 "@strixy/web-app@workspace:apps/web-app":
   version: 0.0.0-use.local
   resolution: "@strixy/web-app@workspace:apps/web-app"
