@@ -6,7 +6,7 @@
     "build": {
       "env": ["ENV"],
       "dependsOn": ["^build"],
-      "inputs": [".env.local", ".env.prod", ".env", ".env.dev"],
+      "inputs": [".env.local", ".env.prod", ".env", ".env.dev", "src/**"],
       "outputs": ["dist/**", ".open-next/**", ".next/**"]
     },
     "deploy": {
