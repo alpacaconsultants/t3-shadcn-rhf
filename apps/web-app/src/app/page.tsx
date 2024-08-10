@@ -1,9 +1,8 @@
 import Link from 'next/link';
-
+import styles from './index.module.css';
 import { LatestPost } from '~/app/_components/post';
 import { getServerAuthSession } from '~/server/auth';
 import { api, HydrateClient } from '~/trpc/server';
-import styles from './index.module.css';
 
 export default async function Home() {
   const hello = await api.post.hello({ text: 'from tRPC' });
@@ -32,14 +31,14 @@ export default async function Home() {
             <p className={styles.showcaseText}>{hello ? hello.greeting : 'Loading tRPC query...'}</p>
 
             <div className={styles.authContainer}>
-              <p className={styles.showcaseText}>{session && <span>Logged in as {session.user?.name}</span>}</p>
-              <Link href={session ? '/api/auth/signout' : '/api/auth/signin'} className={styles.loginButton}>
+              <p className={styles.showcaseText}>{session ? <span>Logged in as {session.user.name}</span> : null}</p>
+              <Link className={styles.loginButton} href={session ? '/api/auth/signout' : '/api/auth/signin'}>
                 {session ? 'Sign out' : 'Sign in'}
               </Link>
             </div>
           </div>
 
-          {session?.user && <LatestPost />}
+          {session?.user ? <LatestPost /> : null}
         </div>
       </main>
     </HydrateClient>
