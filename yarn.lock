@@ -3802,7 +3802,7 @@ __metadata:
     server-only: ^0.0.1
     sst: ion
     superjson: ^2.2.1
-    typescript: ^5.5.3
+    typescript: ^5.5.4
     zod: ^3.23.3
   languageName: unknown
   linkType: soft
@@ -12261,7 +12261,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.5.3, typescript@npm:^5.5.4":
+"typescript@npm:^5.5.4":
   version: 5.5.4
   resolution: "typescript@npm:5.5.4"
   bin:
@@ -12271,7 +12271,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^5.5.3#~builtin<compat/typescript>, typescript@patch:typescript@^5.5.4#~builtin<compat/typescript>":
+"typescript@patch:typescript@^5.5.4#~builtin<compat/typescript>":
   version: 5.5.4
   resolution: "typescript@patch:typescript@npm%3A5.5.4#~builtin<compat/typescript>::version=5.5.4&hash=f3b441"
   bin:

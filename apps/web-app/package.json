@@ -55,7 +55,7 @@
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.2.4",
     "eslint-plugin-drizzle": "^0.2.3",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.4"
   },
   "ct3aMetadata": {
     "initVersion": "7.36.2"
