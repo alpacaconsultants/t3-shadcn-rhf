@@ -1,9 +1,3 @@
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable class-methods-use-this */
-/* eslint-disable camelcase */
-/* eslint-disable no-useless-constructor */
-/* eslint-disable max-classes-per-file */
-
 import AWS from 'aws-sdk';
 import jsonBeautify from 'json-beautify';
 import { commonConfig as config } from 'src';

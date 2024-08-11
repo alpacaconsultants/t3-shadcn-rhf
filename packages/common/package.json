@@ -14,7 +14,8 @@
     "watch:types:alias": "tsc-alias -w",
     "clean": "rm -rf ./dist && rm -rf ./build",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint \"{src,test}/**/*.ts\" --fix"
+    "lint:check": "NODE_ENV=production eslint \"{src,test}/**/*.ts\" --report-unused-disable-directives --max-warnings 0",
+    "lint": "yarn lint:check --fix"
   },
   "dependencies": {
     "aws-sdk": "2.1670.0",
