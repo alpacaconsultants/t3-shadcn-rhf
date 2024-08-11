@@ -148,7 +148,7 @@ dist
 
 **/.open-next
 
-**/.sst
+# **/.sst
 **/out
 
 **/.DS_Store
