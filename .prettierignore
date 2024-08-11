@@ -5,3 +5,9 @@ node_modules
 **/coverage
 **/sst-env.d.ts
 ./yarn
+
+**/.next/**
+**/.open-next/**
+**/.sst/**
+
+**/drizzle/meta/**
