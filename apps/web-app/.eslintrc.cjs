@@ -1,32 +1,39 @@
+// Warnings are errors in production
+const OFF = 'off';
+const ERROR = 'error';
+
+// most rules should be either OFF or ERROR, but use WARNING for things that are common in development but you don't want in production
+const WARNING = process.env.NODE_ENV === 'production' ? 'error' : 'warn';
+
 /** @type {import("eslint").Linter.Config} */
 const config = {
-  ignorePatterns: ['config.d.ts'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    // project: __dirname + '/tsconfig.eslint.json',
-    project: true,
+    project: 'tsconfig.eslint.json',
+    tsconfigRootDir: __dirname,
   },
   plugins: ['@typescript-eslint', 'drizzle'],
   extends: ['next/core-web-vitals', 'plugin:@typescript-eslint/recommended-type-checked', 'plugin:@typescript-eslint/stylistic-type-checked'],
   rules: {
-    '@typescript-eslint/array-type': 'off',
-    '@typescript-eslint/consistent-type-definitions': 'off',
+    '@typescript-eslint/no-unused-vars': WARNING,
+    '@typescript-eslint/array-type': OFF,
+    '@typescript-eslint/consistent-type-definitions': OFF,
     '@typescript-eslint/consistent-type-imports': [
-      'warn',
+      WARNING,
       {
         prefer: 'type-imports',
         fixStyle: 'inline-type-imports',
       },
     ],
     '@typescript-eslint/no-unused-vars': [
-      'warn',
+      WARNING,
       {
         argsIgnorePattern: '^_',
       },
     ],
-    '@typescript-eslint/require-await': 'off',
+    '@typescript-eslint/require-await': OFF,
     '@typescript-eslint/no-misused-promises': [
-      'error',
+      ERROR,
       {
         checksVoidReturn: {
           attributes: false,
@@ -34,13 +41,13 @@ const config = {
       },
     ],
     'drizzle/enforce-delete-with-where': [
-      'error',
+      ERROR,
       {
         drizzleObjectName: ['db', 'ctx.db'],
       },
     ],
     'drizzle/enforce-update-with-where': [
-      'error',
+      ERROR,
       {
         drizzleObjectName: ['db', 'ctx.db'],
       },
