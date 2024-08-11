@@ -27,6 +27,11 @@
   },
   "dependencies": {
     "@auth/drizzle-adapter": "1.4.1",
+    "@emotion/cache": "^11.13.1",
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
+    "@mui/material": "^5.16.7",
+    "@mui/material-nextjs": "^5.16.6",
     "@t3-oss/env-nextjs": "^0.10.1",
     "@tanstack/react-query": "^5.50.0",
     "@trpc/client": "^11.0.0-rc.446",
@@ -43,6 +48,7 @@
     "server-only": "^0.0.1",
     "sst": "ion",
     "superjson": "^2.2.1",
+    "tss-react": "^4.9.12",
     "zod": "^3.23.3"
   },
   "devDependencies": {

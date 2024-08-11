@@ -15,6 +15,8 @@ const config = {
   plugins: ['@typescript-eslint', 'drizzle'],
   extends: ['next/core-web-vitals', 'plugin:@typescript-eslint/recommended-type-checked', 'plugin:@typescript-eslint/stylistic-type-checked'],
   rules: {
+    '@typescript-eslint/no-unsafe-call': OFF,
+    '@typescript-eslint/no-unsafe-assignment': OFF,
     'no-console': [WARNING, { allow: ['warn', 'error'] }],
     'import/order': ERROR,
     'react/jsx-curly-brace-presence': ERROR,

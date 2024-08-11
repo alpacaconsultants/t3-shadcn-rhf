@@ -2,7 +2,9 @@ import '~/styles/globals.css';
 
 import { GeistSans } from 'geist/font/sans';
 import { type Metadata } from 'next';
-
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from './ui/theme';
 import { TRPCReactProvider } from '~/trpc/react';
 
 export const metadata: Metadata = {
@@ -15,7 +17,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang='en'>
       <body className={GeistSans.className}>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <TRPCReactProvider>
+          <AppRouterCacheProvider>
+            <ThemeProvider theme={theme}>{children}</ThemeProvider>
+          </AppRouterCacheProvider>
+        </TRPCReactProvider>
       </body>
     </html>
   );
