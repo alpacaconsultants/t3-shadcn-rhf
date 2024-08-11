@@ -15,7 +15,11 @@
     "clean": "rm -rf ./dist && rm -rf ./build",
     "typecheck": "tsc --noEmit",
     "lint:check": "NODE_ENV=production eslint \"{src,test}/**/*.ts\" --report-unused-disable-directives --max-warnings 0",
-    "lint": "yarn lint:check --fix"
+    "lint": "yarn lint:check --fix",
+    "format:check": "prettier --ignore-path '../../.prettierignore' --check .",
+    "format": "prettier --ignore-path '../../.prettierignore' --write .",
+    "validate:check": "run-s typecheck lint:check format:check",
+    "validate": "run-s typecheck lint format"
   },
   "dependencies": {
     "aws-sdk": "2.1670.0",
