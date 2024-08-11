@@ -3,7 +3,8 @@ const config = {
   ignorePatterns: ['config.d.ts'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: __dirname + '/tsconfig.eslint.json',
+    // project: __dirname + '/tsconfig.eslint.json',
+    project: true,
   },
   plugins: ['@typescript-eslint', 'drizzle'],
   extends: ['next/core-web-vitals', 'plugin:@typescript-eslint/recommended-type-checked', 'plugin:@typescript-eslint/stylistic-type-checked'],
