@@ -4,11 +4,9 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from '~/server/
 import { posts } from '~/server/db/schema';
 
 export const postRouter = createTRPCRouter({
-  hello: publicProcedure.input(z.object({ text: z.string() })).query(({ input }) => {
-    return {
+  hello: publicProcedure.input(z.object({ text: z.string() })).query(({ input }) => ({
       greeting: `Hello ${input.text}`,
-    };
-  }),
+    })),
 
   create: protectedProcedure.input(z.object({ name: z.string().min(1) })).mutation(async ({ ctx, input }) => {
     await ctx.db.insert(posts).values({
@@ -25,7 +23,5 @@ export const postRouter = createTRPCRouter({
     return post ?? null;
   }),
 
-  getSecretMessage: protectedProcedure.query(() => {
-    return 'you can now see this secret message!';
-  }),
+  getSecretMessage: protectedProcedure.query(() => 'you can now see this secret message!'),
 });
