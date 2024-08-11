@@ -5,8 +5,8 @@
   "tasks": {
     "build": {
       "env": ["ENV"],
-      "dependsOn": ["^build"],
-      "inputs": [".env.local", ".env.prod", ".env", ".env.dev", "src/**"],
+      "dependsOn": ["^build", "validate:check"],
+      "inputs": [".env.local", ".env.prod", ".env", ".env.dev", "src/**", "tsconfig.json", "next.config.js", "open-next.config.ts"],
       "outputs": ["dist/**", ".open-next/**", ".next/**"]
     },
     "deploy": {
