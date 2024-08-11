@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { makeStyles } from 'tss-react/mui';
 import { Box } from '@mui/material';
 import styles from './index.module.css';
+import { Surveys } from './_components/surverys';
 import { LatestPost } from '~/app/_components/post';
 import { getServerAuthSession } from '~/server/auth';
 import { HydrateClient, api } from '~/trpc/server';
@@ -27,6 +28,7 @@ export default async function Home() {
         <Link className={styles.loginButton} href={session ? '/api/auth/signout' : '/api/auth/signin'}>
           {session ? 'Sign out' : 'Sign in'}
         </Link>
+        {session && <Surveys />}
       </Box>
     </HydrateClient>
   );
