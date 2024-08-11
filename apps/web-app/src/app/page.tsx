@@ -11,8 +11,6 @@ export default async function Home() {
   // const hello = await api.post.hello({ text: 'from tRPC' });
   const session = await getServerAuthSession();
 
-  void api.post.getLatest.prefetch();
-
   return (
     <HydrateClient>
       <Box
@@ -22,12 +20,10 @@ export default async function Home() {
           alignItems: 'center',
           justifyContent: 'center',
           minHeight: '100vh',
-          backgroundImage: 'linear-gradient(to bottom, #2e026d, #15162c)',
+          // backgroundImage: 'linear-gradient(to bottom, #2e026d, #15162c)',
         }}
       >
-        <Link className={styles.loginButton} href={session ? '/api/auth/signout' : '/api/auth/signin'}>
-          {session ? 'Sign out' : 'Sign in'}
-        </Link>
+        <Link href={session ? '/api/auth/signout' : '/api/auth/signin'}>{session ? 'Sign out' : 'Sign in'}</Link>
         {session && <Surveys />}
       </Box>
     </HydrateClient>
