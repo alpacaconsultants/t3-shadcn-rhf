@@ -7,12 +7,13 @@ import StepContent from '@mui/material/StepContent';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import { TextField } from '@mui/material';
+import { LinearProgress, TextField } from '@mui/material';
 import { useImmerReducer } from 'use-immer';
 import axios from 'axios';
 import { useCallback } from 'react';
 import { Uploader } from './uploader';
 import { api } from '~/trpc/react';
+import { SubmitButton } from '../ui/buttons/base-buttons';
 
 enum StepId {
   Name,
@@ -39,12 +40,17 @@ interface State {
   activeStep: number;
   nextButton: {
     label: string;
-    disabled: boolean;
+    disabled?: boolean;
+  };
+  backButton: {
+    disabled?: boolean;
   };
   file: File | null;
   values: {
     name: string;
   };
+  uploadPercentage: number;
+  uploadStatus: 'idle' | 'uploading' | 'uploaded';
 }
 
 type Action =
@@ -52,7 +58,9 @@ type Action =
   | { type: 'back' }
   | { type: 'reset' }
   | { type: 'setValue'; payload: { key: keyof State['values']; value: string } }
-  | { type: 'setFile'; payload: { file: File } };
+  | { type: 'setFile'; payload: { file: File } }
+  | { type: 'setUploadPercentage'; payload: { percentage: number } }
+  | { type: 'setUploadStatus'; payload: { status: State['uploadStatus'] } };
 
 const initialState: State = {
   activeStep: 0,
@@ -60,10 +68,15 @@ const initialState: State = {
     label: 'Next',
     disabled: true,
   },
+  backButton: {
+    disabled: false,
+  },
   values: {
     name: '',
   },
   file: null,
+  uploadPercentage: 0,
+  uploadStatus: 'idle',
 };
 
 function reducer(state: State, action: Action): State {
@@ -82,12 +95,31 @@ function reducer(state: State, action: Action): State {
       break;
     case 'reset':
       return initialState;
+    case 'setUploadPercentage':
+      state.uploadPercentage = action.payload.percentage;
+      break;
+    case 'setUploadStatus':
+      state.uploadStatus = action.payload.status;
+      break;
     default:
       throw new Error('Unexpected action type');
   }
   state.nextButton.label = state.activeStep === steps.length - 1 ? 'Finish' : 'Next';
+
   const activeId = steps[state.activeStep]?.id;
-  state.nextButton.disabled = (activeId === StepId.Name && !state.values.name) || (activeId === StepId.Upload && !state.file);
+  state.nextButton.disabled = state.activeStep === steps.length - 1 ? true : undefined;
+  state.backButton.disabled = state.activeStep === 0 ? true : undefined;
+  if (activeId === StepId.Name) {
+    state.nextButton.disabled = !state.values.name;
+  }
+  if (activeId === StepId.Upload) {
+    state.nextButton.disabled = !state.file;
+  }
+  if (state.uploadStatus === 'uploading') {
+    state.nextButton.disabled = true;
+    state.backButton.disabled = true;
+  }
+
   return state;
 }
 
@@ -104,20 +136,25 @@ export default function VerticalLinearStepper(): JSX.Element {
 
   const prepareUpload = api.survey.prepareUpload.useMutation();
 
-  const uploadFile = useCallback(async (uploadUrl: string, file: File) => {
-    await axios.put(uploadUrl, file, {
-      onUploadProgress: (progressEvent) => {
-        if (!progressEvent.total) return;
-        const percentage = Math.floor(Math.round((progressEvent.loaded * 100) / progressEvent.total));
-        // eslint-disable-next-line no-console
-        console.log(`Uploaded ${percentage}%`);
-      },
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-  }, []);
+  const uploadFile = useCallback(
+    async (uploadUrl: string, file: File) => {
+      dispatch({ type: 'setUploadStatus', payload: { status: 'uploading' } });
+      await axios.put(uploadUrl, file, {
+        onUploadProgress: (progressEvent) => {
+          if (!progressEvent.total) return;
+          const percentage = Math.floor(Math.round((progressEvent.loaded * 100) / progressEvent.total));
+          // eslint-disable-next-line no-console
+          dispatch({ type: 'setUploadPercentage', payload: { percentage } });
+        },
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      dispatch({ type: 'setUploadStatus', payload: { status: 'uploaded' } });
+    },
+    [dispatch]
+  );
 
   const handleNext = async () => {
     if (state.activeStep === steps.length - 1) {
@@ -147,6 +184,7 @@ export default function VerticalLinearStepper(): JSX.Element {
               {step.id === StepId.Name && (
                 <TextField
                   sx={{ marginTop: 1 }}
+                  value={state.values.name}
                   required
                   fullWidth
                   autoFocus
@@ -160,12 +198,21 @@ export default function VerticalLinearStepper(): JSX.Element {
               <Box sx={{ mb: 2 }}>
                 <div>
                   {step.id === StepId.Upload && (
-                    <Uploader onDrop={(acceptedFiles: File[]) => dispatch({ type: 'setFile', payload: { file: acceptedFiles[0]! } })} />
+                    <>
+                      <Uploader onDrop={(acceptedFiles: File[]) => dispatch({ type: 'setFile', payload: { file: acceptedFiles[0]! } })} />
+                      {state.uploadStatus === 'uploading' && (
+                        <LinearProgress
+                          variant='determinate'
+                          value={Math.min(100, Math.max(0, state.uploadPercentage))}
+                          sx={{ height: 10, borderRadius: 5 }}
+                        />
+                      )}
+                    </>
                   )}
-                  <Button variant='contained' onClick={handleNext} sx={{ mt: 1, mr: 1 }} disabled={nextButton.disabled}>
+                  <SubmitButton variant='contained' onClick={handleNext} sx={{ mt: 1, mr: 1 }}>
                     {nextButton.label}
-                  </Button>
-                  <Button disabled={index === 0} onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
+                  </SubmitButton>
+                  <Button disabled={state.backButton.disabled} onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
                     Back
                   </Button>
                 </div>
@@ -176,10 +223,7 @@ export default function VerticalLinearStepper(): JSX.Element {
       </Stepper>
       {state.activeStep === steps.length && (
         <Paper square elevation={0} sx={{ p: 3 }}>
-          <Typography>All steps completed - you&apos;re finished</Typography>
-          <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
-            Reset
-          </Button>
+          <Typography>Done! We will send you an email when your survey insights are ready.</Typography>
         </Paper>
       )}
     </Box>
