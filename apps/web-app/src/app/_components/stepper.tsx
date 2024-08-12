@@ -7,16 +7,21 @@ import StepContent from '@mui/material/StepContent';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
+import { TextField } from '@mui/material';
+
+enum StepId {
+  Name,
+  Upload,
+}
 
 const steps = [
   {
     label: 'Give your survey a name',
+    id: StepId.Name,
   },
   {
+    id: StepId.Upload,
     label: 'Upload your survey',
-  },
-  {
-    label: 'Done!',
   },
 ];
 
@@ -40,7 +45,10 @@ export default function VerticalLinearStepper() {
       <Stepper activeStep={activeStep} orientation='vertical'>
         {steps.map((step, index) => (
           <Step key={step.label}>
-            <StepLabel optional={index === 2 ? <Typography variant='caption'>Last step</Typography> : null}>{step.label}</StepLabel>
+            <StepLabel>
+              {step.label}
+              {step.id === StepId.Name && <TextField required fullWidth autoFocus disabled={activeStep !== index} placeholder='Survey name' />}
+            </StepLabel>
             <StepContent>
               {/* <Typography>{step.description}</Typography> */}
               <Box sx={{ mb: 2 }}>

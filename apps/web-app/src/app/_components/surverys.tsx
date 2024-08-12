@@ -10,6 +10,8 @@ import { api } from '~/trpc/react';
 export const Surveys: FC = () => {
   const [surveys] = api.survey.getAll.useSuspenseQuery();
 
+  console.log('surveys', surveys);
+
   const utils = api.useUtils();
 
   return <VerticalLinearStepper />;
