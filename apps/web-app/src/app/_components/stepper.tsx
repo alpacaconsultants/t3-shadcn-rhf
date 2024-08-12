@@ -9,6 +9,8 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { TextField } from '@mui/material';
 import { useImmerReducer } from 'use-immer';
+import axios from 'axios';
+import { useCallback } from 'react';
 import { Uploader } from './uploader';
 import { api } from '~/trpc/react';
 
@@ -39,9 +41,9 @@ interface State {
     label: string;
     disabled: boolean;
   };
+  file: File | null;
   values: {
     name: string;
-    file: string;
   };
 }
 
@@ -49,7 +51,8 @@ type Action =
   | { type: 'next' }
   | { type: 'back' }
   | { type: 'reset' }
-  | { type: 'setValue'; payload: { key: keyof State['values']; value: string } };
+  | { type: 'setValue'; payload: { key: keyof State['values']; value: string } }
+  | { type: 'setFile'; payload: { file: File } };
 
 const initialState: State = {
   activeStep: 0,
@@ -59,8 +62,8 @@ const initialState: State = {
   },
   values: {
     name: '',
-    file: '',
   },
+  file: null,
 };
 
 function reducer(state: State, action: Action): State {
@@ -74,15 +77,17 @@ function reducer(state: State, action: Action): State {
     case 'setValue':
       state.values[action.payload.key] = action.payload.value;
       break;
+    case 'setFile':
+      state.file = action.payload.file;
+      break;
     case 'reset':
       return initialState;
-
     default:
       throw new Error('Unexpected action type');
-      break;
   }
   state.nextButton.label = state.activeStep === steps.length - 1 ? 'Finish' : 'Next';
-  state.nextButton.disabled = state.activeStep === steps.findIndex((step) => step.id === StepId.Name) && !state.values.name;
+  const activeId = steps[state.activeStep]?.id;
+  state.nextButton.disabled = (activeId === StepId.Name && !state.values.name) || (activeId === StepId.Upload && !state.file);
   return state;
 }
 
@@ -97,10 +102,30 @@ export default function VerticalLinearStepper(): JSX.Element {
     },
   });
 
+  const prepareUpload = api.survey.prepareUpload.useMutation();
+
+  const uploadFile = useCallback(async (uploadUrl: string, file: File) => {
+    await axios.put(uploadUrl, file, {
+      onUploadProgress: (progressEvent) => {
+        if (!progressEvent.total) return;
+        const percentage = Math.floor(Math.round((progressEvent.loaded * 100) / progressEvent.total));
+        // eslint-disable-next-line no-console
+        console.log(`Uploaded ${percentage}%`);
+      },
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  }, []);
+
   const handleNext = async () => {
     if (state.activeStep === steps.length - 1) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const newSurvey = await createSurvey.mutateAsync({ name: state.values.name, fileName: 'test.csv' });
+      const uploadInfo = await prepareUpload.mutateAsync({ name: state.values.name, fileName: 'test.csv' });
+      const { s3Key, uploadUrl } = uploadInfo;
+      if (!state.file) return;
+      await uploadFile(uploadUrl, state.file);
+      await createSurvey.mutateAsync({ name: state.values.name, s3Key });
     }
     dispatch({ type: 'next' });
   };
@@ -134,7 +159,9 @@ export default function VerticalLinearStepper(): JSX.Element {
             <StepContent>
               <Box sx={{ mb: 2 }}>
                 <div>
-                  {step.id === StepId.Upload && <Uploader />}
+                  {step.id === StepId.Upload && (
+                    <Uploader onDrop={(acceptedFiles: File[]) => dispatch({ type: 'setFile', payload: { file: acceptedFiles[0]! } })} />
+                  )}
                   <Button variant='contained' onClick={handleNext} sx={{ mt: 1, mr: 1 }} disabled={nextButton.disabled}>
                     {nextButton.label}
                   </Button>
