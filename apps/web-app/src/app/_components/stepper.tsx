@@ -14,7 +14,12 @@ enum StepId {
   Upload,
 }
 
-const steps = [
+interface Step {
+  label: string;
+  id: StepId;
+}
+
+const steps: Step[] = [
   {
     label: 'Give your survey a name',
     id: StepId.Name,
@@ -25,32 +30,46 @@ const steps = [
   },
 ];
 
-export default function VerticalLinearStepper() {
-  const [activeStep, setActiveStep] = React.useState(0);
+interface State {
+  activeStep: number;
+}
 
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
+type Action = { type: 'next' } | { type: 'back' } | { type: 'reset' };
 
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
+const initialState: State = {
+  activeStep: 0,
+};
 
-  const handleReset = () => {
-    setActiveStep(0);
-  };
+function reducer(state: State, action: Action): State {
+  switch (action.type) {
+    case 'next':
+      return { ...state, activeStep: state.activeStep + 1 };
+    case 'back':
+      return { ...state, activeStep: state.activeStep - 1 };
+    case 'reset':
+      return initialState;
+    default:
+      return state;
+  }
+}
+
+export default function VerticalLinearStepper(): JSX.Element {
+  const [state, dispatch] = React.useReducer(reducer, initialState);
+
+  const handleNext = () => dispatch({ type: 'next' });
+  const handleBack = () => dispatch({ type: 'back' });
+  const handleReset = () => dispatch({ type: 'reset' });
 
   return (
     <Box sx={{ maxWidth: 400 }}>
-      <Stepper activeStep={activeStep} orientation='vertical'>
+      <Stepper activeStep={state.activeStep} orientation='vertical'>
         {steps.map((step, index) => (
           <Step key={step.label}>
             <StepLabel>
               {step.label}
-              {step.id === StepId.Name && <TextField required fullWidth autoFocus disabled={activeStep !== index} placeholder='Survey name' />}
+              {step.id === StepId.Name && <TextField required fullWidth autoFocus disabled={state.activeStep !== index} placeholder='Survey name' />}
             </StepLabel>
             <StepContent>
-              {/* <Typography>{step.description}</Typography> */}
               <Box sx={{ mb: 2 }}>
                 <div>
                   <Button variant='contained' onClick={handleNext} sx={{ mt: 1, mr: 1 }}>
@@ -65,7 +84,7 @@ export default function VerticalLinearStepper() {
           </Step>
         ))}
       </Stepper>
-      {activeStep === steps.length && (
+      {state.activeStep === steps.length && (
         <Paper square elevation={0} sx={{ p: 3 }}>
           <Typography>All steps completed - you&apos;re finished</Typography>
           <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
