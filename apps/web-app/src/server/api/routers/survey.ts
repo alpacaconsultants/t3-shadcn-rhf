@@ -6,19 +6,18 @@ import { Resource } from 'sst';
 import { createTRPCRouter, protectedProcedure } from '~/server/api/trpc';
 import { surveys } from '~/server/db/schema';
 
-export const surveyRouter = createTRPCRouter({
-  prepareUpload: protectedProcedure
-    .input(z.object({ name: z.string().min(1), fileName: z.string().min(1) }))
-    .mutation(async ({ ctx, input }) => {
-      const s3Key = `${ctx.session.user.id}/${input.name}/${input.fileName}`;
-      const command = new PutObjectCommand({
-        Key: 'file.txt',
-        Bucket: Resource.SurveyBucket.name,
-      });
-      const uploadUrl = await getSignedUrl(new S3Client({}), command);
+const s3 = new S3Client({});
 
-      return { s3Key, uploadUrl };
-    }),
+export const surveyRouter = createTRPCRouter({
+  prepareUpload: protectedProcedure.input(z.object({ fileName: z.string().min(1) })).mutation(async ({ ctx, input }) => {
+    const s3Key = `${ctx.session.user.id}/${new Date().getTime()}/${input.fileName}`;
+    const command = new PutObjectCommand({
+      Key: s3Key,
+      Bucket: Resource.SurveyBucket.name,
+    });
+    const uploadUrl = await getSignedUrl(s3, command);
+    return { s3Key, uploadUrl };
+  }),
   create: protectedProcedure.input(z.object({ name: z.string().min(1), s3Key: z.string().min(1) })).mutation(async ({ ctx, input }) => {
     const [newSurvey] = await ctx.db
       .insert(surveys)
