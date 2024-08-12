@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { TextField } from '@mui/material';
+import { useImmerReducer } from 'use-immer';
 
 enum StepId {
   Name,
@@ -32,48 +33,89 @@ const steps: Step[] = [
 
 interface State {
   activeStep: number;
+  nextButton: {
+    label: string;
+    disabled: boolean;
+  };
+  values: {
+    name: string;
+    file: string;
+  };
 }
 
-type Action = { type: 'next' } | { type: 'back' } | { type: 'reset' };
+type Action =
+  | { type: 'next' }
+  | { type: 'back' }
+  | { type: 'reset' }
+  | { type: 'setValue'; payload: { key: keyof State['values']; value: string } };
 
 const initialState: State = {
   activeStep: 0,
+  nextButton: {
+    label: 'Next',
+    disabled: true,
+  },
+  values: {
+    name: '',
+    file: '',
+  },
 };
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
     case 'next':
-      return { ...state, activeStep: state.activeStep + 1 };
+      state.activeStep++;
+      break;
     case 'back':
-      return { ...state, activeStep: state.activeStep - 1 };
+      state.activeStep--;
+      break;
+    case 'setValue':
+      state.values[action.payload.key] = action.payload.value;
+      break;
     case 'reset':
       return initialState;
+
     default:
-      return state;
+      throw new Error('Unexpected action type');
+      break;
   }
+  state.nextButton.label = state.activeStep === steps.length - 1 ? 'Finish' : 'Next';
+  state.nextButton.disabled = state.activeStep === steps.findIndex((step) => step.id === StepId.Name) && !state.values.name;
+  return state;
 }
 
 export default function VerticalLinearStepper(): JSX.Element {
-  const [state, dispatch] = React.useReducer(reducer, initialState);
+  const [state, dispatch] = useImmerReducer(reducer, initialState);
 
   const handleNext = () => dispatch({ type: 'next' });
   const handleBack = () => dispatch({ type: 'back' });
   const handleReset = () => dispatch({ type: 'reset' });
 
+  const { activeStep, nextButton } = state;
+
   return (
     <Box sx={{ maxWidth: 400 }}>
-      <Stepper activeStep={state.activeStep} orientation='vertical'>
+      <Stepper activeStep={activeStep} orientation='vertical'>
         {steps.map((step, index) => (
           <Step key={step.label}>
             <StepLabel>
               {step.label}
-              {step.id === StepId.Name && <TextField required fullWidth autoFocus disabled={state.activeStep !== index} placeholder='Survey name' />}
+              {step.id === StepId.Name && (
+                <TextField
+                  required
+                  fullWidth
+                  autoFocus
+                  disabled={activeStep !== index}
+                  placeholder='Survey name'
+                  onChange={(e) => dispatch({ type: 'setValue', payload: { key: 'name', value: e.target.value } })}
+                />
+              )}
             </StepLabel>
             <StepContent>
               <Box sx={{ mb: 2 }}>
                 <div>
-                  <Button variant='contained' onClick={handleNext} sx={{ mt: 1, mr: 1 }}>
-                    {index === steps.length - 1 ? 'Finish' : 'Continue'}
+                  <Button variant='contained' onClick={handleNext} sx={{ mt: 1, mr: 1 }} disabled={nextButton.disabled}>
+                    {nextButton.label}
                   </Button>
                   <Button disabled={index === 0} onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
                     Back

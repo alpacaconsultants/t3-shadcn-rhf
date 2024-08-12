@@ -4113,6 +4113,7 @@ __metadata:
     eslint-config-next: ^14.2.4
     eslint-plugin-drizzle: ^0.2.3
     geist: ^1.3.0
+    immer: ^10.1.1
     next: ^14.2.4
     next-auth: ^4.24.7
     npm-run-all: ^4.1.5
@@ -4125,6 +4126,7 @@ __metadata:
     superjson: ^2.2.1
     tss-react: ^4.9.12
     typescript: ^5.5.3
+    use-immer: ^0.10.0
     zod: ^3.23.3
   languageName: unknown
   linkType: soft
@@ -8335,6 +8337,13 @@ __metadata:
   version: 5.2.4
   resolution: "ignore@npm:5.2.4"
   checksum: 3d4c309c6006e2621659311783eaea7ebcd41fe4ca1d78c91c473157ad6666a57a2df790fe0d07a12300d9aac2888204d7be8d59f9aaf665b1c7fcdb432517ef
+  languageName: node
+  linkType: hard
+
+"immer@npm:^10.1.1":
+  version: 10.1.1
+  resolution: "immer@npm:10.1.1"
+  checksum: 07c67970b7d22aded73607193d84861bf786f07d47f7d7c98bb10016c7a88f6654ad78ae1e220b3c623695b133aabbf24f5eb8d9e8060cff11e89ccd81c9c10b
   languageName: node
   linkType: hard
 
@@ -12946,6 +12955,16 @@ __metadata:
     punycode: 1.3.2
     querystring: 0.2.0
   checksum: 7b83ddb106c27bf9bde8629ccbe8d26e9db789c8cda5aa7db72ca2c6f9b8a88a5adf206f3e10db78e6e2d042b327c45db34c7010c1bf0d9908936a17a2b57d05
+  languageName: node
+  linkType: hard
+
+"use-immer@npm:^0.10.0":
+  version: 0.10.0
+  resolution: "use-immer@npm:0.10.0"
+  peerDependencies:
+    immer: ">=8.0.0"
+    react: ^16.8.0 || ^17.0.1 || ^18.0.0
+  checksum: 372b0eea0a05e9435f5dc57a877ec619ea9a479fc82423f502b4a498d5697f8b06b85d089058db5a056bc8bbdb8e6f9ea8c9850b51a6b05d5c63ab0c8eeb2b7e
   languageName: node
   linkType: hard
 
