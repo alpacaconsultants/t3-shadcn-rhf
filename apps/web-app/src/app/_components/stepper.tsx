@@ -7,8 +7,9 @@ import StepContent from '@mui/material/StepContent';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import { TextField } from '@mui/material';
+import { Stack, TextField } from '@mui/material';
 import { useImmerReducer } from 'use-immer';
+import { Uploader } from './uploader';
 
 enum StepId {
   Name,
@@ -102,6 +103,7 @@ export default function VerticalLinearStepper(): JSX.Element {
               {step.label}
               {step.id === StepId.Name && (
                 <TextField
+                  sx={{ marginTop: 1 }}
                   required
                   fullWidth
                   autoFocus
@@ -114,6 +116,7 @@ export default function VerticalLinearStepper(): JSX.Element {
             <StepContent>
               <Box sx={{ mb: 2 }}>
                 <div>
+                  {step.id === StepId.Upload && <Uploader />}
                   <Button variant='contained' onClick={handleNext} sx={{ mt: 1, mr: 1 }} disabled={nextButton.disabled}>
                     {nextButton.label}
                   </Button>
