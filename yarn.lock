@@ -1213,6 +1213,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@aws-sdk/s3-request-presigner@npm:^3.627.0":
+  version: 3.627.0
+  resolution: "@aws-sdk/s3-request-presigner@npm:3.627.0"
+  dependencies:
+    "@aws-sdk/signature-v4-multi-region": 3.626.0
+    "@aws-sdk/types": 3.609.0
+    "@aws-sdk/util-format-url": 3.609.0
+    "@smithy/middleware-endpoint": ^3.1.0
+    "@smithy/protocol-http": ^4.1.0
+    "@smithy/smithy-client": ^3.1.12
+    "@smithy/types": ^3.3.0
+    tslib: ^2.6.2
+  checksum: ea7e2d495eb721fa8723da4df9aba6cea3c2163fbf9b810c1aefe484d38bc1728e92f912c708d1b97265da3c888133f9188e44e995eb64d57f14b2695e9930c0
+  languageName: node
+  linkType: hard
+
 "@aws-sdk/signature-v4-multi-region@npm:3.626.0":
   version: 3.626.0
   resolution: "@aws-sdk/signature-v4-multi-region@npm:3.626.0"
@@ -1336,6 +1352,18 @@ __metadata:
     "@smithy/util-endpoints": ^2.0.5
     tslib: ^2.6.2
   checksum: 9d9973ceee59bf30af85c7f4328083daea033a987ec396dcb89eb7649f470ceb19c6b96635e121f3557e726f7ec7453236c956cf43f22128883c277f17d2a13f
+  languageName: node
+  linkType: hard
+
+"@aws-sdk/util-format-url@npm:3.609.0":
+  version: 3.609.0
+  resolution: "@aws-sdk/util-format-url@npm:3.609.0"
+  dependencies:
+    "@aws-sdk/types": 3.609.0
+    "@smithy/querystring-builder": ^3.0.3
+    "@smithy/types": ^3.3.0
+    tslib: ^2.6.2
+  checksum: 487a666cc4f6a3a8bcd27839fda7b79a3dccc81a7bd694a9903c6ea3695e1cc7cb2e538421335db5fb59460a148cc1a4a0a6e4796c5241a0ab406c4190f781d9
   languageName: node
   linkType: hard
 
@@ -4090,6 +4118,7 @@ __metadata:
   resolution: "@strixy/web-app@workspace:apps/web-app"
   dependencies:
     "@auth/drizzle-adapter": 1.4.1
+    "@aws-sdk/s3-request-presigner": ^3.627.0
     "@emotion/cache": ^11.13.1
     "@emotion/react": ^11.13.0
     "@emotion/styled": ^11.13.0
