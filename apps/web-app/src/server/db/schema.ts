@@ -37,6 +37,7 @@ export const surveys = createTable(
     createdById: varchar('created_by', { length: 255 })
       .notNull()
       .references(() => users.id),
+    s3Key: varchar('s3_key', { length: 255 }).notNull(),
     createdAt: timestamp('created_at', { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),

@@ -1,9 +1,6 @@
 import Link from 'next/link';
-import { makeStyles } from 'tss-react/mui';
 import { Box } from '@mui/material';
-import styles from './index.module.css';
 import { Surveys } from './_components/surverys';
-import { LatestPost } from '~/app/_components/post';
 import { getServerAuthSession } from '~/server/auth';
 import { HydrateClient, api } from '~/trpc/server';
 

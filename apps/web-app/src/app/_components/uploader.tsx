@@ -1,5 +1,5 @@
 import React, { type FC } from 'react';
-import { useDropzone, DropzoneOptions, type FileWithPath } from 'react-dropzone';
+import { useDropzone, type FileWithPath } from 'react-dropzone';
 import { makeStyles } from 'tss-react/mui';
 
 const styles = makeStyles()({

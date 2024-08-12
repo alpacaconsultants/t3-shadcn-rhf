@@ -1,18 +1,12 @@
 'use client';
 
-import { type FC, useState } from 'react';
-
-import { Box } from '@mui/material';
-import styles from '../index.module.css';
+import { type FC } from 'react';
 import VerticalLinearStepper from './stepper';
 import { api } from '~/trpc/react';
 
 export const Surveys: FC = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [surveys] = api.survey.getAll.useSuspenseQuery();
-
-  console.log('surveys', surveys);
-
-  const utils = api.useUtils();
 
   return <VerticalLinearStepper />;
 

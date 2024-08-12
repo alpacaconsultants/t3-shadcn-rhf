@@ -7,9 +7,10 @@ import StepContent from '@mui/material/StepContent';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import { Stack, TextField } from '@mui/material';
+import { TextField } from '@mui/material';
 import { useImmerReducer } from 'use-immer';
 import { Uploader } from './uploader';
+import { api } from '~/trpc/react';
 
 enum StepId {
   Name,
@@ -88,11 +89,28 @@ function reducer(state: State, action: Action): State {
 export default function VerticalLinearStepper(): JSX.Element {
   const [state, dispatch] = useImmerReducer(reducer, initialState);
 
-  const handleNext = () => dispatch({ type: 'next' });
+  const createSurvey = api.survey.create.useMutation({
+    onSuccess: async (response) => {
+      // eslint-disable-next-line no-console
+      console.log('response!', response);
+      await utils.survey.getAll.invalidate();
+    },
+  });
+
+  const handleNext = async () => {
+    if (state.activeStep === steps.length - 1) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const newSurvey = await createSurvey.mutateAsync({ name: state.values.name, fileName: 'test.csv' });
+    }
+    dispatch({ type: 'next' });
+  };
+
   const handleBack = () => dispatch({ type: 'back' });
   const handleReset = () => dispatch({ type: 'reset' });
 
   const { activeStep, nextButton } = state;
+
+  const utils = api.useUtils();
 
   return (
     <Box sx={{ maxWidth: 400 }}>

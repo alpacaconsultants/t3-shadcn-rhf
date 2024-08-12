@@ -12,7 +12,8 @@
     "db:push:prod": "ENV=prod yarn db:push",
     "db:studio": "drizzle-kit studio",
     "deploy": "sst deploy --stage $ENV",
-    "next:dev": "next dev",
+    "next:dev": "sst dev --stage $ENV",
+    "next:dev:2": "ENV=dev yarn next:dev",
     "dev": "run-p next:dev db:studio",
     "format": "prettier --ignore-path '../../.prettierignore' --write .",
     "format:check": "prettier --ignore-path '../../.prettierignore' --check .",
@@ -27,6 +28,7 @@
   },
   "dependencies": {
     "@auth/drizzle-adapter": "1.4.1",
+    "@aws-sdk/s3-request-presigner": "^3.627.0",
     "@emotion/cache": "^11.13.1",
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
