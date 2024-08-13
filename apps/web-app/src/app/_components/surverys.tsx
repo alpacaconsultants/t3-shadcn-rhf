@@ -1,12 +1,17 @@
-'use client';
+'use server';
 
 import { type FC } from 'react';
 import VerticalLinearStepper from './stepper';
 import { api } from '~/trpc/react';
+import { getMySurveys } from '~/server/data-layer/surveys';
 
-export const Surveys: FC = () => {
+export const Surveys: FC = async () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [surveys] = api.survey.getAll.useSuspenseQuery();
+  // const [surveys] = api.survey.getAll.useSuspenseQuery();
+
+  const mySurveys = await getMySurveys();
+
+  console.log('mySurveys', mySurveys);
 
   return <VerticalLinearStepper />;
 

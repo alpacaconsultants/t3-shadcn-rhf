@@ -1,3 +1,5 @@
+'use client';
+
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
@@ -11,9 +13,10 @@ import { LinearProgress, TextField } from '@mui/material';
 import { useImmerReducer } from 'use-immer';
 import axios from 'axios';
 import { useCallback } from 'react';
+import { SubmitButton } from '../ui/buttons/base-buttons';
 import { Uploader } from './uploader';
 import { api } from '~/trpc/react';
-import { SubmitButton } from '../ui/buttons/base-buttons';
+import { prepareUpload } from '~/server/data-layer/server-actions';
 
 enum StepId {
   Name,
@@ -134,7 +137,7 @@ export default function VerticalLinearStepper(): JSX.Element {
     },
   });
 
-  const prepareUpload = api.survey.prepareUpload.useMutation();
+  // const prepareUpload = api.survey.prepareUpload.useMutation();
 
   const uploadFile = useCallback(
     async (uploadUrl: string, file: File) => {
@@ -159,7 +162,7 @@ export default function VerticalLinearStepper(): JSX.Element {
   const handleNext = async () => {
     if (state.activeStep === steps.length - 1) {
       if (!state.file) return;
-      const uploadInfo = await prepareUpload.mutateAsync({ fileName: state.file.name });
+      const uploadInfo = await prepareUpload(state.file.name);
       const { s3Key, uploadUrl } = uploadInfo;
       await uploadFile(uploadUrl, state.file);
       await createSurvey.mutateAsync({ name: state.values.name, s3Key });
