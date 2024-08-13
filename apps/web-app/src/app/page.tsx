@@ -9,6 +9,8 @@ export default async function Home() {
   //
   const session = await getServerAuthSession();
 
+  // console.log('session', session);
+
   return (
     <HydrateClient>
       <Box

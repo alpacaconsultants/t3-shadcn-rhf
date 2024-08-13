@@ -1,20 +1,18 @@
-import { type NextRequest, NextResponse } from 'next/server';
-import { edgeGetServerAuthSession } from './server/util/server-utils';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { withAuth } from 'next-auth/middleware';
+import { NextResponse } from 'next/server';
 
-export async function middleware(request: NextRequest) {
-  // Workaround for NextAuth.js middleware
-  // https://github.com/nextauthjs/next-auth/issues/7732#issuecomment-1984335764
-  const session = await edgeGetServerAuthSession();
-
-  // 🔥 check for relevant role/authorization (if necessarry)
-  if (!session) {
-    const signInUrl = new URL('/api/auth/signin', request.url);
-    signInUrl.searchParams.set('callbackUrl', request.url);
-    return NextResponse.redirect(signInUrl);
+export default withAuth(
+  function middleware(req) {
+    // Custom logic here
+    return NextResponse.next();
+  },
+  {
+    callbacks: {
+      authorized: ({ token }) => !!token,
+    },
   }
-
-  return NextResponse.next();
-}
+);
 
 export const config = {
   matcher: '/((?!api|_next/static|_next/image|favicon.ico).*)',
