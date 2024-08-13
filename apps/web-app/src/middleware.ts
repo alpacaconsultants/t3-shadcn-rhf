@@ -1,9 +1,9 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { edgeGetServerAuthSession } from './server/util/server-utils';
 
-// Workaround for NextAuth.js middleware
-// https://github.com/nextauthjs/next-auth/issues/7732#issuecomment-1984335764
 export async function middleware(request: NextRequest) {
+  // Workaround for NextAuth.js middleware
+  // https://github.com/nextauthjs/next-auth/issues/7732#issuecomment-1984335764
   const session = await edgeGetServerAuthSession();
 
   // 🔥 check for relevant role/authorization (if necessarry)

@@ -2,6 +2,8 @@ import { type Session } from 'next-auth';
 import { cookies } from 'next/headers';
 import { env } from '~/env';
 
+// Workaround for NextAuth.js middleware
+// https://github.com/nextauthjs/next-auth/issues/7732#issuecomment-1984335764
 export const edgeGetServerAuthSession = async (): Promise<Session | null> => {
   const c = cookies();
   const allCookies = c
