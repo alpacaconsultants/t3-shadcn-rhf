@@ -1,5 +1,3 @@
-'use server';
-
 import { type FC } from 'react';
 import VerticalLinearStepper from './stepper';
 import { getMySurveys } from '~/server/data-layer/surveys';

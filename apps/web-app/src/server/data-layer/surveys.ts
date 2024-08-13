@@ -5,16 +5,16 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Resource } from 'sst';
 import { z } from 'zod';
 import { db } from '../db';
-import { serverAction } from '../util/server-utils';
+import { authActionClient } from '../util/server-utils';
 import { surveys } from '~/server/db/schema';
 
 const s3 = new S3Client({});
 
-export const prepareUpload = serverAction()
-  .auth()
-  .input(z.object({ fileName: z.string().min(1) }))
-  .action(async ({ session, input }) => {
-    const s3Key = `${session?.user.id}/${new Date().getTime()}/${input.fileName}`;
+export const prepareUpload = authActionClient
+  // .metadata({ actionName: 'prepareUpload' })
+  .schema(z.object({ fileName: z.string().min(1) }))
+  .action(async ({ parsedInput, ctx }) => {
+    const s3Key = `${ctx?.user.id}/${new Date().getTime()}/${parsedInput.fileName}`;
     const command = new PutObjectCommand({
       Key: s3Key,
       Bucket: Resource.SurveyBucket.name,
@@ -23,26 +23,22 @@ export const prepareUpload = serverAction()
     return { s3Key, uploadUrl };
   });
 
-export const getMySurveys = serverAction()
-  .auth()
-  .action(async () => {
-    const surveys = await db.query.surveys.findMany({
-      orderBy: (survey, { desc }) => [desc(survey.createdAt)],
-    });
-    return surveys ?? null;
+export const getMySurveys = authActionClient.action(async () => {
+  const surveys = await db.query.surveys.findMany({
+    orderBy: (survey, { desc }) => [desc(survey.createdAt)],
   });
+  return surveys ?? null;
+});
 
-export const createSurvey = serverAction()
-  .auth()
-  .input(z.object({ name: z.string().min(1), s3Key: z.string().min(1) }))
-  .action(async ({ session, input }) => {
-    if (!session) return null;
+export const createSurvey = authActionClient
+  .schema(z.object({ name: z.string().min(1), s3Key: z.string().min(1) }))
+  .action(async ({ ctx, parsedInput }) => {
     const [newSurvey] = await db
       .insert(surveys)
       .values({
-        name: input.name,
-        createdById: session.user.id,
-        s3Key: input.s3Key,
+        name: parsedInput.name,
+        createdById: ctx.user.id,
+        s3Key: parsedInput.s3Key,
       })
       .returning();
     return newSurvey;

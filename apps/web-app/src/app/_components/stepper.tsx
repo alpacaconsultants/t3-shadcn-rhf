@@ -162,7 +162,9 @@ export default function VerticalLinearStepper(): JSX.Element {
     if (state.activeStep === steps.length - 1) {
       if (!state.file) return;
       const uploadInfo = await prepareUpload({ fileName: state.file.name });
-      const { s3Key, uploadUrl } = uploadInfo;
+      console.log('uploadInfo!', uploadInfo);
+      if (!uploadInfo?.data) throw new Error('Upload failed');
+      const { s3Key, uploadUrl } = uploadInfo.data;
       await uploadFile(uploadUrl, state.file);
       await createSurvey({ name: state.values.name, s3Key });
     }

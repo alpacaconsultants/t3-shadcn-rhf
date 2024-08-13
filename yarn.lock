@@ -4146,6 +4146,7 @@ __metadata:
     immer: ^10.1.1
     next: ^14.2.4
     next-auth: ^4.24.7
+    next-safe-action: ^7.5.0
     npm-run-all: ^4.1.5
     open-next: ^3.0.8
     postgres: ^3.4.4
@@ -10293,6 +10294,30 @@ __metadata:
     nodemailer:
       optional: true
   checksum: e7849ecf86394d86f08730b96f869c9353b6cc003794fcd953db2949f1ab06a2ce4f7a67312fdb8c7b3bbe7e99a8a215f11ef4eba5ec93f6c3e8ac1954e8b3e6
+  languageName: node
+  linkType: hard
+
+"next-safe-action@npm:^7.5.0":
+  version: 7.5.0
+  resolution: "next-safe-action@npm:7.5.0"
+  peerDependencies:
+    "@sinclair/typebox": ">= 0.33.3"
+    next: ">= 14.0.0"
+    react: ">= 18.2.0"
+    react-dom: ">= 18.2.0"
+    valibot: ">= 0.36.0"
+    yup: ">= 1.0.0"
+    zod: ">= 3.0.0"
+  peerDependenciesMeta:
+    "@sinclair/typebox":
+      optional: true
+    valibot:
+      optional: true
+    yup:
+      optional: true
+    zod:
+      optional: true
+  checksum: 9d16d57cc94669a30881834db0054f4d99fedc369e1b766c8377ae41070a441118650196e8dd65d5d47c34f9d5cb9e76c31489806567681289b45c55dea31d7b
   languageName: node
   linkType: hard
 
