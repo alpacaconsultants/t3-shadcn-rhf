@@ -2,13 +2,12 @@ import Link from 'next/link';
 import { Box } from '@mui/material';
 import { Surveys } from './_components/surverys';
 import { getServerAuthSession } from '~/server/auth';
-import { HydrateClient, api } from '~/trpc/server';
+import { HydrateClient } from '~/trpc/server';
 
 export default async function Home() {
   // const hello = await api.post.hello({ text: 'from tRPC' });
   //
   const session = await getServerAuthSession();
-  void api.survey.getAll.prefetch();
 
   return (
     <HydrateClient>

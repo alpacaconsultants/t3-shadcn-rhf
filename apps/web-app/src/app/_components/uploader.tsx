@@ -1,7 +1,6 @@
-import React, { useCallback, type FC } from 'react';
+import React, { type FC } from 'react';
 import { useDropzone, type FileWithPath } from 'react-dropzone';
 import { makeStyles } from 'tss-react/mui';
-import axios from 'axios';
 
 const styles = makeStyles()({
   dropzone: {
@@ -27,32 +26,6 @@ interface UploaderProps {
 
 export const Uploader: FC<UploaderProps> = ({ onDrop }) => {
   const { classes } = styles();
-
-  // const uploadFile = useCallback(async (uploadUrl: string, file: File) => {
-  //   await axios.put(uploadUrl, file, {
-  //     onUploadProgress: (progressEvent) => {
-  //       if (!progressEvent.total) return;
-  //       const percentage = Math.floor(Math.round((progressEvent.loaded * 100) / progressEvent.total));
-  //       // eslint-disable-next-line no-console
-  //       console.log(`Uploaded ${percentage}%`);
-  //     },
-  //     method: 'PUT',
-  //     headers: {
-  //       'Content-Type': 'multipart/form-data',
-  //     },
-  //   });
-  // }, []);
-
-  // const onDrop = useCallback(
-  //   (acceptedFiles: File[]) => {
-  //     if (acceptedFiles.length > 0) {
-  //       const file = acceptedFiles[0];
-  //       _onDrop?.(file);
-  //       // void uploadFile(uploadUrl, file!);
-  //     }
-  //   },
-  //   [uploadFile, uploadUrl]
-  // );
 
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone({ maxFiles: 1, onDrop });
 

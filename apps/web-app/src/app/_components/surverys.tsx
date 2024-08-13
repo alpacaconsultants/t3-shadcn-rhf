@@ -2,7 +2,6 @@
 
 import { type FC } from 'react';
 import VerticalLinearStepper from './stepper';
-import { api } from '~/trpc/react';
 import { getMySurveys } from '~/server/data-layer/surveys';
 
 export const Surveys: FC = async () => {
@@ -11,6 +10,7 @@ export const Surveys: FC = async () => {
 
   const mySurveys = await getMySurveys();
 
+  // eslint-disable-next-line no-console
   console.log('mySurveys', mySurveys);
 
   return <VerticalLinearStepper />;

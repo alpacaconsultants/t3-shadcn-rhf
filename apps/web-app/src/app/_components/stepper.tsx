@@ -15,8 +15,7 @@ import axios from 'axios';
 import { useCallback } from 'react';
 import { SubmitButton } from '../ui/buttons/base-buttons';
 import { Uploader } from './uploader';
-import { api } from '~/trpc/react';
-import { prepareUpload } from '~/server/data-layer/surveys';
+import { createSurvey, prepareUpload } from '~/server/data-layer/surveys';
 
 enum StepId {
   Name,
@@ -129,13 +128,13 @@ function reducer(state: State, action: Action): State {
 export default function VerticalLinearStepper(): JSX.Element {
   const [state, dispatch] = useImmerReducer(reducer, initialState);
 
-  const createSurvey = api.survey.create.useMutation({
-    onSuccess: async (response) => {
-      // eslint-disable-next-line no-console
-      console.log('response!', response);
-      await utils.survey.getAll.invalidate();
-    },
-  });
+  // const createSurvey = api.survey.create.useMutation({
+  //   onSuccess: async (response) => {
+  //     // eslint-disable-next-line no-console
+  //     console.log('response!', response);
+  //     await utils.survey.getAll.invalidate();
+  //   },
+  // });
 
   // const prepareUpload = api.survey.prepareUpload.useMutation();
 
@@ -165,17 +164,13 @@ export default function VerticalLinearStepper(): JSX.Element {
       const uploadInfo = await prepareUpload({ fileName: state.file.name });
       const { s3Key, uploadUrl } = uploadInfo;
       await uploadFile(uploadUrl, state.file);
-      await createSurvey.mutateAsync({ name: state.values.name, s3Key });
+      await createSurvey({ name: state.values.name, s3Key });
     }
     dispatch({ type: 'next' });
   };
 
   const handleBack = () => dispatch({ type: 'back' });
-  const handleReset = () => dispatch({ type: 'reset' });
-
   const { activeStep, nextButton } = state;
-
-  const utils = api.useUtils();
 
   return (
     <Box sx={{ maxWidth: 400 }}>

@@ -30,7 +30,7 @@ class ServerActionBuilder<Input = void> {
 
   action<Return>(fn: AuthenticatedServerAction<Input, Return>): (data?: Input) => Promise<Return> {
     return async (data?: Input): Promise<Return> => {
-      let session: Session | undefined;
+      let session: Session;
 
       if (this.requireAuth) {
         session = await getServerAuthSession();

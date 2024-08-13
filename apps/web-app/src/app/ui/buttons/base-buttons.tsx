@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-key */
-import { Button, ButtonProps, CircularProgress, Grid } from '@mui/material';
+import { Button, type ButtonProps, CircularProgress } from '@mui/material';
 import { type FC, useState } from 'react';
 
 export type SubmitButtonProps = Omit<ButtonProps, 'type'> & {
@@ -22,6 +22,7 @@ export const SubmitButton: FC<SubmitButtonProps> = (props) => {
         onClick
           ? async (event) => {
               setInternalIsSubmitting(true);
+              // eslint-disable-next-line @typescript-eslint/await-thenable
               await onClick(event);
               setInternalIsSubmitting(false);
             }
@@ -32,7 +33,7 @@ export const SubmitButton: FC<SubmitButtonProps> = (props) => {
       {...rest}
     >
       {children}
-      {(isSubmitting === undefined ? internalIsSubmitting : isSubmitting) && <CircularProgress size={20} sx={{ marginLeft: '1em' }} />}
+      {(isSubmitting ?? internalIsSubmitting) && <CircularProgress size={20} sx={{ marginLeft: '1em' }} />}
     </Button>
   );
 };

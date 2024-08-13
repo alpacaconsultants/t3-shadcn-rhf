@@ -6,6 +6,7 @@ import { Resource } from 'sst';
 import { z } from 'zod';
 import { db } from '../db';
 import { serverAction } from '../util/server-utils';
+import { surveys } from '~/server/db/schema';
 
 const s3 = new S3Client({});
 
@@ -29,4 +30,20 @@ export const getMySurveys = serverAction()
       orderBy: (survey, { desc }) => [desc(survey.createdAt)],
     });
     return surveys ?? null;
+  });
+
+export const createSurvey = serverAction()
+  .auth()
+  .input(z.object({ name: z.string().min(1), s3Key: z.string().min(1) }))
+  .action(async ({ session, input }) => {
+    if (!session) return null;
+    const [newSurvey] = await db
+      .insert(surveys)
+      .values({
+        name: input.name,
+        createdById: session.user.id,
+        s3Key: input.s3Key,
+      })
+      .returning();
+    return newSurvey;
   });
