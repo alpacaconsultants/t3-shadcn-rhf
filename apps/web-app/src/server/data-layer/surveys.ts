@@ -5,7 +5,7 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Resource } from 'sst';
 import { z } from 'zod';
 import { db } from '../db';
-import { authActionClient } from '../util/server-utils';
+import { authActionClient } from '../util/safe-action';
 import { surveys } from '~/server/db/schema';
 
 const s3 = new S3Client({});
