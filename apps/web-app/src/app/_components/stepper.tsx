@@ -16,7 +16,7 @@ import { useCallback } from 'react';
 import { SubmitButton } from '../ui/buttons/base-buttons';
 import { Uploader } from './uploader';
 import { api } from '~/trpc/react';
-import { prepareUpload } from '~/server/data-layer/server-actions';
+import { prepareUpload } from '~/server/data-layer/surveys';
 
 enum StepId {
   Name,
