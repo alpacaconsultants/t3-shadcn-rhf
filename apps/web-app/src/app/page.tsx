@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Box } from '@mui/material';
-import { Surveys } from './_components/surverys';
+import { Surveys } from '../components/molecules/surverys';
 import { getServerAuthSession } from '~/server/auth';
 import { HydrateClient } from '~/trpc/server';
 
@@ -8,8 +8,6 @@ export default async function Home() {
   // const hello = await api.post.hello({ text: 'from tRPC' });
   //
   const session = await getServerAuthSession();
-
-  console.log('session!!!!!!!!!!!!!', session?.user);
 
   return (
     <HydrateClient>

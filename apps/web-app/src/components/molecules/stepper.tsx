@@ -13,7 +13,7 @@ import { LinearProgress, TextField } from '@mui/material';
 import { useImmerReducer } from 'use-immer';
 import axios from 'axios';
 import { useCallback } from 'react';
-import { SubmitButton } from '../ui/buttons/base-buttons';
+import { SubmitButton } from '../atoms/buttons/base-buttons';
 import { Uploader } from './uploader';
 import { createSurvey, prepareUpload } from '~/server/data-layer/surveys';
 

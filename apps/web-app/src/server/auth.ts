@@ -29,7 +29,6 @@ export const authOptions: NextAuthOptions = {
   session: { strategy: 'jwt' },
   callbacks: {
     async jwt({ token, user, account }): Promise<JWT> {
-      console.log('account!', account);
       // Initial sign in
       if (account && user) {
         token.id = user.id;
