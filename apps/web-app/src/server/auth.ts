@@ -6,7 +6,7 @@ import GoogleProvider from 'next-auth/providers/google';
 
 import { env } from '~/env';
 import { db } from '~/server/db';
-import { accounts, users, verificationTokens } from '~/server/db/schema';
+import { accounts, users } from '~/server/db/schema';
 
 type UserId = string;
 /**
@@ -18,6 +18,7 @@ type UserId = string;
 declare module 'next-auth/jwt' {
   interface JWT {
     id: UserId;
+    roles: string[];
   }
 }
 
@@ -25,6 +26,7 @@ declare module 'next-auth' {
   interface Session {
     user: User & {
       id: UserId;
+      roles: string[];
     };
   }
 }
@@ -39,41 +41,40 @@ export const authOptions: NextAuthOptions = {
   // https://dev.to/miljancode/drizzle-orm-next-auth-and-planetscale-2jbl
   session: { strategy: 'jwt' },
   callbacks: {
-    async session({ token, session }) {
-      if (token && session) {
-        session.user = {
-          id: token.id,
-          name: token.name,
-          email: token.email,
-          image: token.picture,
-        };
-      }
-
-      return session;
-    },
+    session: ({ session, token }) => ({
+      ...session,
+      user: {
+        ...session.user,
+        id: token.sub,
+        roles: token.roles,
+      },
+    }),
     async jwt({ token, user }) {
-      if (!token.email) return token;
-      const [dbUser] = await db.select().from(users).where(eq(users.email, token.email)).limit(1);
+      token.roles = ['user']; //replace with await db.select().from(users).where... // get roles from db
 
-      if (!dbUser) {
-        if (user) {
-          token.id = user?.id;
-        }
-        return token;
-      }
+      return token;
+      // if (!token.email) return token;
+      // const [dbUser] = await db.select().from(users).where(eq(users.email, token.email)).limit(1);
 
-      return {
-        id: dbUser.id,
-        name: dbUser.name,
-        email: dbUser.email,
-        picture: dbUser.image,
-      };
+      // if (!dbUser) {
+      //   if (user) {
+      //     token.id = user?.id;
+      //   }
+      //   return token;
+      // }
+
+      // return {
+      //   id: dbUser.id,
+      //   name: dbUser.name,
+      //   email: dbUser.email,
+      //   picture: dbUser.image,
+      // };
     },
   },
   adapter: DrizzleAdapter(db, {
     usersTable: users,
     accountsTable: accounts,
-    verificationTokensTable: verificationTokens,
+    // verificationTokensTable: verificationTokens,
   }) as Adapter,
   providers: [
     GoogleProvider({
