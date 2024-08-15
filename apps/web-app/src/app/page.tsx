@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Box } from '@mui/material';
+import { type Route } from 'next';
 import { Surveys } from '../components/molecules/surverys';
 import { getServerAuthSession } from '~/server/auth';
 import { HydrateClient } from '~/trpc/server';
@@ -22,6 +23,7 @@ export default async function Home() {
         }}
       >
         <Link href={session ? '/api/auth/signout' : '/api/auth/signin'}>{session ? 'Sign out' : 'Sign in'}</Link>
+        <Link href={`/admin/${1}`}>Admin Page 1</Link>
         {session && <Surveys />}
       </Box>
     </HydrateClient>
