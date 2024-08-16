@@ -1648,7 +1648,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.20.13, @babel/runtime@npm:^7.23.9, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.7":
+"@babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.20.13, @babel/runtime@npm:^7.23.9, @babel/runtime@npm:^7.25.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.7":
   version: 7.25.0
   resolution: "@babel/runtime@npm:7.25.0"
   dependencies:
@@ -2647,7 +2647,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/system@npm:^5.16.7":
+"@mui/system@npm:^5.16.5, @mui/system@npm:^5.16.7":
   version: 5.16.7
   resolution: "@mui/system@npm:5.16.7"
   dependencies:
@@ -2687,7 +2687,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/utils@npm:^5.16.6":
+"@mui/utils@npm:^5.16.5, @mui/utils@npm:^5.16.6":
   version: 5.16.6
   resolution: "@mui/utils@npm:5.16.6"
   dependencies:
@@ -2704,6 +2704,53 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 6f8068f07f60a842fcb2e2540eecbd9c5f04df695bcc427184720e8ae138ae689fefd3c20147ab7c76e809ede6e10f5e08d1c34cd3a8b09bd22d2020a666a96f
+  languageName: node
+  linkType: hard
+
+"@mui/x-date-pickers@npm:^7.12.1":
+  version: 7.12.1
+  resolution: "@mui/x-date-pickers@npm:7.12.1"
+  dependencies:
+    "@babel/runtime": ^7.25.0
+    "@mui/system": ^5.16.5
+    "@mui/utils": ^5.16.5
+    "@types/react-transition-group": ^4.4.10
+    clsx: ^2.1.1
+    prop-types: ^15.8.1
+    react-transition-group: ^4.4.5
+  peerDependencies:
+    "@emotion/react": ^11.9.0
+    "@emotion/styled": ^11.8.1
+    "@mui/material": ^5.15.14
+    date-fns: ^2.25.0 || ^3.2.0
+    date-fns-jalali: ^2.13.0-0 || ^3.2.0-0
+    dayjs: ^1.10.7
+    luxon: ^3.0.2
+    moment: ^2.29.4
+    moment-hijri: ^2.1.2
+    moment-jalaali: ^0.7.4 || ^0.8.0 || ^0.9.0 || ^0.10.0
+    react: ^17.0.0 || ^18.0.0
+    react-dom: ^17.0.0 || ^18.0.0
+  peerDependenciesMeta:
+    "@emotion/react":
+      optional: true
+    "@emotion/styled":
+      optional: true
+    date-fns:
+      optional: true
+    date-fns-jalali:
+      optional: true
+    dayjs:
+      optional: true
+    luxon:
+      optional: true
+    moment:
+      optional: true
+    moment-hijri:
+      optional: true
+    moment-jalaali:
+      optional: true
+  checksum: fd5efde7015ddec7c169d03f833e7035380982a8e7ed29b513ac643e85ab69b9edbf11cc69d5d64a8370e43782d5be81db65cb22b109ee2f3b7feb87e70e9914
   languageName: node
   linkType: hard
 
@@ -4124,6 +4171,7 @@ __metadata:
     "@emotion/styled": ^11.13.0
     "@mui/material": ^5.16.7
     "@mui/material-nextjs": ^5.16.6
+    "@mui/x-date-pickers": ^7.12.1
     "@t3-oss/env-nextjs": ^0.10.1
     "@tanstack/react-query": ^5.50.0
     "@trpc/client": ^11.0.0-rc.446
@@ -4136,6 +4184,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^7.18.0
     "@typescript-eslint/parser": ^7.18.0
     axios: ^1.7.3
+    date-fns: ^3.6.0
     drizzle-kit: ^0.21.4
     drizzle-orm: ^0.30.10
     env-cmd: ^10.1.0
@@ -4153,6 +4202,8 @@ __metadata:
     react: ^18.3.1
     react-dom: ^18.3.1
     react-dropzone: ^14.2.3
+    react-hook-form: ^7.45.1
+    react-hook-form-mui: ^6.5.1
     server-only: ^0.0.1
     sst: ion
     superjson: ^2.2.1
@@ -6041,6 +6092,13 @@ __metadata:
     es-errors: ^1.3.0
     is-data-view: ^1.0.1
   checksum: 7f0bf8720b7414ca719eedf1846aeec392f2054d7af707c5dc9a753cc77eb8625f067fa901e0b5127e831f9da9056138d894b9c2be79c27a21f6db5824f009c2
+  languageName: node
+  linkType: hard
+
+"date-fns@npm:^3.6.0":
+  version: 3.6.0
+  resolution: "date-fns@npm:3.6.0"
+  checksum: 0daa1e9a436cf99f9f2ae9232b55e11f3dd46132bee10987164f3eebd29f245b2e066d7d7db40782627411ecf18551d8f4c9fcdf2226e48bb66545407d448ab7
   languageName: node
   linkType: hard
 
@@ -11281,6 +11339,33 @@ __metadata:
   peerDependencies:
     react: ">= 16.8 || 18.0.0"
   checksum: 174b744d5ca898cf3d84ec1aeb6cef5211c446697e45dc8ece8287a03d291f8d07253206d5a1247ef156fd385d65e7de666d4d5c2986020b8543b8f2434e8b40
+  languageName: node
+  linkType: hard
+
+"react-hook-form-mui@npm:^6.5.1":
+  version: 6.8.0
+  resolution: "react-hook-form-mui@npm:6.8.0"
+  peerDependencies:
+    "@mui/icons-material": ">= 5.x <6"
+    "@mui/material": ">= 5.x <6"
+    "@mui/x-date-pickers": ">=6.1.0 <7"
+    react: ">=17 <19"
+    react-hook-form: ">=7.33.1"
+  peerDependenciesMeta:
+    "@mui/icons-material":
+      optional: true
+    "@mui/x-date-pickers":
+      optional: true
+  checksum: a1d8ab7a704cc46afee62a87ef535f6426242203da81fe5c0698150897d5abded560a43f8a0f4f08b6cd0233bbd6fa72c7f721616edcb758ca2c31aa7fde5421
+  languageName: node
+  linkType: hard
+
+"react-hook-form@npm:^7.45.1":
+  version: 7.52.2
+  resolution: "react-hook-form@npm:7.52.2"
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18 || ^19
+  checksum: 8621a21cf674f46507776741b2507d5357564af62bfc9dae8d1d7fb9076538352a48f16485885d3379d685d2d50537b28285322ad5a8c33d0ea5ddff21080543
   languageName: node
   linkType: hard
 
