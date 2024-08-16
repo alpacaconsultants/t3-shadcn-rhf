@@ -1,5 +1,5 @@
 import { type FC } from 'react';
-import VerticalLinearStepper from './stepper';
+import VerticalLinearStepper from './Stepper';
 import { getMySurveys } from '~/server/data-layer/surveys';
 
 export const Surveys: FC = async () => {

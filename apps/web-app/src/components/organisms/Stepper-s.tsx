@@ -17,7 +17,7 @@ import { useForm } from 'react-hook-form-mui';
 import { SubmitButton } from '../atoms/buttons/base-buttons';
 import { FormContainer } from '../molecules/forms/FormContainer';
 import { RhfMuiSelect, RhfMuiTextArea, RhfMuiTextField } from '../molecules/fields/rhf-mui-fields';
-import { Uploader } from './uploader';
+import { Uploader } from './Uploader';
 import { createSurvey, prepareUpload } from '~/server/data-layer/surveys';
 
 enum StepId {
