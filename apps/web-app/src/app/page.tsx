@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Box } from '@mui/material';
 import { type Route } from 'next';
-import { Surveys } from '../components/molecules/surverys';
+import { Surveys } from '../components/organisms/surverys';
 import { getServerAuthSession } from '~/server/auth';
 import { HydrateClient } from '~/trpc/server';
 

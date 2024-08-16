@@ -12,8 +12,11 @@ import Typography from '@mui/material/Typography';
 import { LinearProgress, TextField } from '@mui/material';
 import { useImmerReducer } from 'use-immer';
 import axios from 'axios';
-import { useCallback } from 'react';
+import { type FC, useCallback } from 'react';
+import { useForm } from 'react-hook-form-mui';
 import { SubmitButton } from '../atoms/buttons/base-buttons';
+import { FormContainer } from '../molecules/forms/FormContainer';
+import { RhfMuiSelect, RhfMuiTextArea, RhfMuiTextField } from '../molecules/fields/rhf-mui-fields';
 import { Uploader } from './uploader';
 import { createSurvey, prepareUpload } from '~/server/data-layer/surveys';
 
@@ -125,6 +128,26 @@ function reducer(state: State, action: Action): State {
   return state;
 }
 
+const defaultValues = {
+  name: 'test',
+  description: '',
+  gender: '',
+};
+
+export const SampleForm: FC = () => {
+  const formContext = useForm({
+    defaultValues,
+  });
+
+  return (
+    <FormContainer formContext={formContext} FormProps={{ className: 'h-full flex flex-col' }}>
+      <RhfMuiTextField name='name' label='Name' />
+      <RhfMuiSelect name='gender' label='Gender' options={[{ id: 'male', label: 'Male' }]} />
+      <RhfMuiTextArea name='description' label='Description' />
+    </FormContainer>
+  );
+};
+
 export default function VerticalLinearStepper(): JSX.Element {
   const [state, dispatch] = useImmerReducer(reducer, initialState);
 
@@ -172,6 +195,8 @@ export default function VerticalLinearStepper(): JSX.Element {
 
   const handleBack = () => dispatch({ type: 'back' });
   const { activeStep, nextButton } = state;
+
+  return <SampleForm />;
 
   return (
     <Box sx={{ maxWidth: 400 }}>
