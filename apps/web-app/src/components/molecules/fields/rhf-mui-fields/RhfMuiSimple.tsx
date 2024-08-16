@@ -28,7 +28,7 @@ export const RhfMuiTextArea: FC<TextFieldElementProps> = (props) => {
         <TextFieldElement
           onBlurCapture={handleTrimOnBlur}
           name={name}
-          className={cx({ [classes.shortWidth]: !fullWidth }, classes.inputField)}
+          className={cx({ [classes.shortWidth]: !fullWidth })}
           multiline
           rows={6}
           fullWidth
@@ -51,15 +51,7 @@ export const RhfMuiTextField: FC<TextFieldElementProps> = (props) => {
 
   return (
     <>
-      {!isReadOnly && (
-        <TextFieldElement
-          name={name}
-          className={cx({ [classes.shortWidth]: !fullWidth }, classes.inputField)}
-          fullWidth
-          size={size}
-          {...rest}
-        />
-      )}
+      {!isReadOnly && <TextFieldElement name={name} className={cx({ [classes.shortWidth]: !fullWidth })} fullWidth size={size} {...rest} />}
       {isReadOnly && value}
       {children}
     </>
@@ -77,7 +69,7 @@ export const RhfMuiNumericField: FC<TextFieldElementProps> = (props) => {
     <>
       {!isReadOnly && (
         <TextFieldElement
-          className={cx({ [classes.shortWidth]: !fullWidth }, classes.inputField)}
+          className={cx({ [classes.shortWidth]: !fullWidth })}
           fullWidth
           size={size}
           name={name}

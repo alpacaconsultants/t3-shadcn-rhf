@@ -25,7 +25,7 @@ export const RhfMuiSelect: FC<IRhfMuiSelectProps> = (props) => {
   return (
     <>
       <SelectElement
-        className={cx({ [classes.shortWidth]: !fullWidth }, classes.inputField)}
+        className={cx({ [classes.shortWidth]: !fullWidth })}
         fullWidth
         size={size}
         options={options}
