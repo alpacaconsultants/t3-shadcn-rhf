@@ -24,7 +24,7 @@ interface UploaderProps {
   onDrop: (acceptedFiles: File[]) => void;
 }
 
-export const Uploader: FC<UploaderProps> = ({ onDrop }) => {
+export const FileUploader: FC<UploaderProps> = ({ onDrop }) => {
   const { classes } = styles();
 
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone({ maxFiles: 1, onDrop });

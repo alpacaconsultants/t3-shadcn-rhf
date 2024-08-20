@@ -17,7 +17,7 @@ import { useForm } from 'react-hook-form-mui';
 import { SubmitButton } from '../atoms/buttons/BaseButtons';
 import { FormContainer } from '../molecules/forms/FormContainer';
 import { RhfMuiSelect, RhfMuiTextArea, RhfMuiTextField } from '../molecules/fields/rhf-mui-fields';
-import { Uploader } from './Uploader';
+import { FileUploader } from './FileUploader';
 import { createSurvey, prepareUpload } from '~/server/data-layer/surveys';
 
 enum StepId {
@@ -84,6 +84,12 @@ const initialState: State = {
   uploadStatus: 'idle',
 };
 
+interface SurveyFormValues {
+  name: string;
+  step: StepId;
+  file: File | null;
+}
+
 function reducer(state: State, action: Action): State {
   switch (action.type) {
     case 'next':
@@ -140,7 +146,7 @@ export const SampleForm: FC = () => {
   });
 
   return (
-    <FormContainer formContext={formContext} FormProps={{ className: 'h-full flex flex-col' }}>
+    <FormContainer formContext={formContext}>
       <RhfMuiTextField name='name' label='Name' />
       <RhfMuiSelect name='gender' label='Gender' options={[{ id: 'male', label: 'Male' }]} />
       <RhfMuiTextArea name='description' label='Description' />
@@ -223,7 +229,9 @@ export default function VerticalLinearStepper(): JSX.Element {
                 <div>
                   {step.id === StepId.Upload && (
                     <>
-                      <Uploader onDrop={(acceptedFiles: File[]) => dispatch({ type: 'setFile', payload: { file: acceptedFiles[0]! } })} />
+                      <FileUploader
+                        onDrop={(acceptedFiles: File[]) => dispatch({ type: 'setFile', payload: { file: acceptedFiles[0]! } })}
+                      />
                       {state.uploadStatus === 'uploading' && (
                         <LinearProgress
                           variant='determinate'
