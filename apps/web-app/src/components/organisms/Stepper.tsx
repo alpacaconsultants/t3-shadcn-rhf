@@ -13,14 +13,15 @@ import { LinearProgress, TextField } from '@mui/material';
 import { useImmerReducer } from 'use-immer';
 import axios from 'axios';
 import { type FC, useCallback } from 'react';
-import { useForm, useWatch } from 'react-hook-form-mui';
+import { useForm, useWatch, type Resolver } from 'react-hook-form';
+
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ProgressButton } from '../atoms/buttons/BaseButtons';
 import { FormContainer } from '../molecules/forms/FormContainer';
 import { RhfMuiSelect, RhfMuiTextArea, RhfMuiTextField } from '../molecules/fields/rhf-mui-fields';
 import { RhfFileUpload } from '../molecules/fields/rhf-mui-fields/RhfFileUpload';
-import { nameofFactory } from '../utils/nameofFactory';
+import { nameofFactory, type ShapeOf } from '../utils/type-helpers';
 import { FileUploader } from './FileUploader';
 import { createSurvey, prepareUpload } from '~/server/data-layer/surveys';
 
@@ -181,7 +182,7 @@ const surveyFormSchema = Yup.object().shape({
     then: (schema) => schema.required(),
     otherwise: (schema) => schema.nullable(),
   }),
-});
+} as ShapeOf<SurveyFormValues>);
 
 function FormValueDisplay() {
   const formValues = useWatch();
@@ -223,7 +224,7 @@ export default function VerticalLinearStepper(): JSX.Element {
 
   const formContext = useForm({
     defaultValues,
-    resolver: yupResolver(surveyFormSchema) as any,
+    resolver: yupResolver(surveyFormSchema),
     mode: 'onChange',
     shouldUnregister: false,
   });
@@ -233,7 +234,7 @@ export default function VerticalLinearStepper(): JSX.Element {
     formState: { isValid },
   } = formContext;
 
-  const activeStep = watch('activeStep');
+  const activeStep = watch('activeStep') as StepId;
 
   const handleNext = async () => {
     if (+activeStep === steps.length - 1) {
