@@ -2,14 +2,24 @@
 import { Button, type ButtonProps, CircularProgress } from '@mui/material';
 import { type FC, useState } from 'react';
 
-export type SubmitButtonProps = Omit<ButtonProps, 'type'> & {
+export type SubmitButtonProps = ButtonProps & {
   isSubmitting?: boolean;
   onClick?: ButtonProps['onClick'];
   testId?: string;
 };
 
-export const SubmitButton: FC<SubmitButtonProps> = (props) => {
-  const { children, color, disabled, isSubmitting, onClick, testId = 'submit-button', variant = 'contained', ...rest } = props;
+export const ProgressButton: FC<SubmitButtonProps> = (props) => {
+  const {
+    children,
+    color,
+    disabled,
+    isSubmitting,
+    onClick,
+    testId = 'submit-button',
+    variant = 'contained',
+    type = 'submit',
+    ...rest
+  } = props;
 
   const [internalIsSubmitting, setInternalIsSubmitting] = useState(false);
 
@@ -28,7 +38,7 @@ export const SubmitButton: FC<SubmitButtonProps> = (props) => {
             }
           : undefined
       }
-      type='submit'
+      type={type}
       variant={variant}
       {...rest}
     >
