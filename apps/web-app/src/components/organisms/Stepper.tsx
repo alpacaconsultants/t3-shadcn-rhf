@@ -17,6 +17,8 @@ import { useForm } from 'react-hook-form-mui';
 import { SubmitButton } from '../atoms/buttons/BaseButtons';
 import { FormContainer } from '../molecules/forms/FormContainer';
 import { RhfMuiSelect, RhfMuiTextArea, RhfMuiTextField } from '../molecules/fields/rhf-mui-fields';
+import { RhfFileUpload } from '../molecules/fields/rhf-mui-fields/RhfFileUpload';
+import { nameofFactory } from '../utils/nameofFactory';
 import { FileUploader } from './FileUploader';
 import { createSurvey, prepareUpload } from '~/server/data-layer/surveys';
 
@@ -90,6 +92,14 @@ interface SurveyFormValues {
   file: File | null;
 }
 
+const defaultValues: SurveyFormValues = {
+  name: '',
+  step: StepId.Name,
+  file: null,
+};
+
+const nameof = nameofFactory<SurveyFormValues>();
+
 function reducer(state: State, action: Action): State {
   switch (action.type) {
     case 'next':
@@ -134,25 +144,26 @@ function reducer(state: State, action: Action): State {
   return state;
 }
 
-const defaultValues = {
-  name: 'test',
-  description: '',
-  gender: '',
-};
+// const defaultValues = {
+//   name: 'test',
+//   description: '',
+//   gender: '',
+// };
 
-export const SampleForm: FC = () => {
-  const formContext = useForm({
-    defaultValues,
-  });
+// export const SampleForm: FC = () => {
+//   const formContext = useForm({
+//     defaultValues,
+//   });
 
-  return (
-    <FormContainer formContext={formContext}>
-      <RhfMuiTextField name='name' label='Name' />
-      <RhfMuiSelect name='gender' label='Gender' options={[{ id: 'male', label: 'Male' }]} />
-      <RhfMuiTextArea name='description' label='Description' />
-    </FormContainer>
-  );
-};
+//   return (
+//     <FormContainer formContext={formContext}>
+//       <RhfMuiTextField name='name' label='Name' />
+//       <RhfMuiSelect name='gender' label='Gender' options={[{ id: 'male', label: 'Male' }]} />
+//       <RhfMuiTextArea name='description' label='Description' />
+//       <RhfFileUpload name='file' />
+//     </FormContainer>
+//   );
+// };
 
 export default function VerticalLinearStepper(): JSX.Element {
   const [state, dispatch] = useImmerReducer(reducer, initialState);
@@ -202,7 +213,18 @@ export default function VerticalLinearStepper(): JSX.Element {
   const handleBack = () => dispatch({ type: 'back' });
   const { activeStep, nextButton } = state;
 
-  return <SampleForm />;
+  // return <SampleForm />;
+
+  const formContext = useForm({
+    defaultValues,
+  });
+
+  return (
+    <FormContainer formContext={formContext}>
+      <RhfMuiTextField name={nameof('name')} label='Name' />
+      <RhfFileUpload name={nameof('file')} />
+    </FormContainer>
+  );
 
   return (
     <Box sx={{ maxWidth: 400 }}>

@@ -1,6 +1,5 @@
 import { type FC } from 'react';
-
-import { useWatch, useFormContext } from 'react-hook-form-mui';
+import { useController, useFormContext } from 'react-hook-form';
 import { FileUploader } from '~/components/organisms/FileUploader';
 
 interface RhfFileUploadProps {
@@ -8,8 +7,14 @@ interface RhfFileUploadProps {
 }
 
 export const RhfFileUpload: FC<RhfFileUploadProps> = ({ name }) => {
-  const value = useWatch({ name });
-  const formContext = useFormContext();
+  const { control } = useFormContext();
+  const {
+    field: { onChange, value },
+    fieldState: { error },
+  } = useController({
+    name,
+    control,
+  });
 
-  return <FileUploader onDrop={(acceptedFiles: File[]) => formContext.setValue(name, acceptedFiles[0])} />;
+  return <FileUploader onDrop={(acceptedFiles: File[]) => onChange(acceptedFiles[0])} file={value} error={error?.message} />;
 };
