@@ -14,7 +14,7 @@ import { useImmerReducer } from 'use-immer';
 import axios from 'axios';
 import { type FC, useCallback } from 'react';
 import { useForm } from 'react-hook-form-mui';
-import { SubmitButton } from '../atoms/buttons/base-buttons';
+import { SubmitButton } from '../atoms/buttons/BaseButtons';
 import { FormContainer } from '../molecules/forms/FormContainer';
 import { RhfMuiSelect, RhfMuiTextArea, RhfMuiTextField } from '../molecules/fields/rhf-mui-fields';
 import { Uploader } from './Uploader';
