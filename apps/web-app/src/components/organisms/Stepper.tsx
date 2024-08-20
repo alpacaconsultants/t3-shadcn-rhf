@@ -95,7 +95,7 @@ interface SurveyFormValues {
 }
 
 const defaultValues: SurveyFormValues = {
-  name: 'bla',
+  name: '',
   activeStep: StepId.Name,
   file: null,
 };
@@ -223,7 +223,7 @@ export default function VerticalLinearStepper(): JSX.Element {
 
   const formContext = useForm({
     defaultValues,
-    // resolver: yupResolver(surveyFormSchema) as any,
+    resolver: yupResolver(surveyFormSchema) as any,
     mode: 'onChange',
     shouldUnregister: false,
   });
@@ -246,12 +246,11 @@ export default function VerticalLinearStepper(): JSX.Element {
     }
     // dispatch({ type: 'next' });
     formContext.setValue('activeStep', activeStep + 1, { shouldValidate: true });
-    // await formContext.trigger('activeStep');
   };
 
   const handleBack = async () => {
     formContext.setValue('activeStep', activeStep - 1), { shouldValidate: true };
-    // await formContext.trigger('activeStep');
+    void formContext.trigger();
   };
   const { nextButton } = state;
 
@@ -261,9 +260,21 @@ export default function VerticalLinearStepper(): JSX.Element {
     formContext.register('activeStep');
   }, [formContext]);
 
+  // React.useEffect(() => {
+  //   void formContext.trigger();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [activeStep]);
+
   return (
     <FormContainer formContext={formContext}>
       <Box>{JSON.stringify(formValues)}</Box>
+      <Button
+        onClick={() => {
+          void formContext.trigger();
+        }}
+      >
+        Validate
+      </Button>
       <FormValueDisplay />
       <Box>{JSON.stringify(formContext.formState.isValid)}</Box>
       <Box sx={{ maxWidth: 400 }}>

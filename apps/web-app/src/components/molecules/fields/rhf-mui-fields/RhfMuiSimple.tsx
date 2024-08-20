@@ -4,10 +4,12 @@ import {
   TextFieldElement,
   type TextFieldElementProps,
   useWatch,
-  useFormContext,
   CheckboxButtonGroup,
   type CheckboxButtonGroupProps,
 } from 'react-hook-form-mui';
+import { type TextFieldProps } from '@mui/material';
+import { Controller, useFormContext } from 'react-hook-form';
+import { TextField } from '@mui/material';
 import { useDefaultProps } from '../useDefaultProps';
 import { useFieldMaterialUIStyles } from '../useFieldMaterialUIStyles';
 
@@ -43,18 +45,45 @@ export const RhfMuiTextArea: FC<TextFieldElementProps> = (props) => {
   );
 };
 
-export const RhfMuiTextField: FC<TextFieldElementProps> = (props) => {
-  props = { ...props, ...useDefaultProps(props) };
-  const { fullWidth = true, size = 'small', isReadOnly, name, children, ...rest } = { ...props, ...useDefaultProps(props) };
+export interface RhfMuiTextFieldProps extends Omit<TextFieldProps, 'name'> {
+  name: string;
+  isReadOnly?: boolean;
+  fullWidth?: boolean;
+  size?: 'small' | 'medium';
+  // Add any other custom props you need for your component
+}
+
+export const RhfMuiTextField: React.FC<RhfMuiTextFieldProps> = (props) => {
+  const { fullWidth = true, size = 'small', isReadOnly, name, children, ...rest } = props;
   const { classes, cx } = useFieldMaterialUIStyles();
-  const value = useWatch({ name });
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext();
 
   return (
-    <>
-      {!isReadOnly && <TextFieldElement name={name} className={cx({ [classes.shortWidth]: !fullWidth })} fullWidth size={size} {...rest} />}
-      {isReadOnly && value}
-      {children}
-    </>
+    <Controller
+      name={name}
+      control={control}
+      render={({ field }) => (
+        <>
+          {!isReadOnly ? (
+            <TextField
+              {...field}
+              {...rest}
+              className={cx({ [classes.shortWidth]: !fullWidth })}
+              fullWidth={fullWidth}
+              size={size}
+              error={!!errors[name]}
+              helperText={errors[name]?.message as string}
+            />
+          ) : (
+            <div>{field.value}</div>
+          )}
+          {children}
+        </>
+      )}
+    />
   );
 };
 
