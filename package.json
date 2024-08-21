@@ -34,10 +34,5 @@
     "apps/*",
     "packages/*",
     "utils/*"
-  ],
-  "dependencies": {
-    "@hookform/resolvers": "^3.9.0",
-    "react-hook-form-mui": "^7.0.1",
-    "yup": "^1.4.0"
-  }
+  ]
 }
