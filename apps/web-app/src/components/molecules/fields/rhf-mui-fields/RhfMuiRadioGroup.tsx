@@ -1,13 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-redundant-type-constituents */
 import { type RadioButtonGroupProps, useFormContext, useWatch } from 'react-hook-form-mui';
 import { FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import { type ReactNode } from 'react';
 import { useDefaultProps } from '../useDefaultProps';
 
 export const RhfMuiRadioGroup: React.FC<
-  RadioButtonGroupProps<any> & {
+  RadioButtonGroupProps<any, any, any> & {
     children?: ReactNode;
   }
 > = (props) => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   const { isReadOnly, options, name, ...rest } = { ...props, ...useDefaultProps(props) };
 
   const value = useWatch({ name });

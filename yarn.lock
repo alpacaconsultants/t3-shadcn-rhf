@@ -4308,7 +4308,6 @@ __metadata:
     react-dom: ^18.3.1
     react-dropzone: ^14.2.3
     react-hook-form: ^7.45.1
-    react-hook-form-mui: ^6.5.1
     server-only: ^0.0.1
     sst: ion
     superjson: ^2.2.1
@@ -11456,13 +11455,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form-mui@npm:^6.5.1":
-  version: 6.8.0
-  resolution: "react-hook-form-mui@npm:6.8.0"
+"react-hook-form-mui@npm:^7.0.1":
+  version: 7.0.1
+  resolution: "react-hook-form-mui@npm:7.0.1"
   peerDependencies:
     "@mui/icons-material": ">= 5.x <6"
     "@mui/material": ">= 5.x <6"
-    "@mui/x-date-pickers": ">=6.1.0 <7"
+    "@mui/x-date-pickers": ">=7.0.0 <8"
     react: ">=17 <19"
     react-hook-form: ">=7.33.1"
   peerDependenciesMeta:
@@ -11470,7 +11469,7 @@ __metadata:
       optional: true
     "@mui/x-date-pickers":
       optional: true
-  checksum: a1d8ab7a704cc46afee62a87ef535f6426242203da81fe5c0698150897d5abded560a43f8a0f4f08b6cd0233bbd6fa72c7f721616edcb758ca2c31aa7fde5421
+  checksum: a9c247e8d8ecda5ca5f070c8a29bf1eb981777524f3a8922bafca08f69762cb14a2f4d94bd0c2835806e7fdfeb60003329e51c0cbc3e95ee1c3c2088780cee89
   languageName: node
   linkType: hard
 
@@ -12573,6 +12572,7 @@ __metadata:
     husky: ^9.1.4
     npm-run-all: ^4.1.5
     prettier: ^3.3.3
+    react-hook-form-mui: ^7.0.1
     ts-node: ^10.9.2
     tsconfig: "*"
     turbo: ^2.0.12

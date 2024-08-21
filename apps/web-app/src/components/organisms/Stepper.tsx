@@ -266,6 +266,8 @@ export default function VerticalLinearStepper(): JSX.Element {
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [activeStep]);
 
+  // return <SampleForm />;
+
   return (
     <FormContainer formContext={formContext}>
       <Box>{JSON.stringify(formValues)}</Box>
