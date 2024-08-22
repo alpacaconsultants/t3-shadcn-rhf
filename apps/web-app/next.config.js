@@ -8,6 +8,7 @@ await import('./src/env.js');
 const config = {
   experimental: {
     typedRoutes: true,
+    serverComponentsExternalPackages: ['@aws-sdk/s3-request-presigner'],
   },
 };
 

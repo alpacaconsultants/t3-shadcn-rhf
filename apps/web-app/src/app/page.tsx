@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { Box } from '@mui/material';
 import { getServerAuthSession } from '~/server/auth';
 import { HydrateClient } from '~/trpc/server';
-import { Surveys } from '~/components/modules/Surverys';
+import { CreateSurveyForm } from '~/components/modules/CreateSurveyForm';
 
 export default async function Home() {
   // const hello = await api.post.hello({ text: 'from tRPC' });
@@ -22,8 +22,8 @@ export default async function Home() {
         }}
       >
         <Link href={session ? '/api/auth/signout' : '/api/auth/signin'}>{session ? 'Sign out' : 'Sign in'}</Link>
-        <Link href={`/admin/${1}`}>Admin Page 1</Link>
-        {session && <Surveys />}
+        {session && <Link href='/admin'>Admin Page 1</Link>}
+        <CreateSurveyForm />
       </Box>
     </HydrateClient>
   );
