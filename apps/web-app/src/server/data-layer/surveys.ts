@@ -31,7 +31,7 @@ export const getMySurveys = authActionClient.action(async () => {
 });
 
 export const createSurvey = authActionClient
-  .schema(z.object({ name: z.string().min(1), s3Key: z.string().min(1) }))
+  .schema(z.object({ name: z.string().min(1), s3Key: z.string().min(1), description: z.string().optional() }))
   .action(async ({ ctx, parsedInput }) => {
     const [newSurvey] = await db
       .insert(surveys)
@@ -39,6 +39,7 @@ export const createSurvey = authActionClient
         name: parsedInput.name,
         createdById: ctx.user.id,
         s3Key: parsedInput.s3Key,
+        description: parsedInput.description,
       })
       .returning();
     return newSurvey;

@@ -16,11 +16,12 @@ import { type FC, useCallback } from 'react';
 import { useForm, type Resolver } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { FormContainer } from '../molecules/forms/FormContainer';
-import { RhfMuiSelect, RhfMuiTextArea, RhfMuiTextField } from '../molecules/fields/rhf-mui-fields';
-import { RhfFileUpload } from '../molecules/fields/rhf-mui-fields/RhfFileUpload';
+
+import FormSubmitButton from '../ui/atoms/buttons/FormSubmitButton';
+import { RhfMuiTextField, RhfMuiTextArea } from '../ui/molecules/fields/rhf-mui-fields';
+import { RhfFileUpload } from '../ui/molecules/fields/rhf-mui-fields/RhfFileUpload';
 import { nameofFactory, type ShapeOf } from '../utils/type-helpers';
-import FormSubmitButton from '../atoms/buttons/FormSubmitButton';
+import { FormContainer } from '../ui/molecules/forms/FormContainer';
 import { createSurvey, prepareUpload } from '~/server/data-layer/surveys';
 
 enum StepId {
@@ -40,7 +41,7 @@ const steps: Step[] = [
   },
   {
     id: StepId.Upload,
-    label: 'Upload Ssurvey',
+    label: 'Upload Survey',
   },
 ];
 
@@ -125,7 +126,7 @@ const surveyFormSchema = Yup.object().shape({
   }),
 } as ShapeOf<SurveyFormValues>);
 
-export default function VerticalLinearStepper(): JSX.Element {
+export const CreateSurveyForm: FC = () => {
   const [state, dispatch] = useImmerReducer(reducer, initialState);
 
   const uploadFile = useCallback(
@@ -169,22 +170,25 @@ export default function VerticalLinearStepper(): JSX.Element {
     [activeStep]
   );
 
-  const handleNext = async (values: SurveyFormValues) => {
-    if (+activeStep === steps.length - 1) {
-      if (!values.file) return;
-      const uploadInfo = await prepareUpload({ fileName: values.file.name });
-      if (!uploadInfo?.data) throw new Error('Upload failed');
-      const { s3Key, uploadUrl } = uploadInfo.data;
-      await uploadFile(uploadUrl, values.file);
-      await createSurvey({ name: values.name, s3Key });
-    }
-    formContext.setValue('activeStep', activeStep + 1, { shouldValidate: true });
-  };
+  const handleNext = useCallback(
+    async (values: SurveyFormValues) => {
+      if (isLastStep) {
+        if (!values.file) return;
+        const uploadInfo = await prepareUpload({ fileName: values.file.name });
+        if (!uploadInfo?.data) throw new Error('Upload failed');
+        const { s3Key, uploadUrl } = uploadInfo.data;
+        await uploadFile(uploadUrl, values.file);
+        await createSurvey({ name: values.name, s3Key, description: values.description });
+      }
+      formContext.setValue('activeStep', activeStep + 1, { shouldValidate: true });
+    },
+    [activeStep, formContext, isLastStep, uploadFile]
+  );
 
-  const handleBack = async () => {
+  const handleBack = useCallback(async () => {
     formContext.setValue('activeStep', activeStep - 1), { shouldValidate: true };
     void formContext.trigger();
-  };
+  }, [activeStep, formContext]);
 
   React.useEffect(() => {
     formContext.register('activeStep');
@@ -250,4 +254,4 @@ export default function VerticalLinearStepper(): JSX.Element {
       </Box>
     </FormContainer>
   );
-}
+};

@@ -1,6 +1,6 @@
 import { type FC } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
-import { FileUploader } from '~/components/organisms/FileUploader';
+import { FileUploader } from '~/components/modules/FileUploader';
 
 interface RhfFileUploadProps {
   name: string;

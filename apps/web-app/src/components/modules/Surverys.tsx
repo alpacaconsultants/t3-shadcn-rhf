@@ -1,5 +1,5 @@
 import { type FC } from 'react';
-import VerticalLinearStepper from './Stepper';
+import { CreateSurveyForm } from './CreateSurveyForm';
 import { getMySurveys } from '~/server/data-layer/surveys';
 
 export const Surveys: FC = async () => {
@@ -11,7 +11,7 @@ export const Surveys: FC = async () => {
   // eslint-disable-next-line no-console
   console.log('mySurveys', mySurveys);
 
-  return <VerticalLinearStepper />;
+  return <CreateSurveyForm />;
 
   // return (
   //   <Box>

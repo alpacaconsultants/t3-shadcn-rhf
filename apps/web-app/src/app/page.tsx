@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { Box } from '@mui/material';
 import { type Route } from 'next';
-import { Surveys } from '../components/organisms/Surverys';
 import { getServerAuthSession } from '~/server/auth';
 import { HydrateClient } from '~/trpc/server';
+import { Surveys } from '~/components/modules/Surverys';
 
 export default async function Home() {
   // const hello = await api.post.hello({ text: 'from tRPC' });
