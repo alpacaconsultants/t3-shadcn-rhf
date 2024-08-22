@@ -25,8 +25,9 @@ import { FormContainer } from '../ui/molecules/forms/FormContainer';
 import { createSurvey, prepareUpload } from '~/server/data-layer/surveys';
 
 enum StepId {
-  Name = 0,
-  Upload = 1,
+  Email = 0,
+  Name = 1,
+  Upload = 2,
 }
 
 interface Step {
@@ -35,6 +36,10 @@ interface Step {
 }
 
 const steps: Step[] = [
+  {
+    id: StepId.Email,
+    label: 'Your Details',
+  },
   {
     label: 'Survey details',
     id: StepId.Name,
@@ -79,6 +84,7 @@ const initialState: State = {
 interface SurveyFormValues {
   name: string;
   description: string;
+  email: string;
   activeStep: StepId;
   file: File | null;
 }
@@ -86,7 +92,8 @@ interface SurveyFormValues {
 const defaultValues: SurveyFormValues = {
   name: '',
   description: '',
-  activeStep: StepId.Name,
+  activeStep: 0,
+  email: '',
   file: null,
 };
 
@@ -109,6 +116,13 @@ function reducer(state: State, action: Action): State {
 }
 
 const surveyFormSchema = Yup.object().shape({
+  email: Yup.string()
+    .email()
+    .when('activeStep', {
+      is: StepId.Email,
+      then: (schema) => schema.required().label('Email'),
+      otherwise: (schema) => schema,
+    }),
   name: Yup.string().when('activeStep', {
     is: StepId.Name,
     then: (schema) => schema.required().label('Name'),
@@ -203,17 +217,23 @@ export const CreateSurveyForm: FC = () => {
               <StepLabel>{step.label}</StepLabel>
               <StepContent>
                 <Box>
+                  {step.id === StepId.Email && (
+                    <RhfMuiTextField name={nameof('email')} label='Email' placeholder='Where should we send the results?' fullWidth />
+                  )}
+
                   {step.id === StepId.Name && (
                     <>
                       <RhfMuiTextField
                         name={nameof('name')}
                         placeholder='Give your survey a name'
+                        fullWidth
                         label='Name'
                         sx={{ mt: 1, mb: 1 }}
                         disabled={activeStep !== StepId.Name}
                       />
                       <RhfMuiTextArea
                         name={nameof('description')}
+                        fullWidth
                         label='Description'
                         placeholder='Tell us a bit about your survey'
                         sx={{ mt: 1, mb: 1 }}
@@ -221,26 +241,24 @@ export const CreateSurveyForm: FC = () => {
                       />
                     </>
                   )}
-                  <div>
-                    {step.id === StepId.Upload && (
-                      <>
-                        <RhfFileUpload name={nameof('file')} />
-                        {state.uploadStatus === 'uploading' && (
-                          <LinearProgress
-                            variant='determinate'
-                            value={Math.min(100, Math.max(0, state.uploadPercentage))}
-                            sx={{ height: 10, borderRadius: 5 }}
-                          />
-                        )}
-                      </>
+                  {step.id === StepId.Upload && <RhfFileUpload name={nameof('file')} />}
+
+                  <>
+                    {state.uploadStatus === 'uploading' && (
+                      <LinearProgress
+                        variant='determinate'
+                        value={Math.min(100, Math.max(0, state.uploadPercentage))}
+                        sx={{ height: 10, borderRadius: 5 }}
+                      />
                     )}
+
                     <FormSubmitButton variant='contained' sx={{ mt: 1, mr: 1 }} disabled={!isValid}>
                       {isLastStep ? 'Finish' : 'Next'}
                     </FormSubmitButton>
                     <Button disabled={formContext.formState.isSubmitting || isFistStep} onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
                       Back
                     </Button>
-                  </div>
+                  </>
                 </Box>
               </StepContent>
             </Step>
