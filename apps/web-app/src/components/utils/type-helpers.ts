@@ -13,6 +13,7 @@ export type ConditionalSchema<T> = T extends string
     : T extends boolean
       ? Yup.BooleanSchema
       : // Relaxed type to allow more complex shapes
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         any;
 
 export type ShapeOf<Fields> = {

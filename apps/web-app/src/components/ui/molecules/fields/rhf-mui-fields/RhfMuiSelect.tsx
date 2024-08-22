@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { type FC } from 'react';
-import { Controller, type FieldValues, type Control, type FieldError, useFormContext } from 'react-hook-form';
+import { Controller, type FieldValues, useFormContext } from 'react-hook-form';
 import { Select, MenuItem, FormControl, InputLabel, type SelectChangeEvent, type SelectProps, FormHelperText } from '@mui/material';
 import { useDefaultProps } from '../useDefaultProps';
 import { useFieldMaterialUIStyles } from '../useFieldMaterialUIStyles';
@@ -20,6 +21,7 @@ interface IRhfMuiSelectProps<T extends FieldValues> extends Omit<SelectProps, 'n
   hideFieldLabel?: boolean;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const RhfMuiSelect: FC<IRhfMuiSelectProps<any>> = (props) => {
   props = { ...props, ...useDefaultProps(props) };
 

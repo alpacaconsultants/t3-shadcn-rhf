@@ -9,7 +9,7 @@ import StepContent from '@mui/material/StepContent';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import { LinearProgress, Stack } from '@mui/material';
+import { LinearProgress } from '@mui/material';
 import { useImmerReducer } from 'use-immer';
 import axios from 'axios';
 import { type FC, useCallback } from 'react';
@@ -192,7 +192,7 @@ export const CreateSurveyForm: FC = () => {
         if (!uploadInfo?.data) throw new Error('Upload failed');
         const { s3Key, uploadUrl } = uploadInfo.data;
         await uploadFile(uploadUrl, values.file);
-        await createSurvey({ name: values.name, s3Key, description: values.description });
+        await createSurvey({ name: values.name, s3Key, description: values.description, userEmail: values.email });
       }
       formContext.setValue('activeStep', activeStep + 1, { shouldValidate: true });
     },

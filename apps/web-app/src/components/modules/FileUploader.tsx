@@ -1,5 +1,5 @@
 import React, { type FC } from 'react';
-import { useDropzone, type FileWithPath } from 'react-dropzone';
+import { useDropzone } from 'react-dropzone';
 import { makeStyles } from 'tss-react/mui';
 import { Typography } from '@mui/material';
 
