@@ -13,7 +13,7 @@ export interface RhfMuiTextFieldProps extends Omit<TextFieldProps, 'name'> {
   // Add any other custom props you need for your component
 }
 
-export const RhfMuiTextArea: FC<RhfMuiTextFieldProps> = (props) => <RhfMuiTextField {...props} rows={6} />;
+export const RhfMuiTextArea: FC<RhfMuiTextFieldProps> = (props) => <RhfMuiTextField {...props} rows={6} multiline />;
 
 export const RhfMuiTextField: React.FC<RhfMuiTextFieldProps> = (props) => {
   props = { ...props, ...useDefaultProps(props) };

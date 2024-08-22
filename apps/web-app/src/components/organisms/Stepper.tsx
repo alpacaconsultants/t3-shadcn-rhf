@@ -9,7 +9,7 @@ import StepContent from '@mui/material/StepContent';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import { LinearProgress } from '@mui/material';
+import { LinearProgress, Stack } from '@mui/material';
 import { useImmerReducer } from 'use-immer';
 import axios from 'axios';
 import { type FC, useCallback } from 'react';
@@ -35,12 +35,12 @@ interface Step {
 
 const steps: Step[] = [
   {
-    label: 'Give your survey a name',
+    label: 'Survey details',
     id: StepId.Name,
   },
   {
     id: StepId.Upload,
-    label: 'Upload your survey',
+    label: 'Upload Ssurvey',
   },
 ];
 
@@ -77,12 +77,14 @@ const initialState: State = {
 
 interface SurveyFormValues {
   name: string;
+  description: string;
   activeStep: StepId;
   file: File | null;
 }
 
 const defaultValues: SurveyFormValues = {
   name: '',
+  description: '',
   activeStep: StepId.Name,
   file: null,
 };
@@ -108,12 +110,17 @@ function reducer(state: State, action: Action): State {
 const surveyFormSchema = Yup.object().shape({
   name: Yup.string().when('activeStep', {
     is: StepId.Name,
-    then: (schema) => schema.required(),
+    then: (schema) => schema.required().label('Name'),
+    otherwise: (schema) => schema,
+  }),
+  description: Yup.string().when('activeStep', {
+    is: StepId.Name,
+    then: (schema) => schema.required().label('Description'),
     otherwise: (schema) => schema,
   }),
   file: Yup.mixed().when('activeStep', {
     is: StepId.Upload,
-    then: (schema) => schema.required(),
+    then: (schema) => schema.required().label('File'),
     otherwise: (schema) => schema.nullable(),
   }),
 } as ShapeOf<SurveyFormValues>);
@@ -154,7 +161,13 @@ export default function VerticalLinearStepper(): JSX.Element {
 
   const activeStep = watch('activeStep');
 
-  const isLastStep = React.useMemo(() => +activeStep === steps.length - 1, [activeStep]);
+  const { isLastStep, isFistStep } = React.useMemo(
+    () => ({
+      isLastStep: +activeStep === steps.length - 1,
+      isFistStep: +activeStep === 0,
+    }),
+    [activeStep]
+  );
 
   const handleNext = async (values: SurveyFormValues) => {
     if (+activeStep === steps.length - 1) {
@@ -183,20 +196,27 @@ export default function VerticalLinearStepper(): JSX.Element {
         <Stepper activeStep={activeStep} orientation='vertical'>
           {steps.map((step) => (
             <Step key={step.id}>
-              <StepLabel>
-                {step.label}
-                {step.id === StepId.Name && (
-                  <RhfMuiTextField
-                    name={nameof('name')}
-                    label='Name'
-                    placeholder='Survey name'
-                    sx={{ marginTop: 1 }}
-                    disabled={activeStep !== StepId.Name}
-                  />
-                )}
-              </StepLabel>
+              <StepLabel>{step.label}</StepLabel>
               <StepContent>
-                <Box sx={{ mb: 2 }}>
+                <Box>
+                  {step.id === StepId.Name && (
+                    <>
+                      <RhfMuiTextField
+                        name={nameof('name')}
+                        placeholder='Give your survey a name'
+                        label='Name'
+                        sx={{ mt: 1, mb: 1 }}
+                        disabled={activeStep !== StepId.Name}
+                      />
+                      <RhfMuiTextArea
+                        name={nameof('description')}
+                        label='Description'
+                        placeholder='Tell us a bit about your survey'
+                        sx={{ mt: 1, mb: 1 }}
+                        disabled={activeStep !== StepId.Name}
+                      />
+                    </>
+                  )}
                   <div>
                     {step.id === StepId.Upload && (
                       <>
@@ -213,7 +233,7 @@ export default function VerticalLinearStepper(): JSX.Element {
                     <FormSubmitButton variant='contained' sx={{ mt: 1, mr: 1 }} disabled={!isValid}>
                       {isLastStep ? 'Finish' : 'Next'}
                     </FormSubmitButton>
-                    <Button disabled={formContext.formState.isSubmitting} onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
+                    <Button disabled={formContext.formState.isSubmitting || isFistStep} onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
                       Back
                     </Button>
                   </div>
