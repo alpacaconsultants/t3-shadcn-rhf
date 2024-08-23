@@ -42,7 +42,7 @@ export class AppController {
         timeout: 4000,
       });
 
-      // await axios.get(enrichFileInput.callbackUrl);
+      await axios.get(enrichFileInput.callbackUrl);
     }, 10);
 
     console.log('processFileinput', JSON.stringify(enrichFileInput));
