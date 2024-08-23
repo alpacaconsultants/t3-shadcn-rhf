@@ -5,10 +5,11 @@ import * as path from 'path';
 import { createReadStream } from 'fs';
 import { stat } from 'fs/promises';
 
-interface IProcessFileInput {
+interface IEnrichFileInput {
   downloadUrl: string;
   uploadUrl: string;
   callbackUrl: string;
+  context: string;
 }
 
 @Controller()
@@ -16,7 +17,7 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Post()
-  getHello(@Body() processFile: IProcessFileInput): true {
+  getHello(@Body() enrichFileInput: IEnrichFileInput): true {
     setTimeout(async () => {
       // Create a read stream for the CSV file
       const filePath = path.join(
@@ -32,7 +33,7 @@ export class AppController {
 
       console.log('uploading file...', size);
       // Upload the file
-      await axios.put(processFile.uploadUrl, fileStream, {
+      await axios.put(enrichFileInput.uploadUrl, fileStream, {
         headers: {
           'Content-Type': 'text/csv',
           'Content-Length': size,
@@ -41,8 +42,11 @@ export class AppController {
         timeout: 4000,
       });
 
-      await axios.get(processFile.callbackUrl);
+      // await axios.get(enrichFileInput.callbackUrl);
     }, 10);
+
+    console.log('processFileinput', JSON.stringify(enrichFileInput));
+
     return true;
   }
 }
