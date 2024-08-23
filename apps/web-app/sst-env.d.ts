@@ -3,7 +3,11 @@
 import "sst"
 declare module "sst" {
   export interface Resource {
-    "SurveyBucket": {
+    "BucketSurveyProcessed": {
+      "name": string
+      "type": "sst.aws.Bucket"
+    }
+    "BucketSurveyUploads": {
       "name": string
       "type": "sst.aws.Bucket"
     }

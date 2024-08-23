@@ -15,6 +15,7 @@ export class AppController {
   @Post()
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getHello(@Body() processFile: IProcessFileInput): true {
+    console.log('uploadUrl', processFile.uploadUrl);
     setTimeout(() => {
       console.log('Sending callback');
       axios.get(processFile.callbackUrl);

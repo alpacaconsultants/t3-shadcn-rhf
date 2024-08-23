@@ -23,6 +23,8 @@ import { RhfFileUpload } from '../ui/molecules/fields/rhf-mui-fields/RhfFileUplo
 import { nameofFactory, type ShapeOf } from '../utils/type-helpers';
 import { FormContainer } from '../ui/molecules/forms/FormContainer';
 import { createSurvey, prepareUpload } from '~/server/data-layer/surveys';
+import { api } from '~/trpc/react';
+import { env } from '~/env';
 
 enum StepId {
   Email = 0,
@@ -188,11 +190,15 @@ export const CreateSurveyForm: FC = () => {
     async (values: SurveyFormValues) => {
       if (isLastStep) {
         if (!values.file) return;
-        const uploadInfo = await prepareUpload({ fileName: values.file.name });
+        const uploadInfo = await prepareUpload({ fileName: values.file.name, userEmail: values.email });
         if (!uploadInfo?.data) throw new Error('Upload failed');
         const { s3Key, uploadUrl } = uploadInfo.data;
         await uploadFile(uploadUrl, values.file);
         await createSurvey({ name: values.name, s3Key, description: values.description, userEmail: values.email });
+        if (env.NEXT_PUBLIC_NODE_ENV === 'development') {
+          // Allow submit again
+          return;
+        }
       }
       formContext.setValue('activeStep', activeStep + 1, { shouldValidate: true });
     },
@@ -210,6 +216,14 @@ export const CreateSurveyForm: FC = () => {
 
   return (
     <FormContainer formContext={formContext} onSuccess={handleNext}>
+      {/* <Button
+        variant='contained'
+        onClick={() => {
+          callback.mutate({ surveyId: '1' });
+        }}
+      >
+        Callback
+      </Button> */}
       <Box sx={{ maxWidth: 400 }}>
         <Stepper activeStep={activeStep} orientation='vertical'>
           {steps.map((step) => (

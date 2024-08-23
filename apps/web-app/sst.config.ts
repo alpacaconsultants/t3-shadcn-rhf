@@ -15,12 +15,15 @@ export default $config({
 
     const NODE_ENV = $app.stage === 'prod' ? 'production' : 'development';
 
-    const surveyBucket = new sst.aws.Bucket('SurveyBucket');
+    const bucketSurveyUploads = new sst.aws.Bucket('BucketSurveyUploads');
+    const bucketSurveyProcessed = new sst.aws.Bucket('BucketSurveyProcessed');
+
+    // const resultsBucket = new sst.aws.Bucket('SurveyBucket');
     // const surveyBucket = new sst.aws.Bucket('SurveyBucket', {transform: {bucket: {bucket: getConstructName('survey-bucket')}}});
 
     new sst.aws.Nextjs('WebApp', {
       buildCommand: 'echo buildeded by turbo',
-      link: [surveyBucket],
+      link: [bucketSurveyUploads, bucketSurveyProcessed],
       // domain: { name: domainName }
     });
   },
