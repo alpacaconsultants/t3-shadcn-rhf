@@ -16,7 +16,7 @@ export default $config({
     const NODE_ENV = $app.stage === 'prod' ? 'production' : 'development';
 
     const bucketSurveyUploads = new sst.aws.Bucket('BucketSurveyUploads');
-    const bucketSurveyProcessed = new sst.aws.Bucket('BucketSurveyProcessed');
+    const bucketSurveyProcessed = new sst.aws.Bucket('BucketSurveyEnriched');
 
     // const resultsBucket = new sst.aws.Bucket('SurveyBucket');
     // const surveyBucket = new sst.aws.Bucket('SurveyBucket', {transform: {bucket: {bucket: getConstructName('survey-bucket')}}});

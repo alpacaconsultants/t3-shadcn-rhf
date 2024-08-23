@@ -34,7 +34,7 @@ export const surveys = createTable(
   {
     id: serial('id').primaryKey(),
     name: varchar('name', { length: 256 }),
-    description: varchar('description', { length: 1000 }),
+    context: varchar('context', { length: 1000 }),
     createdById: varchar('created_by', { length: 255 })
       .notNull()
       .references(() => users.id),
@@ -47,6 +47,27 @@ export const surveys = createTable(
   (example) => ({
     createdByIdIdx: index('survey_created_by_idx').on(example.createdById),
     nameIndex: index('survey_name_idx').on(example.name),
+  })
+);
+
+export const insights = createTable(
+  'insights',
+  {
+    id: serial('id').primaryKey(),
+    surveyId: integer('survey_id')
+      .notNull()
+      .references(() => surveys.id),
+    reference: integer('reference'),
+    topic: varchar('topic', { length: 1000 }),
+    sentiment: varchar('sentiment', { enum: ['positive', 'negative', 'neutral'] }),
+    originalData: varchar('original_data', { length: 2000 }).notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).$onUpdate(() => new Date()),
+  },
+  (example) => ({
+    surveyIdIdx: index('insights_suvey_idx').on(example.surveyId),
   })
 );
 

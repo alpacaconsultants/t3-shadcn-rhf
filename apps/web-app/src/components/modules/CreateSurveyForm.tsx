@@ -23,7 +23,6 @@ import { RhfFileUpload } from '../ui/molecules/fields/rhf-mui-fields/RhfFileUplo
 import { nameofFactory, type ShapeOf } from '../utils/type-helpers';
 import { FormContainer } from '../ui/molecules/forms/FormContainer';
 import { createSurvey, prepareUpload } from '~/server/data-layer/surveys';
-import { api } from '~/trpc/react';
 import { env } from '~/env';
 
 enum StepId {
@@ -85,7 +84,7 @@ const initialState: State = {
 
 interface SurveyFormValues {
   name: string;
-  description: string;
+  context: string;
   email: string;
   activeStep: StepId;
   file: File | null;
@@ -93,7 +92,7 @@ interface SurveyFormValues {
 
 const defaultValues: SurveyFormValues = {
   name: '',
-  description: '',
+  context: '',
   activeStep: 0,
   email: '',
   file: null,
@@ -130,7 +129,7 @@ const surveyFormSchema = Yup.object().shape({
     then: (schema) => schema.required().label('Name'),
     otherwise: (schema) => schema,
   }),
-  description: Yup.string().when('activeStep', {
+  context: Yup.string().when('activeStep', {
     is: StepId.Name,
     then: (schema) => schema.required().label('Description'),
     otherwise: (schema) => schema,
@@ -194,7 +193,7 @@ export const CreateSurveyForm: FC = () => {
         if (!uploadInfo?.data) throw new Error('Upload failed');
         const { s3Key, uploadUrl } = uploadInfo.data;
         await uploadFile(uploadUrl, values.file);
-        await createSurvey({ name: values.name, s3Key, description: values.description, userEmail: values.email });
+        await createSurvey({ name: values.name, s3Key, context: values.context, userEmail: values.email });
         if (env.NEXT_PUBLIC_NODE_ENV === 'development') {
           // Allow submit again
           return;
@@ -246,9 +245,9 @@ export const CreateSurveyForm: FC = () => {
                         disabled={activeStep !== StepId.Name}
                       />
                       <RhfMuiTextArea
-                        name={nameof('description')}
+                        name={nameof('context')}
                         fullWidth
-                        label='Description'
+                        label='Context'
                         placeholder='Tell us a bit about your survey'
                         sx={{ mt: 1, mb: 1 }}
                         disabled={activeStep !== StepId.Name}

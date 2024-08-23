@@ -9,10 +9,10 @@ import axios from 'axios';
 import { type Route } from 'next';
 import { db } from '../db';
 import { actionClient, authActionClient } from '../util/safe-action';
+import { SEARCH_PARAM_SURVERY_ID } from '../config';
 import { surveys, users } from '~/server/db/schema';
 import { env } from '~/env';
 import { api } from '~/trpc/server';
-import { SEARCH_PARAM_SURVERY_ID } from '~/app/api/web-hooks/survey-processed/route';
 
 const axiosInstance = axios.create({
   baseURL: 'http://localhost:3100/',
@@ -61,7 +61,7 @@ export const getMySurveys = authActionClient.action(async () => {
 });
 
 export const createSurvey = actionClient
-  .schema(z.object({ name: z.string().min(1), s3Key: z.string().min(1), description: z.string().optional(), userEmail: z.string() }))
+  .schema(z.object({ name: z.string().min(1), s3Key: z.string().min(1), context: z.string().optional(), userEmail: z.string() }))
   .action(async ({ parsedInput }) => {
     const user = await findOrCreateUser(parsedInput.userEmail);
 
@@ -73,7 +73,7 @@ export const createSurvey = actionClient
         name: parsedInput.name,
         createdById: user.id,
         s3Key: parsedInput.s3Key,
-        description: parsedInput.description,
+        context: parsedInput.context,
       })
       .returning();
 
@@ -92,20 +92,19 @@ export const createSurvey = actionClient
       s3,
       new PutObjectCommand({
         Key: parsedInput.s3Key,
-        Bucket: Resource.BucketSurveyProcessed.name,
+        Bucket: Resource.BucketSurveyEnriched.name,
       }),
       { expiresIn: 7 * 24 * 60 * 60 }
     ); // 7 days in seconds
 
-    void api.survey.processedCallback({ surveyId: newSurvey.id });
+    const webbookPath: Route = '/api/web-hooks/survey-enriched';
 
-    const webbookPath: Route = '/api/web-hooks/survey-processed';
-
-    // Note: I could use trpc here but I'm not sure if it's worth it
+    // // Note: I could use trpc here but I'm not sure if it's worth it
     await axiosInstance.post('/', {
       downloadUrl,
       uploadUrl,
       callbackUrl: `${env.SITE_URL}${webbookPath}?${SEARCH_PARAM_SURVERY_ID}=${newSurvey.id}`,
+      context: parsedInput.context,
     });
     return newSurvey;
   });
