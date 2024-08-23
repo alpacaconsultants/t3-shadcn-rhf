@@ -32,7 +32,7 @@
   "packageManager": "yarn@3.6.3",
   "workspaces": [
     "apps/*",
-    "packages/*",
-    "utils/*"
+    "utils/*",
+    "packages/*"
   ]
 }
