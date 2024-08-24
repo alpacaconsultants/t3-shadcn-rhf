@@ -2,7 +2,7 @@
 
 import { type FC } from 'react';
 import { ProgressButton } from '../ui/atoms/buttons/BaseButtons';
-import { sendEmail } from '~/server/util/send-email';
+import { sendEmail } from '~/server/email/send-email';
 
 export const SendEmail: FC = () => (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
