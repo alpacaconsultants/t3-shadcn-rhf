@@ -2,6 +2,7 @@
 
 import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { SESv2Client, SendEmailCommand } from '@aws-sdk/client-sesv2';
 import { Resource } from 'sst';
 import { z } from 'zod';
 import { eq } from 'drizzle-orm';
@@ -12,7 +13,8 @@ import { actionClient, authActionClient } from '../util/safe-action';
 import { SEARCH_PARAM_SURVERY_ID } from '../config';
 import { surveys, users } from '~/server/db/schema';
 import { env } from '~/env';
-import { api } from '~/trpc/server';
+
+const client = new SESv2Client();
 
 const axiosInstance = axios.create({
   baseURL: 'http://localhost:3100/',
@@ -97,14 +99,31 @@ export const createSurvey = actionClient
       { expiresIn: 7 * 24 * 60 * 60 }
     ); // 7 days in seconds
 
-    const webbookPath: Route = '/api/web-hooks/survey-enriched';
+    const webhookPath: Route = '/api/web-hooks/survey-enriched';
 
     // // Note: I could use trpc here but I'm not sure if it's worth it
     await axiosInstance.post('/', {
       downloadUrl,
       uploadUrl,
-      callbackUrl: `${env.SITE_URL}${webbookPath}?${SEARCH_PARAM_SURVERY_ID}=${newSurvey.id}`,
+      callbackUrl: `${env.APP_URL}${webhookPath}?${SEARCH_PARAM_SURVERY_ID}=${newSurvey.id}`,
       context: parsedInput.context,
     });
     return newSurvey;
   });
+
+// export const sendEmail = actionClient.action(async () => {
+//   await client.send(
+//     new SendEmailCommand({
+//       FromEmailAddress: `simon@${Resource.EmailAlpaca.sender}`,
+//       Destination: {
+//         ToAddresses: ['simonaverhoeven@gmail.com'],
+//       },
+//       Content: {
+//         Simple: {
+//           Subject: { Data: 'Hello World!' },
+//           Body: { Text: { Data: 'Sent from my SST app.' } },
+//         },
+//       },
+//     })
+//   );
+// });

@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-import { type Readable } from 'stream';
 import { eq } from 'drizzle-orm';
 import { type NextRequest } from 'next/server';
 import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
