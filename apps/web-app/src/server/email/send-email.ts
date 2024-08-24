@@ -4,7 +4,7 @@ import { SESv2Client, SendEmailCommand } from '@aws-sdk/client-sesv2';
 import { render } from '@react-email/components';
 import { Resource } from 'sst';
 import { actionClient } from '../util/safe-action';
-import { WelcomeEmail } from './emails/wellcome-email';
+import WelcomeEmail from './emails/welcome-email';
 
 const client = new SESv2Client();
 

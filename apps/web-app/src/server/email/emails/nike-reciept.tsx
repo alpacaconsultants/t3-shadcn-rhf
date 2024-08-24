@@ -4,7 +4,7 @@ import * as React from 'react';
 
 const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : '';
 
-export const NikeReceiptEmail = () => (
+const NikeReceiptEmail = () => (
   <Html>
     <Head />
     <Preview>Get your order summary, estimated delivery date and more</Preview>

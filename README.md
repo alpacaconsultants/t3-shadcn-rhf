@@ -2,6 +2,8 @@
 
 By Simon Verhoeven
 
+React Email runing on http://localhost:3001
+
 ## Getting started
 
 - `yarn install`

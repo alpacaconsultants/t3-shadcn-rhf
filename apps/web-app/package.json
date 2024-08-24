@@ -13,7 +13,8 @@
     "db:studio": "drizzle-kit studio",
     "deploy": "sst deploy --stage $ENV",
     "next:dev": "sst shell --stage dev -- next dev",
-    "dev": "run-p next:dev db:studio",
+    "email:dev": "email dev --dir ./src/server/email/emails --port 3001",
+    "dev": "run-p next:dev db:studio email:dev",
     "format": "prettier --ignore-path '../../.prettierignore' --write .",
     "format:check": "prettier --ignore-path '../../.prettierignore' --check .",
     "get:env": "env-cmd -f .env${ENV:+.$ENV}",
@@ -83,6 +84,7 @@
     "eslint-config-next": "^14.2.4",
     "eslint-plugin-drizzle": "^0.2.3",
     "npm-run-all": "^4.1.5",
+    "react-email": "^3.0.1",
     "typescript": "^5.5.3"
   },
   "ct3aMetadata": {

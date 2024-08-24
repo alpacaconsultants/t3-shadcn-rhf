@@ -2,7 +2,7 @@
 import React, { type CSSProperties } from 'react';
 import { Body, Container, Head, Heading, Hr, Html, Link, Preview, Text } from '@react-email/components';
 
-export const WelcomeEmail = () => (
+const WelcomeEmail = () => (
   <Html>
     <Head>
       <title>Welcome to Stirxy - Survey Processing Confirmation</title>
@@ -43,6 +43,8 @@ export const WelcomeEmail = () => (
     </Body>
   </Html>
 );
+
+export default WelcomeEmail;
 
 const main = {
   backgroundColor: '#ffffff',
