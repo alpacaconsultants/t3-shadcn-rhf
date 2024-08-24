@@ -1,8 +1,8 @@
 /* eslint-disable react/no-unescaped-entities */
-import React, { type CSSProperties } from 'react';
+import React, { type FC, type CSSProperties } from 'react';
 import { Body, Container, Head, Heading, Hr, Html, Link, Preview, Text } from '@react-email/components';
 
-const WelcomeEmail = () => (
+const WelcomeEmail: FC = () => (
   <Html>
     <Head>
       <title>Welcome to Stirxy - Survey Processing Confirmation</title>
