@@ -13,6 +13,9 @@ export default withAuth(
     callbacks: {
       authorized: ({ token, req }) => {
         const path = req.nextUrl.pathname;
+
+        if (path.startsWith('/admin') && !token?.isAdmin) return false;
+
         // Allow access to paths starting with allowedPaths without authentication
         if (allowedPaths.some((allowedPath) => path === allowedPath)) {
           return true;
