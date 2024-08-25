@@ -1,9 +1,9 @@
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
-import { type NextAuthOptions, getServerSession } from 'next-auth';
+import { type NextAuthOptions, type User, getServerSession } from 'next-auth';
 import { type Adapter } from 'next-auth/adapters';
 import GoogleProvider from 'next-auth/providers/google';
 import { type JWT } from 'next-auth/jwt';
-import { eq, type InferSelectModel } from 'drizzle-orm';
+import { type InferSelectModel } from 'drizzle-orm';
 import { env } from '~/env';
 import { db } from '~/server/db';
 import { accounts, users } from '~/server/db/schema';
@@ -12,20 +12,20 @@ export type DbUser = InferSelectModel<typeof users>;
 
 type UserRole = 'admin';
 
+interface CustomUserData {
+  id: string;
+  roles: UserRole[];
+  isAdmin: boolean;
+}
+
 declare module 'next-auth/jwt' {
-  interface JWT {
-    id: string;
-    roles: UserRole[];
-    isAdmin: boolean;
-  }
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface JWT extends CustomUserData {}
 }
 
 declare module 'next-auth' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface User extends DbUser {}
-
   interface Session {
-    user: DbUser;
+    user: User & CustomUserData;
   }
 }
 
@@ -65,6 +65,7 @@ export const authOptions: NextAuthOptions = {
         ...session.user,
         id: token.id,
         roles: token.roles,
+        isAdmin: token.isAdmin,
       },
     }),
   },
