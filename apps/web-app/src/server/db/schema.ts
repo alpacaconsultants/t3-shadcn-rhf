@@ -72,22 +72,18 @@ export const insights = createTable(
   })
 );
 
-const UserRoleEnum = pgEnum('user_role', ['admin', 'user']);
-
-export type UserRole = (typeof UserRoleEnum.enumValues)[number];
+export const insightsRelations = relations(insights, ({ one }) => ({
+  survey: one(surveys, {
+    fields: [insights.surveyId],
+    references: [surveys.id],
+  }),
+}));
 
 export const users = createTable('user', {
   id: varchar('id', { length: 255 })
     .notNull()
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  // roles: text('roles')
-  //   .array()
-  //   .$type<UserRole[]>()
-  //   .default(sql`ARRAY['user']::text[]`),
-  roles: text('roles', { enum: ['admin', 'user'] })
-    .array()
-    .default(sql`ARRAY['user']::text[]`),
   name: varchar('name', { length: 255 }),
   email: varchar('email', { length: 255 }).notNull(),
   emailVerified: timestamp('email_verified', {
@@ -97,6 +93,46 @@ export const users = createTable('user', {
   image: varchar('image', { length: 255 }),
 });
 
+export const roles = createTable('role', {
+  id: varchar('id', { length: 255 }).notNull().primaryKey(),
+  name: varchar('name', { enum: ['admin', 'user'], length: 255 }).notNull(),
+});
+
+export const userRoles = createTable(
+  'user_role',
+  {
+    userId: varchar('user_id', { length: 255 })
+      .notNull()
+      .references(() => users.id),
+    roleId: varchar('role_id', { length: 255 })
+      .notNull()
+      .references(() => roles.id),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.userId, t.roleId] }),
+  })
+);
+
+export const usersRelations = relations(users, ({ many }) => ({
+  accounts: many(accounts),
+  userRoles: many(userRoles),
+}));
+
+export const rolesRelations = relations(roles, ({ many }) => ({
+  userRoles: many(userRoles),
+}));
+
+export const userRolesRelations = relations(userRoles, ({ one }) => ({
+  user: one(users, {
+    fields: [userRoles.userId],
+    references: [users.id],
+  }),
+  role: one(roles, {
+    fields: [userRoles.roleId],
+    references: [roles.id],
+  }),
+}));
+
 // If I need a seperate table for roles
 // export const roles = createTable('roles', {
 //   id: serial('id').primaryKey(),
@@ -104,10 +140,6 @@ export const users = createTable('user', {
 //     .notNull()
 //     .references(() => surveys.id),
 // });
-
-export const usersRelations = relations(users, ({ many }) => ({
-  accounts: many(accounts),
-}));
 
 export const accounts = createTable(
   'account',

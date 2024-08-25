@@ -3,17 +3,20 @@ import { type NextAuthOptions, getServerSession } from 'next-auth';
 import { type Adapter } from 'next-auth/adapters';
 import GoogleProvider from 'next-auth/providers/google';
 import { type JWT } from 'next-auth/jwt';
-import { type InferSelectModel } from 'drizzle-orm';
+import { eq, type InferSelectModel } from 'drizzle-orm';
 import { env } from '~/env';
 import { db } from '~/server/db';
 import { accounts, users } from '~/server/db/schema';
 
 export type DbUser = InferSelectModel<typeof users>;
 
+type UserRole = 'admin';
+
 declare module 'next-auth/jwt' {
   interface JWT {
     id: string;
-    roles: DbUser['roles'];
+    roles: UserRole[];
+    isAdmin: boolean;
   }
 }
 
@@ -32,27 +35,27 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user, account }): Promise<JWT> {
       // Initial sign in
       if (account && user) {
-        console.log('sign in token! before', token);
-
         token.id = user.id;
-        token.roles = user.roles;
 
-        console.log('sign in token!', token);
+        // Fetch user roles
+        const userWithRoles = await db.query.users.findFirst({
+          where: (users, { eq }) => eq(users.id, user.id),
+          with: {
+            userRoles: {
+              columns: {
+                roleId: true,
+              },
+            },
+          },
+        });
 
-        // Fetch user roles from database
-        // const dbUser = await db.select({ roles: users.roles })
-        //                         .from(users)
-        //                         .where(eq(users.id, user.id))
-        //                         .limit(1);
-
-        // if (dbUser && dbUser[0]) {
-        //   token.roles = dbUser[0].roles || ['user'];
-        // }
-
+        if (userWithRoles) {
+          token.roles = userWithRoles.userRoles.map((ur) => ur.roleId) as UserRole[];
+          token.isAdmin = token.roles.includes('admin');
+        }
         return token;
       }
 
-      console.log('next token!', token);
       // Subsequent uses of the token
       return token;
     },
