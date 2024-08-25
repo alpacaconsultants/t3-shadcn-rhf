@@ -1,5 +1,5 @@
 import { relations, sql } from 'drizzle-orm';
-import { index, integer, pgTableCreator, primaryKey, serial, text, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { index, integer, jsonb, pgEnum, pgTableCreator, primaryKey, serial, text, timestamp, varchar } from 'drizzle-orm/pg-core';
 import { type AdapterAccount } from 'next-auth/adapters';
 
 /**
@@ -34,7 +34,7 @@ export const surveys = createTable(
   {
     id: serial('id').primaryKey(),
     name: varchar('name', { length: 256 }),
-    context: varchar('context', { length: 1000 }),
+    context: text('context'),
     status: varchar('status', { enum: ['ENRICHING', 'ENRICHED'], length: 255 }).notNull(),
     createdById: varchar('created_by', { length: 255 })
       .notNull()
@@ -61,7 +61,7 @@ export const insights = createTable(
     reference: integer('reference'),
     topic: varchar('topic', { length: 1000 }),
     sentiment: varchar('sentiment', { enum: ['positive', 'negative', 'neutral'] }),
-    originalData: varchar('original_data', { length: 2000 }).notNull(),
+    originalData: jsonb('original_data').notNull(),
     createdAt: timestamp('created_at', { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
@@ -72,11 +72,22 @@ export const insights = createTable(
   })
 );
 
+const UserRoleEnum = pgEnum('user_role', ['admin', 'user']);
+
+export type UserRole = (typeof UserRoleEnum.enumValues)[number];
+
 export const users = createTable('user', {
   id: varchar('id', { length: 255 })
     .notNull()
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
+  // roles: text('roles')
+  //   .array()
+  //   .$type<UserRole[]>()
+  //   .default(sql`ARRAY['user']::text[]`),
+  roles: text('roles', { enum: ['admin', 'user'] })
+    .array()
+    .default(sql`ARRAY['user']::text[]`),
   name: varchar('name', { length: 255 }),
   email: varchar('email', { length: 255 }).notNull(),
   emailVerified: timestamp('email_verified', {
@@ -85,6 +96,14 @@ export const users = createTable('user', {
   }).default(sql`CURRENT_TIMESTAMP`),
   image: varchar('image', { length: 255 }),
 });
+
+// If I need a seperate table for roles
+// export const roles = createTable('roles', {
+//   id: serial('id').primaryKey(),
+//   userId: integer('survey_id')
+//     .notNull()
+//     .references(() => surveys.id),
+// });
 
 export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),

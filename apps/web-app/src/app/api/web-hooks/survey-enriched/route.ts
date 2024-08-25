@@ -68,7 +68,7 @@ export async function GET(request: NextRequest) {
       reference: data.Reference,
       topic: data.Topic,
       sentiment: data.Sentiment,
-      originalData: JSON.stringify(_.omit(data, ['Reference', 'Topic', 'Sentiment'])),
+      originalData: _.omit(data, ['Reference', 'Topic', 'Sentiment']),
     }));
 
     await db.delete(insights).where(eq(insights.surveyId, survey.id));

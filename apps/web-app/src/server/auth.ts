@@ -1,27 +1,28 @@
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
-import { type User, type NextAuthOptions, getServerSession } from 'next-auth';
+import { type NextAuthOptions, getServerSession } from 'next-auth';
 import { type Adapter } from 'next-auth/adapters';
 import GoogleProvider from 'next-auth/providers/google';
 import { type JWT } from 'next-auth/jwt';
+import { type InferSelectModel } from 'drizzle-orm';
 import { env } from '~/env';
 import { db } from '~/server/db';
 import { accounts, users } from '~/server/db/schema';
 
-type UserId = string;
+export type DbUser = InferSelectModel<typeof users>;
 
 declare module 'next-auth/jwt' {
   interface JWT {
-    id: UserId;
-    roles: string[];
+    id: string;
+    roles: DbUser['roles'];
   }
 }
 
 declare module 'next-auth' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface User extends DbUser {}
+
   interface Session {
-    user: User & {
-      id: UserId;
-      roles: string[];
-    };
+    user: DbUser;
   }
 }
 
@@ -31,8 +32,12 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user, account }): Promise<JWT> {
       // Initial sign in
       if (account && user) {
+        console.log('sign in token! before', token);
+
         token.id = user.id;
-        token.roles = ['user']; // Default role
+        token.roles = user.roles;
+
+        console.log('sign in token!', token);
 
         // Fetch user roles from database
         // const dbUser = await db.select({ roles: users.roles })
@@ -47,6 +52,7 @@ export const authOptions: NextAuthOptions = {
         return token;
       }
 
+      console.log('next token!', token);
       // Subsequent uses of the token
       return token;
     },
