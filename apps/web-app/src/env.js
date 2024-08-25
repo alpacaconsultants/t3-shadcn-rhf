@@ -9,6 +9,7 @@ export const env = createEnv({
    * isn't built with invalid env vars.
    */
   server: {
+    WEBHOOK_API_KEY: z.string(),
     DATABASE_URL: z.string().url(),
     NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
     NEXTAUTH_SECRET: process.env.NODE_ENV === 'production' ? z.string() : z.string().optional(),
@@ -46,6 +47,7 @@ export const env = createEnv({
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     APP_URL: process.env.APP_URL,
+    WEBHOOK_API_KEY: process.env.WEBHOOK_API_KEY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
