@@ -11,6 +11,7 @@ import { type Route } from 'next';
 import { db } from '../db';
 import { actionClient, authActionClient } from '../util/safe-action';
 import { SEARCH_PARAM_SURVERY_ID } from '../config';
+import { getServerAuthSession } from '../auth';
 import { surveys, users } from '~/server/db/schema';
 import { env } from '~/env';
 
@@ -25,7 +26,13 @@ const axiosInstance = axios.create({
 
 const s3 = new S3Client({});
 
-const findOrCreateUser = async (email: string) => {
+const findOrCreateUser = async (email?: string) => {
+  const session = await getServerAuthSession();
+
+  if (session?.user) return session.user;
+
+  if (!email) throw new Error('User cannot be found or created');
+
   const user = await db.query.users.findFirst({
     where: eq(users.email, email),
   });
@@ -63,7 +70,7 @@ export const getMySurveys = authActionClient.action(async () => {
 });
 
 export const createSurvey = actionClient
-  .schema(z.object({ name: z.string().min(1), s3Key: z.string().min(1), context: z.string().optional(), userEmail: z.string() }))
+  .schema(z.object({ name: z.string().min(1), s3Key: z.string().min(1), context: z.string().optional(), userEmail: z.string().optional() }))
   .action(async ({ parsedInput }) => {
     const user = await findOrCreateUser(parsedInput.userEmail);
 

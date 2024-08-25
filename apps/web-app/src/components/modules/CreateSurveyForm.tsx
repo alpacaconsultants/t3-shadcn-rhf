@@ -35,21 +35,6 @@ interface Step {
   id: StepId;
 }
 
-const steps: Step[] = [
-  {
-    id: StepId.Email,
-    label: 'Your Details',
-  },
-  {
-    label: 'Survey details',
-    id: StepId.Name,
-  },
-  {
-    id: StepId.Upload,
-    label: 'Upload Survey',
-  },
-];
-
 interface State {
   nextButton: {
     label: string;
@@ -136,6 +121,18 @@ interface ICreateSurveyFormProps {
   defaultEmail?: string;
 }
 
+const steps = [
+  // { id: StepId.Email, label: 'Your Details' },
+  {
+    label: 'Survey details',
+    id: StepId.Name,
+  },
+  {
+    id: StepId.Upload,
+    label: 'Upload Survey',
+  },
+];
+
 export const CreateSurveyForm: FC<ICreateSurveyFormProps> = ({ defaultEmail }) => {
   const [state, dispatch] = useImmerReducer(reducer, initialState);
 
@@ -146,6 +143,22 @@ export const CreateSurveyForm: FC<ICreateSurveyFormProps> = ({ defaultEmail }) =
     email: defaultEmail ?? '',
     file: null,
   };
+
+  // const steps: Step[] = React.useMemo(
+  //   () =>
+  //     [
+  //       { id: StepId.Email, label: 'Your Details' },
+  //       {
+  //         label: 'Survey details',
+  //         id: StepId.Name,
+  //       },
+  //       {
+  //         id: StepId.Upload,
+  //         label: 'Upload Survey',
+  //       },
+  //     ].filter(Boolean) as Step[],
+  //   [defaultEmail]
+  // );
 
   const uploadFile = useCallback(
     async (uploadUrl: string, file: File) => {
