@@ -72,6 +72,11 @@ export const getMySurveys = authActionClient.action(async () => {
 export const listSurveys = authActionAdminClient.action(async () => {
   const surveys = await db.query.surveys.findMany({
     orderBy: (survey, { desc }) => [desc(survey.createdAt)],
+    with: {
+      createdBy: {
+        columns: { email: true },
+      },
+    },
   });
   return surveys ?? null;
 });

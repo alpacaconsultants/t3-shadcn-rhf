@@ -51,6 +51,13 @@ export const surveys = createTable(
   })
 );
 
+export const surveysRelations = relations(surveys, ({ one }) => ({
+  createdBy: one(users, {
+    fields: [surveys.createdById],
+    references: [users.id],
+  }),
+}));
+
 export const insights = createTable(
   'insights',
   {
@@ -132,14 +139,6 @@ export const userRolesRelations = relations(userRoles, ({ one }) => ({
     references: [roles.id],
   }),
 }));
-
-// If I need a seperate table for roles
-// export const roles = createTable('roles', {
-//   id: serial('id').primaryKey(),
-//   userId: integer('survey_id')
-//     .notNull()
-//     .references(() => surveys.id),
-// });
 
 export const accounts = createTable(
   'account',

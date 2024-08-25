@@ -31,40 +31,40 @@ const cellSx = {
 export const useMyMaterialReactTable = <RowData extends MRT_RowData>({
   columns,
   data,
-  muiTableBodyCellProps: propsMuiTableBodyCellProps,
-  muiTableHeadCellProps,
-  muiTableFooterCellProps,
+  // muiTableBodyCellProps: propsMuiTableBodyCellProps,
+  // muiTableHeadCellProps,
+  // muiTableFooterCellProps,
   ...rest
 }: MRT_TableOptions<RowData>) => {
   return useMaterialReactTable({
     columns,
     data,
-    enableBottomToolbar: false,
-    muiTableBodyCellProps: (p) => {
-      const propsOveride = typeof propsMuiTableBodyCellProps === 'function' ? propsMuiTableBodyCellProps(p) : propsMuiTableBodyCellProps;
-      return {
-        sx: cellSx,
-        ...propsOveride,
-      };
-    },
-    muiTableHeadCellProps: {
-      sx: cellSx,
-      ...muiTableHeadCellProps,
-    },
-    muiTableFooterCellProps: {
-      sx: cellSx,
-      ...muiTableFooterCellProps,
-    },
-    enableDensityToggle: false,
-    enableFullScreenToggle: false,
-    enablePagination: false,
-    enableStickyHeader: true,
-    enableColumnFilters: false,
-    enableSorting: false,
-    enableHiding: false,
-    enableColumnActions: false,
-    enableGlobalFilter: false,
-    enableTopToolbar: false,
+    // enableBottomToolbar: false,
+    // muiTableBodyCellProps: (p) => {
+    //   const propsOveride = typeof propsMuiTableBodyCellProps === 'function' ? propsMuiTableBodyCellProps(p) : propsMuiTableBodyCellProps;
+    //   return {
+    //     sx: cellSx,
+    //     ...propsOveride,
+    //   };
+    // },
+    // muiTableHeadCellProps: {
+    //   sx: cellSx,
+    //   ...muiTableHeadCellProps,
+    // },
+    // muiTableFooterCellProps: {
+    //   sx: cellSx,
+    //   ...muiTableFooterCellProps,
+    // },
+    // enableDensityToggle: false,
+    // enableFullScreenToggle: false,
+    // enablePagination: false,
+    // enableStickyHeader: true,
+    // enableColumnFilters: false,
+    // enableSorting: false,
+    // enableHiding: false,
+    // enableColumnActions: false,
+    // enableGlobalFilter: false,
+    // enableTopToolbar: false,
     ...rest,
   } satisfies MRT_TableOptions<RowData>);
 };

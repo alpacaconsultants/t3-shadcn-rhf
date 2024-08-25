@@ -4,9 +4,11 @@ import { useMemo } from 'react';
 import {
   MRT_Table, //import alternative sub-component if we do not want toolbars
   type MRT_ColumnDef,
-  useMaterialReactTable,
 } from 'material-react-table';
+import { useQuery } from '@tanstack/react-query';
 import { useMyMaterialReactTable } from '../ui/molecules/data-table/use-material-react-table';
+import { listSurveys } from '~/server/data-layer/surveys';
+import { type ListSurveysDto } from '~/server/db/types';
 
 export type Person = {
   firstName: string;
@@ -16,77 +18,48 @@ export type Person = {
   state: string;
 };
 
-export const data = [
-  {
-    firstName: 'Dylan',
-    lastName: 'Murray',
-    address: '261 Erdman Ford',
-    city: 'East Daphne',
-    state: 'Kentucky',
-  },
-  {
-    firstName: 'Raquel',
-    lastName: 'Kohler',
-    address: '769 Dominic Grove',
-    city: 'Columbus',
-    state: 'Ohio',
-  },
-  {
-    firstName: 'Ervin',
-    lastName: 'Reinger',
-    address: '566 Brakus Inlet',
-    city: 'South Linda',
-    state: 'West Virginia',
-  },
-  {
-    firstName: 'Brittany',
-    lastName: 'McCullough',
-    address: '722 Emie Stream',
-    city: 'Lincoln',
-    state: 'Nebraska',
-  },
-  {
-    firstName: 'Branson',
-    lastName: 'Frami',
-    address: '32188 Larkin Turnpike',
-    city: 'Charleston',
-    state: 'South Carolina',
-  },
-];
+const useSurveys = () =>
+  useQuery({
+    queryKey: ['surveys'],
+    queryFn: async () => {
+      const result = await listSurveys();
+      return result?.data;
+    },
+  });
 
 export const SurveysTable = () => {
-  const columns = useMemo<MRT_ColumnDef<Person>[]>(
-    //column definitions...
+  const { data: surveys } = useSurveys();
+
+  // const columns = useMemo<MRT_ColumnDef<NonNullable<typeof surveys>[number]>[]>(
+  const columns = useMemo<MRT_ColumnDef<ListSurveysDto>[]>(
     () => [
       {
-        accessorKey: 'firstName',
-        header: 'First Name',
+        header: 'Created At',
+        accessorFn: (row) => row.createdAt.toLocaleString(),
       },
       {
-        accessorKey: 'lastName',
-        header: 'Last Name',
+        header: 'Email',
+        accessorFn: (row) => row.createdBy.email,
       },
       {
-        accessorKey: 'address',
-        header: 'Address',
+        header: 'Name',
+        accessorFn: (row) => row.name,
       },
+
       {
-        accessorKey: 'city',
-        header: 'City',
-      },
-      {
-        accessorKey: 'state',
-        header: 'State',
+        header: 'Status',
+        accessorFn: (row) => row.status,
       },
     ],
     []
-    //end
   );
 
   const table = useMyMaterialReactTable({
     columns,
-    data, //data must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
+    data: surveys ?? [], //data must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
   });
+
+  if (!surveys) return <div>Loading...</div>;
 
   return <MRT_Table table={table} />;
 };
