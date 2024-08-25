@@ -74,6 +74,8 @@ export async function GET(request: NextRequest) {
     await db.delete(insights).where(eq(insights.surveyId, survey.id));
     await db.insert(insights).values(newInsights).returning();
 
+    await db.update(surveys).set({ status: 'ENRICHED' }).where(eq(surveys.id, surveyId));
+
     return Response.json({ status: 'OK' });
   } catch (error) {
     console.error('Error processing CSV:', error);

@@ -76,6 +76,7 @@ export const createSurvey = actionClient
         createdById: user.id,
         s3Key: parsedInput.s3Key,
         context: parsedInput.context,
+        status: 'ENRICHING',
       })
       .returning();
 

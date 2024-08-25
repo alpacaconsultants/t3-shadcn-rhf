@@ -24,7 +24,7 @@ export default async function Home() {
       >
         <Link href={session ? '/api/auth/signout' : '/api/auth/signin'}>{session ? 'Sign out' : 'Sign in'}</Link>
         {session && <Link href='/admin'>Admin Page 1</Link>}
-        <CreateSurveyForm />
+        <CreateSurveyForm defaultEmail={session?.user.email ?? undefined} />
         <SendEmail />
       </Box>
     </HydrateClient>

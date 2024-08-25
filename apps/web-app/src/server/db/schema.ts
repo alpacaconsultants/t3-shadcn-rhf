@@ -35,6 +35,7 @@ export const surveys = createTable(
     id: serial('id').primaryKey(),
     name: varchar('name', { length: 256 }),
     context: varchar('context', { length: 1000 }),
+    status: varchar('status', { enum: ['ENRICHING', 'ENRICHED'], length: 255 }).notNull(),
     createdById: varchar('created_by', { length: 255 })
       .notNull()
       .references(() => users.id),

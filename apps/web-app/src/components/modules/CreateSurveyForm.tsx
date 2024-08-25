@@ -16,7 +16,6 @@ import { type FC, useCallback } from 'react';
 import { useForm, type Resolver } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-
 import FormSubmitButton from '../ui/atoms/buttons/FormSubmitButton';
 import { RhfMuiTextField, RhfMuiTextArea } from '../ui/molecules/fields/rhf-mui-fields';
 import { RhfFileUpload } from '../ui/molecules/fields/rhf-mui-fields/RhfFileUpload';
@@ -90,14 +89,6 @@ interface SurveyFormValues {
   file: File | null;
 }
 
-const defaultValues: SurveyFormValues = {
-  name: '',
-  context: '',
-  activeStep: 0,
-  email: '',
-  file: null,
-};
-
 const nameof = nameofFactory<SurveyFormValues>();
 
 function reducer(state: State, action: Action): State {
@@ -141,8 +132,20 @@ const surveyFormSchema = Yup.object().shape({
   }),
 } as ShapeOf<SurveyFormValues>);
 
-export const CreateSurveyForm: FC = () => {
+interface ICreateSurveyFormProps {
+  defaultEmail?: string;
+}
+
+export const CreateSurveyForm: FC<ICreateSurveyFormProps> = ({ defaultEmail }) => {
   const [state, dispatch] = useImmerReducer(reducer, initialState);
+
+  const defaultValues: SurveyFormValues = {
+    name: '',
+    context: '',
+    activeStep: 0,
+    email: defaultEmail ?? '',
+    file: null,
+  };
 
   const uploadFile = useCallback(
     async (uploadUrl: string, file: File) => {
@@ -170,10 +173,7 @@ export const CreateSurveyForm: FC = () => {
     shouldUnregister: false,
   });
 
-  const {
-    watch,
-    formState: { isValid },
-  } = formContext;
+  const { watch, formState, trigger, setValue, register } = formContext;
 
   const activeStep = watch('activeStep');
 
@@ -199,19 +199,19 @@ export const CreateSurveyForm: FC = () => {
           return;
         }
       }
-      formContext.setValue('activeStep', activeStep + 1, { shouldValidate: true });
+      setValue('activeStep', activeStep + 1, { shouldValidate: true });
     },
-    [activeStep, formContext, isLastStep, uploadFile]
+    [activeStep, isLastStep, setValue, uploadFile]
   );
 
   const handleBack = useCallback(async () => {
-    formContext.setValue('activeStep', activeStep - 1), { shouldValidate: true };
-    void formContext.trigger();
-  }, [activeStep, formContext]);
+    setValue('activeStep', activeStep - 1), { shouldValidate: true };
+    void trigger();
+  }, [activeStep, setValue, trigger]);
 
   React.useEffect(() => {
-    formContext.register('activeStep');
-  }, [formContext]);
+    register('activeStep');
+  }, [formContext, register]);
 
   return (
     <FormContainer formContext={formContext} onSuccess={handleNext}>
@@ -265,10 +265,10 @@ export const CreateSurveyForm: FC = () => {
                       />
                     )}
 
-                    <FormSubmitButton variant='contained' sx={{ mt: 1, mr: 1 }} disabled={!isValid}>
+                    <FormSubmitButton variant='contained' sx={{ mt: 1, mr: 1 }} disabled={!formState.isValid} allowSubmitPristine>
                       {isLastStep ? 'Finish' : 'Next'}
                     </FormSubmitButton>
-                    <Button disabled={formContext.formState.isSubmitting || isFistStep} onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
+                    <Button disabled={formState.isSubmitting || isFistStep} onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
                       Back
                     </Button>
                   </>
