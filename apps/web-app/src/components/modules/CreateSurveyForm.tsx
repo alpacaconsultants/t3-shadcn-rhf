@@ -121,20 +121,24 @@ interface ICreateSurveyFormProps {
   defaultEmail?: string;
 }
 
-const steps = [
-  // { id: StepId.Email, label: 'Your Details' },
-  {
-    label: 'Survey details',
-    id: StepId.Name,
-  },
-  {
-    id: StepId.Upload,
-    label: 'Upload Survey',
-  },
-];
-
 export const CreateSurveyForm: FC<ICreateSurveyFormProps> = ({ defaultEmail }) => {
   const [state, dispatch] = useImmerReducer(reducer, initialState);
+
+  const steps: Step[] = React.useMemo(
+    () =>
+      [
+        defaultEmail ? null : { id: StepId.Email, label: 'Your Details' },
+        {
+          label: 'Survey details',
+          id: StepId.Name,
+        },
+        {
+          id: StepId.Upload,
+          label: 'Upload Survey',
+        },
+      ].filter(Boolean) as Step[],
+    [defaultEmail]
+  );
 
   const defaultValues: SurveyFormValues = {
     name: '',
@@ -143,22 +147,6 @@ export const CreateSurveyForm: FC<ICreateSurveyFormProps> = ({ defaultEmail }) =
     email: defaultEmail ?? '',
     file: null,
   };
-
-  // const steps: Step[] = React.useMemo(
-  //   () =>
-  //     [
-  //       { id: StepId.Email, label: 'Your Details' },
-  //       {
-  //         label: 'Survey details',
-  //         id: StepId.Name,
-  //       },
-  //       {
-  //         id: StepId.Upload,
-  //         label: 'Upload Survey',
-  //       },
-  //     ].filter(Boolean) as Step[],
-  //   [defaultEmail]
-  // );
 
   const uploadFile = useCallback(
     async (uploadUrl: string, file: File) => {
@@ -195,7 +183,7 @@ export const CreateSurveyForm: FC<ICreateSurveyFormProps> = ({ defaultEmail }) =
       isLastStep: +activeStep === steps.length - 1,
       isFistStep: +activeStep === 0,
     }),
-    [activeStep]
+    [activeStep, steps.length]
   );
 
   const handleNext = useCallback(
@@ -236,6 +224,7 @@ export const CreateSurveyForm: FC<ICreateSurveyFormProps> = ({ defaultEmail }) =
       >
         Callback
       </Button> */}
+
       <Box sx={{ maxWidth: 400 }}>
         <Stepper activeStep={activeStep} orientation='vertical'>
           {steps.map((step) => (
@@ -246,7 +235,6 @@ export const CreateSurveyForm: FC<ICreateSurveyFormProps> = ({ defaultEmail }) =
                   {step.id === StepId.Email && (
                     <RhfMuiTextField name={nameof('email')} label='Email' placeholder='Where should we send the results?' fullWidth />
                   )}
-
                   {step.id === StepId.Name && (
                     <>
                       <RhfMuiTextField
@@ -255,7 +243,6 @@ export const CreateSurveyForm: FC<ICreateSurveyFormProps> = ({ defaultEmail }) =
                         fullWidth
                         label='Name'
                         sx={{ mt: 1, mb: 1 }}
-                        disabled={activeStep !== StepId.Name}
                       />
                       <RhfMuiTextArea
                         name={nameof('context')}
@@ -263,7 +250,6 @@ export const CreateSurveyForm: FC<ICreateSurveyFormProps> = ({ defaultEmail }) =
                         label='Context'
                         placeholder='Tell us a bit about your survey'
                         sx={{ mt: 1, mb: 1 }}
-                        disabled={activeStep !== StepId.Name}
                       />
                     </>
                   )}
@@ -278,7 +264,7 @@ export const CreateSurveyForm: FC<ICreateSurveyFormProps> = ({ defaultEmail }) =
                       />
                     )}
 
-                    <FormSubmitButton variant='contained' sx={{ mt: 1, mr: 1 }} disabled={!formState.isValid} allowSubmitPristine>
+                    <FormSubmitButton variant='contained' sx={{ mt: 1, mr: 1 }} disabled={!formState.isValid}>
                       {isLastStep ? 'Finish' : 'Next'}
                     </FormSubmitButton>
                     <Button disabled={formState.isSubmitting || isFistStep} onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
