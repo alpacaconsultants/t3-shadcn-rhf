@@ -58,6 +58,20 @@ export const authActionClient = actionClient
     return next({ ctx: { user: session.user } });
   });
 
+// Auth client defined by extending the base one.
+// Note that the same initialization options and middleware functions of the base client
+// will also be used for this one.
+export const authActionAdminClient = authActionClient
+  // Define authorization middleware.
+  .use(async ({ next, ctx }) => {
+    if (!ctx.user.isAdmin) {
+      throw new Error('Not authorized');
+    }
+
+    // Return the next middleware with `userId` value in the context
+    return next({ ctx });
+  });
+
 // Here is my own version of this
 
 /* eslint-disable no-console */

@@ -4,6 +4,11 @@ import axios from 'axios';
 import * as path from 'path';
 import { createReadStream } from 'fs';
 import { stat } from 'fs/promises';
+import * as dotenv from 'dotenv';
+
+dotenv.config({
+  path: path.join(process.env.PROJECT_CWD!, `apps/web-app/.env`),
+});
 
 interface IEnrichFileInput {
   downloadUrl: string;
@@ -42,10 +47,12 @@ export class AppController {
         timeout: 4000,
       });
 
-      await axios.get(enrichFileInput.callbackUrl);
+      await axios.get(enrichFileInput.callbackUrl, {
+        headers: { api_key: 'LEANDRO_SHIT_HIS_PANTS' },
+      });
     }, 10);
 
-    console.log('processFileinput', JSON.stringify(enrichFileInput));
+    console.log('processFileinput', process.env.WEBHOOK_API_KEY);
 
     return true;
   }

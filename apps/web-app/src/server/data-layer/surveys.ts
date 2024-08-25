@@ -9,7 +9,7 @@ import { eq } from 'drizzle-orm';
 import axios from 'axios';
 import { type Route } from 'next';
 import { db } from '../db';
-import { actionClient, authActionClient } from '../util/safe-action';
+import { actionClient, authActionAdminClient, authActionClient } from '../util/safe-action';
 import { SEARCH_PARAM_SURVERY_ID } from '../config';
 import { getServerAuthSession } from '../auth';
 import { surveys, users } from '~/server/db/schema';
@@ -63,6 +63,13 @@ export const prepareUpload = actionClient
   });
 
 export const getMySurveys = authActionClient.action(async () => {
+  const surveys = await db.query.surveys.findMany({
+    orderBy: (survey, { desc }) => [desc(survey.createdAt)],
+  });
+  return surveys ?? null;
+});
+
+export const listSurveys = authActionAdminClient.action(async () => {
   const surveys = await db.query.surveys.findMany({
     orderBy: (survey, { desc }) => [desc(survey.createdAt)],
   });
