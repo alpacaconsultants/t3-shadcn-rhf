@@ -1,6 +1,7 @@
 import { relations, sql } from 'drizzle-orm';
 import { index, integer, jsonb, pgEnum, pgTableCreator, primaryKey, serial, text, timestamp, varchar } from 'drizzle-orm/pg-core';
 import { type AdapterAccount } from 'next-auth/adapters';
+import { generateSlug } from '../util/server-utils';
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -44,18 +45,21 @@ export const surveys = createTable(
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).$onUpdate(() => new Date()),
+    slug: varchar('slug', { length: 64 }).$defaultFn(() => generateSlug(22)),
   },
   (example) => ({
     createdByIdIdx: index('survey_created_by_idx').on(example.createdById),
     nameIndex: index('survey_name_idx').on(example.name),
+    slugIndex: index('survey_slug_idx').on(example.slug),
   })
 );
 
-export const surveysRelations = relations(surveys, ({ one }) => ({
+export const surveysRelations = relations(surveys, ({ one, many }) => ({
   createdBy: one(users, {
     fields: [surveys.createdById],
     references: [users.id],
   }),
+  insights: many(insights),
 }));
 
 export const insights = createTable(
