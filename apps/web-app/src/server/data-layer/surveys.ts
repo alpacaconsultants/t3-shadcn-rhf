@@ -2,7 +2,7 @@
 
 import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { SESv2Client, SendEmailCommand } from '@aws-sdk/client-sesv2';
+import { SESv2Client } from '@aws-sdk/client-sesv2';
 import { Resource } from 'sst';
 import { z } from 'zod';
 import { eq } from 'drizzle-orm';

@@ -1,5 +1,5 @@
 import { relations, sql } from 'drizzle-orm';
-import { index, integer, jsonb, pgEnum, pgTableCreator, primaryKey, serial, text, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { index, integer, jsonb, pgTableCreator, primaryKey, serial, text, timestamp, varchar } from 'drizzle-orm/pg-core';
 import { type AdapterAccount } from 'next-auth/adapters';
 import { generateSlug } from '../util/server-utils';
 

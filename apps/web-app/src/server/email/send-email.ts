@@ -57,5 +57,6 @@ export const sendEmail = actionClient.action(async () => {
   // } catch (error) {
   //   console.error('Error sending email!!!!', error);
   // }
+  // eslint-disable-next-line no-console
   console.log('email sent!!!');
 });
