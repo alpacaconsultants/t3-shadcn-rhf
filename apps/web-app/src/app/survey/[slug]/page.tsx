@@ -1,5 +1,6 @@
 import { Box } from '@mui/material';
 import { eq, sql } from 'drizzle-orm';
+import { InsightSummaryTable } from '~/components/modules/InsightsSummaryTable';
 import { db } from '~/server/db';
 import { insights, surveys } from '~/server/db/schema';
 import { type InsightSummary } from '~/server/db/types';
@@ -24,5 +25,5 @@ export default async function Home({ params }: { params: { slug: string } }) {
     .where(eq(surveys.slug, params.slug))
     .groupBy(surveys.id, surveys.name, surveys.status, insights.topic)) as InsightSummary[];
 
-  return <Box>{JSON.stringify(insightsSummary)}</Box>;
+  return <InsightSummaryTable insightsSummary={insightsSummary} />;
 }

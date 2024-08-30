@@ -6,19 +6,11 @@ import {
   type MRT_ColumnDef,
 } from 'material-react-table';
 import { useQuery } from '@tanstack/react-query';
-import { type Route } from 'next';
+
 import { useRouter } from 'next/navigation';
 import { useMyMaterialReactTable } from '../ui/molecules/data-table/use-material-react-table';
 import { listSurveys } from '~/server/data-layer/surveys';
 import { type ListSurveysDto } from '~/server/db/types';
-
-export type Person = {
-  firstName: string;
-  lastName: string;
-  address: string;
-  city: string;
-  state: string;
-};
 
 const useSurveys = () =>
   useQuery({
