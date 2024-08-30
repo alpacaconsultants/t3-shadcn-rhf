@@ -2,6 +2,7 @@
 import { type MRT_RowData, type MRT_TableOptions, useMaterialReactTable } from 'material-react-table';
 import { type SxProps, type Theme } from '@mui/material';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const cellSx = {
   fontSize: {
     xs: '10px',

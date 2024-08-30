@@ -80,10 +80,12 @@ const text = {
   textAlign: 'left',
 } satisfies CSSProperties;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const buttonContainer = {
   margin: '30px 0',
 } satisfies CSSProperties;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const button = {
   backgroundColor: '#4CAF50',
   borderRadius: '4px',

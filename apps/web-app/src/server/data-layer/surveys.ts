@@ -2,7 +2,6 @@
 
 import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { SESv2Client } from '@aws-sdk/client-sesv2';
 import { Resource } from 'sst';
 import { z } from 'zod';
 import { eq } from 'drizzle-orm';
@@ -15,10 +14,8 @@ import { getServerAuthSession } from '../auth';
 import { surveys, users } from '~/server/db/schema';
 import { env } from '~/env';
 
-const client = new SESv2Client();
-
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3100/',
+  baseURL: 'https://strixy-brain.onrender.com',
   headers: {
     api_key: 'f2491365539c99daef760c0db4881bf5',
   },
@@ -122,12 +119,16 @@ export const createSurvey = actionClient
     const webhookPath: Route = '/api/web-hooks/survey-enriched';
 
     // // Note: I could use trpc here but I'm not sure if it's worth it
-    await axiosInstance.post('/', {
+    const response = await axiosInstance.post('/juicer', {
       downloadUrl,
       uploadUrl,
       callbackUrl: `${env.APP_URL}${webhookPath}?${SEARCH_PARAM_SURVERY_ID}=${newSurvey.id}`,
       context: parsedInput.context,
     });
+
+    // eslint-disable-next-line no-console
+    console.log('response!', response.data);
+
     return newSurvey;
   });
 
