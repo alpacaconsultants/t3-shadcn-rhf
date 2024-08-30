@@ -1,4 +1,3 @@
-import { Box } from '@mui/material';
 import { eq, sql } from 'drizzle-orm';
 import { InsightSummaryTable } from '~/components/modules/InsightsSummaryTable';
 import { db } from '~/server/db';

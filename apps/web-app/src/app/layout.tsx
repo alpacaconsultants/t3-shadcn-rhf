@@ -4,6 +4,7 @@ import { GeistSans } from 'geist/font/sans';
 import { type Metadata } from 'next';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 import { ThemeProvider } from '@mui/material/styles';
+import { Suspense } from 'react';
 import theme from '../ui/theme';
 import { TRPCReactProvider } from '~/trpc/react';
 import { ClientProviders } from '~/components/utils/ClientProviders';
@@ -21,7 +22,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <TRPCReactProvider>
           <AppRouterCacheProvider>
             <ThemeProvider theme={theme}>
-              <ClientProviders> {children}</ClientProviders>
+              <Suspense fallback={<div>Loading...</div>}>
+                <ClientProviders>{children} </ClientProviders>
+              </Suspense>
             </ThemeProvider>
           </AppRouterCacheProvider>
         </TRPCReactProvider>
