@@ -1,8 +1,17 @@
-import { type Route } from 'next';
 import { withAuth } from 'next-auth/middleware';
 import { NextResponse } from 'next/server';
+import { pathToRegexp } from 'path-to-regexp';
 
-const allowedPaths: Route[] = ['/', '/survey/[slug]' as Route];
+// ToDo: not sure why I cannot use Route here
+type MiddleWareRoute = __next_route_internal_types__.StaticRoutes | __next_route_internal_types__.DynamicRoutes;
+
+const allowedPaths: MiddleWareRoute[] = ['/', '/survey/:slug'];
+
+// Define allowed paths and precompile regex matchers
+const regexMatchers = allowedPaths.map((route) => pathToRegexp(route));
+
+// Helper function to check if a path matches any allowed route
+const isAllowedPath = (path: string) => regexMatchers.some((regex) => regex.test(path));
 
 const webhooksPath = '/api/web-hooks';
 
@@ -27,11 +36,8 @@ export default withAuth(
       authorized: ({ token, req }) => {
         const path = req.nextUrl.pathname;
 
-        // console.log('path!', path); // is survey/1234
-        // console.log('dyanmic!', '???'); //  I want /survey/[slug]
-
         // Allow access to paths starting with allowedPaths without authentication
-        if (allowedPaths.some((allowedPath) => path === allowedPath)) {
+        if (isAllowedPath(path)) {
           return true;
         }
 
