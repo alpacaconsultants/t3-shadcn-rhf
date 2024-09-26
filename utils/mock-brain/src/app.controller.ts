@@ -21,8 +21,9 @@ interface IEnrichFileInput {
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Post()
-  getHello(@Body() enrichFileInput: IEnrichFileInput): true {
+  @Post('/juicer')
+  juicer(@Body() enrichFileInput: IEnrichFileInput): true {
+    console.log('enrichFileInput!', JSON.stringify(enrichFileInput));
     setTimeout(async () => {
       // Create a read stream for the CSV file
       const filePath = path.join(
@@ -47,9 +48,13 @@ export class AppController {
         timeout: 4000,
       });
 
-      await axios.get(enrichFileInput.callbackUrl, {
-        headers: { api_key: 'LEANDRO_SHIT_HIS_PANTS' },
-      });
+      try {
+        await axios.get(enrichFileInput.callbackUrl, {
+          headers: { api_key: 'f2491365539c99daef760c0db4881bf5' },
+        });
+      } catch (error) {
+        console.error('Error processing CSV:', error);
+      }
     }, 10);
 
     console.log('processFileinput', process.env.WEBHOOK_API_KEY);

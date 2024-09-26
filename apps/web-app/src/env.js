@@ -23,6 +23,7 @@ export const env = createEnv({
     APP_URL: z.string(),
     GOOGLE_CLIENT_ID: z.string(),
     GOOGLE_CLIENT_SECRET: z.string(),
+    STRIXY_BRAIN_URL: z.string(),
   },
 
   /**
@@ -48,6 +49,7 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     APP_URL: process.env.APP_URL,
     WEBHOOK_API_KEY: process.env.WEBHOOK_API_KEY,
+    STRIXY_BRAIN_URL: process.env.STRIXY_BRAIN_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

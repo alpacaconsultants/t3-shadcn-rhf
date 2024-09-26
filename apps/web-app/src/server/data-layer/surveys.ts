@@ -15,9 +15,9 @@ import { surveys, users } from '~/server/db/schema';
 import { env } from '~/env';
 
 const axiosInstance = axios.create({
-  baseURL: 'https://strixy-brain.onrender.com',
+  baseURL: env.STRIXY_BRAIN_URL,
   headers: {
-    api_key: 'f2491365539c99daef760c0db4881bf5',
+    api_key: env.WEBHOOK_API_KEY,
   },
 });
 
