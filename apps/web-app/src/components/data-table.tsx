@@ -11,6 +11,7 @@ import {
   getFilteredRowModel,
   type ColumnFiltersState,
   type VisibilityState,
+  type ColumnResizeMode,
 } from "@tanstack/react-table";
 
 import {
@@ -52,6 +53,7 @@ export function DataTable<TData, TValue>({
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
+  const [columnResizeMode] = React.useState<ColumnResizeMode>("onChange");
 
   const table = useReactTable({
     data,
@@ -62,6 +64,7 @@ export function DataTable<TData, TValue>({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    columnResizeMode,
     state: {
       sorting,
       columnFilters,
@@ -71,13 +74,17 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-md border">
-        <Table>
+      <div className="overflow-hidden rounded-md border">
+        <Table className="w-full table-fixed">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
+                  <TableHead
+                    key={header.id}
+                    style={{ width: header.getSize() }}
+                    className="relative"
+                  >
                     {header.isPlaceholder ? null : (
                       <div className="flex items-center justify-between">
                         <div
@@ -148,6 +155,13 @@ export function DataTable<TData, TValue>({
                         </DropdownMenu>
                       </div>
                     )}
+                    <div
+                      onMouseDown={header.getResizeHandler()}
+                      onTouchStart={header.getResizeHandler()}
+                      className={`resizer ${
+                        header.column.getIsResizing() ? "isResizing" : ""
+                      }`}
+                    />
                   </TableHead>
                 ))}
               </TableRow>
@@ -161,7 +175,10 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell
+                      key={cell.id}
+                      style={{ width: cell.column.getSize() }}
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),

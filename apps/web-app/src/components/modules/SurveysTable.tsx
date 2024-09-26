@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { type ColumnDef } from "@tanstack/react-table";
 import { useMyMaterialReactTable } from "../ui/molecules/data-table/use-material-react-table";
-import { DataTable } from "../ui/data-table";
+import { DataTable } from "../data-table";
 import { listSurveys } from "~/server/data-layer/surveys";
 import { type ListSurveysDto } from "~/server/db/types";
 
