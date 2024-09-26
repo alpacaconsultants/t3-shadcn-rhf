@@ -11,7 +11,6 @@ import {
   getFilteredRowModel,
   type ColumnFiltersState,
   type VisibilityState,
-  type ColumnResizeMode,
 } from "@tanstack/react-table";
 
 import {
@@ -41,11 +40,13 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  onRowClick?: (row: TData) => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  onRowClick,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -53,7 +54,6 @@ export function DataTable<TData, TValue>({
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
-  const [columnResizeMode] = React.useState<ColumnResizeMode>("onChange");
 
   const table = useReactTable({
     data,
@@ -64,103 +64,98 @@ export function DataTable<TData, TValue>({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
-    columnResizeMode,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
     },
+    columnResizeMode: "onChange",
   });
 
   return (
     <div className="space-y-4">
-      <div className="overflow-hidden rounded-md border">
-        <Table className="w-full table-fixed">
+      <div className="rounded-md border">
+        <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <TableHead
                     key={header.id}
-                    style={{ width: header.getSize() }}
-                    className="relative"
+                    style={{
+                      width: header.getSize(),
+                      position: "relative",
+                    }}
                   >
-                    {header.isPlaceholder ? null : (
-                      <div className="flex items-center justify-between">
-                        <div
-                          className="flex cursor-pointer items-center"
-                          onClick={() => header.column.toggleSorting()}
-                        >
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                          {header.column.getIsSorted() === "asc" && (
-                            <ChevronUp className="ml-2 h-4 w-4" />
-                          )}
-                          {header.column.getIsSorted() === "desc" && (
-                            <ChevronDown className="ml-2 h-4 w-4" />
-                          )}
-                          {header.column.getIsSorted() === false && (
-                            <ArrowUpDown className="ml-2 h-4 w-4 opacity-0 group-hover:opacity-100" />
-                          )}
-                        </div>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                              onClick={() => header.column.toggleSorting(false)}
-                            >
-                              Sort ascending
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => header.column.toggleSorting(true)}
-                            >
-                              Sort descending
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                              onClick={() => header.column.setFilterValue("")}
-                            >
-                              Clear filter
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                              <Input
-                                placeholder={`Filter ${header.column.id}...`}
-                                value={
-                                  (header.column.getFilterValue() as string) ??
-                                  ""
-                                }
-                                onChange={(event) =>
-                                  header.column.setFilterValue(
-                                    event.target.value,
-                                  )
-                                }
-                                className="max-w-sm"
-                              />
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                              onClick={() =>
-                                header.column.toggleVisibility(false)
-                              }
-                            >
-                              Hide column
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                    <div className="flex items-center justify-between">
+                      <div
+                        className="flex cursor-pointer items-center"
+                        onClick={() => header.column.toggleSorting()}
+                      >
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                        {header.column.getIsSorted() === "asc" && (
+                          <ChevronUp className="ml-2 h-4 w-4" />
+                        )}
+                        {header.column.getIsSorted() === "desc" && (
+                          <ChevronDown className="ml-2 h-4 w-4" />
+                        )}
+                        {header.column.getIsSorted() === false && (
+                          <ArrowUpDown className="ml-2 h-4 w-4 opacity-0 group-hover:opacity-100" />
+                        )}
                       </div>
-                    )}
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="sm">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            onClick={() => header.column.toggleSorting(false)}
+                          >
+                            Sort ascending
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => header.column.toggleSorting(true)}
+                          >
+                            Sort descending
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            onClick={() => header.column.setFilterValue("")}
+                          >
+                            Clear filter
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <Input
+                              placeholder={`Filter ${header.column.id}...`}
+                              value={
+                                (header.column.getFilterValue() as string) ?? ""
+                              }
+                              onChange={(event) =>
+                                header.column.setFilterValue(event.target.value)
+                              }
+                              className="max-w-sm"
+                            />
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            onClick={() =>
+                              header.column.toggleVisibility(false)
+                            }
+                          >
+                            Hide column
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
                     <div
                       onMouseDown={header.getResizeHandler()}
                       onTouchStart={header.getResizeHandler()}
-                      className={`resizer ${
-                        header.column.getIsResizing() ? "isResizing" : ""
-                      }`}
+                      className="resizer"
                     />
                   </TableHead>
                 ))}
@@ -173,11 +168,17 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  onClick={() => onRowClick && onRowClick(row.original)}
+                  className={
+                    onRowClick ? "cursor-pointer hover:bg-muted/50" : ""
+                  }
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      style={{ width: cell.column.getSize() }}
+                      style={{
+                        width: cell.column.getSize(),
+                      }}
                     >
                       {flexRender(
                         cell.column.columnDef.cell,

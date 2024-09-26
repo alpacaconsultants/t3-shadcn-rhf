@@ -64,5 +64,13 @@ export const SurveysTable = () => {
 
   if (!surveys) return <div>Loading...</div>;
 
-  return <DataTable columns={columns} data={surveys} />;
+  return (
+    <DataTable
+      columns={columns}
+      data={surveys}
+      onRowClick={(row) => {
+        void router.push(`/survey/${row.slug}`); // Adjust the route as needed
+      }}
+    />
+  );
 };
