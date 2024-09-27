@@ -1,6 +1,6 @@
-import { type FC } from 'react';
-import { CreateSurveyForm } from './CreateSurveyForm';
-import { getMySurveys } from '~/server/data-layer/surveys';
+import { type FC } from "react";
+import SurveyUploadForm from "./survey-upload-form";
+import { getMySurveys } from "~/server/data-layer/surveys";
 
 export const Surveys: FC = async () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -9,9 +9,9 @@ export const Surveys: FC = async () => {
   const mySurveys = await getMySurveys();
 
   // eslint-disable-next-line no-console
-  console.log('mySurveys', mySurveys);
+  console.log("mySurveys", mySurveys);
 
-  return <CreateSurveyForm />;
+  return <SurveyUploadForm />;
 
   // return (
   //   <Box>

@@ -7,7 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { RhfInput } from "../rhf-input";
 import FormSubmitButton from "../ui/form-submit-button";
 import { nameofFactory, type ShapeOf } from "../utils/type-helpers";
-import { FormContainer } from "../ui/molecules/forms/form-container";
+import { FormContainer } from "../forms/form-container";
 
 interface FormValues {
   firstName: string;

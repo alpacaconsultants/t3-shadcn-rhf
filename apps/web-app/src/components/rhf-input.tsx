@@ -2,7 +2,8 @@
 
 import React from "react";
 import { useFormContext, Controller } from "react-hook-form";
-import { useCustomFormContainerContext } from "./ui/molecules/forms/form-container";
+import { useCustomFormContainerContext } from "./forms/form-container";
+import { useDefaultProps } from "./forms/useDefaultProps";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { cn } from "~/lib/utils";
@@ -14,8 +15,14 @@ interface RhfInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const RhfInput: React.FC<RhfInputProps> = (props) => {
-  const { name, label, fullWidth = true, className, ...rest } = props;
-  const { isReadOnly } = useCustomFormContainerContext();
+  const {
+    name,
+    label,
+    fullWidth = true,
+    className,
+    isReadOnly,
+    ...rest
+  } = { ...props, ...useDefaultProps(props) };
   const {
     control,
     formState: { errors },

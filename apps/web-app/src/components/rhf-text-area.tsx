@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useFormContext, Controller } from "react-hook-form";
-import { useCustomFormContainerContext } from "./ui/molecules/forms/form-container";
+import { useDefaultProps } from "./forms/useDefaultProps";
 import { Textarea } from "~/components/ui/textarea";
 import { Label } from "~/components/ui/label";
 import { cn } from "~/lib/utils";
@@ -15,8 +15,14 @@ interface RhfTextareaProps
 }
 
 export const RhfTextarea: React.FC<RhfTextareaProps> = (props) => {
-  const { name, label, fullWidth = true, className, ...rest } = props;
-  const { isReadOnly } = useCustomFormContainerContext();
+  const {
+    name,
+    label,
+    fullWidth = true,
+    className,
+    isReadOnly,
+    ...rest
+  } = { ...props, ...useDefaultProps(props) };
   const {
     control,
     formState: { errors },

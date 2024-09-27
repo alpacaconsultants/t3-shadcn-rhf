@@ -1,7 +1,8 @@
-'use client'
+"use client";
 
 import React from "react";
 import { useFormContext } from "react-hook-form";
+import { useDefaultProps } from "./forms/useDefaultProps";
 import {
   Select,
   SelectContent,
@@ -9,21 +10,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import { FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "~/components/ui/form";
 
 interface RhfSelectProps {
   name: string;
   label: string;
   placeholder?: string;
   options: { value: string; label: string }[];
+  disabled?: boolean;
 }
 
-export const RhfSelect: React.FC<RhfSelectProps> = ({
-  name,
-  label,
-  placeholder,
-  options,
-}) => {
+export const RhfSelect: React.FC<RhfSelectProps> = (props) => {
+  const { name, label, placeholder, options } = {
+    ...props,
+    ...useDefaultProps(props),
+  };
   const { control } = useFormContext();
 
   return (

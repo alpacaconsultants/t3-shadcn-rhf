@@ -1,8 +1,6 @@
 import Link from "next/link";
 import { getServerAuthSession } from "~/server/auth";
 import { HydrateClient } from "~/trpc/server";
-import { SendEmail } from "~/components/modules/SendEmail";
-import { AddressContactForm } from "~/components/sample-forms/address-contact-form";
 import SurveyUploadForm from "~/components/modules/survey-upload-form";
 
 export default async function Home() {

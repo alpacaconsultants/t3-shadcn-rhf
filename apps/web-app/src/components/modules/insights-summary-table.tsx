@@ -1,10 +1,8 @@
 "use client";
 
 import { type FC, useMemo } from "react";
-import { MRT_Table, type MRT_ColumnDef } from "material-react-table";
 import _ from "lodash";
 import { type ColumnDef } from "@tanstack/react-table";
-import { useMyMaterialReactTable } from "../ui/molecules/data-table/use-material-react-table";
 import { DataTable } from "../data-table";
 import { type InsightSummary } from "~/server/db/types";
 
