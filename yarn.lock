@@ -6425,7 +6425,6 @@ __metadata:
     react-dropzone: ^14.2.3
     react-email: ^3.0.1
     react-hook-form: ^7.52.2
-    react-hook-form-mui: ^7.0.1
     server-only: ^0.0.1
     sst: ion
     superjson: ^2.2.1
@@ -16957,24 +16956,6 @@ __metadata:
   bin:
     email: dist/cli/index.js
   checksum: 2a90353f4146aa2019a708bea3965e02a86e3950318c836611f8999c80fee011cb06599ecc774e70c8ae16068c340651d00573efe21369f54e74a502d9d80877
-  languageName: node
-  linkType: hard
-
-"react-hook-form-mui@npm:^7.0.1":
-  version: 7.0.1
-  resolution: "react-hook-form-mui@npm:7.0.1"
-  peerDependencies:
-    "@mui/icons-material": ">= 5.x <6"
-    "@mui/material": ">= 5.x <6"
-    "@mui/x-date-pickers": ">=7.0.0 <8"
-    react: ">=17 <19"
-    react-hook-form: ">=7.33.1"
-  peerDependenciesMeta:
-    "@mui/icons-material":
-      optional: true
-    "@mui/x-date-pickers":
-      optional: true
-  checksum: a9c247e8d8ecda5ca5f070c8a29bf1eb981777524f3a8922bafca08f69762cb14a2f4d94bd0c2835806e7fdfeb60003329e51c0cbc3e95ee1c3c2088780cee89
   languageName: node
   linkType: hard
 

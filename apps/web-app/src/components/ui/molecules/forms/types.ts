@@ -13,3 +13,5 @@ export interface IOptionsProps<T extends IOptionOrString = INamedOption> {
 export interface INamedOption extends IOption {
   name: string;
 }
+
+export type FieldValues = Record<string, any>;
