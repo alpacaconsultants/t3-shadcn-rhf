@@ -4,6 +4,7 @@ import { HydrateClient } from "~/trpc/server";
 import { SendEmail } from "~/components/modules/SendEmail";
 import { SampleForm } from "~/components/modules/sample-form";
 import NameAddressForm from "~/components/name-address-form";
+import { AddressForm } from "~/components/address-form";
 
 export default async function Home() {
   const session = await getServerAuthSession();
@@ -17,7 +18,8 @@ export default async function Home() {
         {session && <Link href="/admin">Admin Page</Link>}
         {/* <CreateSurveyForm defaultEmail={session?.user.email ?? undefined} /> */}
         {/* <SampleForm /> */}
-        <NameAddressForm />
+        {/* <NameAddressForm /> */}
+        <AddressForm />
         <SendEmail />
       </div>
     </HydrateClient>
