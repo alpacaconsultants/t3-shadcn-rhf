@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import {
   type ColumnDef,
   flexRender,
@@ -11,6 +11,7 @@ import {
   getFilteredRowModel,
   type ColumnFiltersState,
   type VisibilityState,
+  type ColumnSizingState,
 } from "@tanstack/react-table";
 
 import {
@@ -54,6 +55,7 @@ export function DataTable<TData, TValue>({
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
+  const [columnSizing, setColumnSizing] = React.useState<ColumnSizingState>({});
 
   const table = useReactTable({
     data,
@@ -64,13 +66,17 @@ export function DataTable<TData, TValue>({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    onColumnSizingChange: setColumnSizing,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
+      columnSizing,
     },
     columnResizeMode: "onChange",
   });
+
+  const footerGroups = table.getFooterGroups();
 
   return (
     <div className="space-y-4">
@@ -199,6 +205,27 @@ export function DataTable<TData, TValue>({
               </TableRow>
             )}
           </TableBody>
+          {footerGroups.map((footerGroup) => (
+            <tfoot key={footerGroup.id}>
+              <TableRow>
+                {footerGroup.headers.map((header) => (
+                  <TableCell
+                    key={header.id}
+                    style={{
+                      width: header.getSize(),
+                    }}
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.footer,
+                          header.getContext(),
+                        )}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </tfoot>
+          ))}
         </Table>
       </div>
     </div>
