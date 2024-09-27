@@ -1,18 +1,26 @@
-'use server';
+"use server";
 
-import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { Resource } from 'sst';
-import { z } from 'zod';
-import { eq } from 'drizzle-orm';
-import axios from 'axios';
-import { type Route } from 'next';
-import { db } from '../db';
-import { actionClient, authActionAdminClient, authActionClient } from '../util/safe-action';
-import { SEARCH_PARAM_SURVERY_ID } from '../config';
-import { getServerAuthSession } from '../auth';
-import { surveys, users } from '~/server/db/schema';
-import { env } from '~/env';
+import {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+} from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { Resource } from "sst";
+import { z } from "zod";
+import { eq } from "drizzle-orm";
+import axios from "axios";
+import { type Route } from "next";
+import { db } from "../db";
+import {
+  actionClient,
+  authActionAdminClient,
+  authActionClient,
+} from "../util/safe-action";
+import { SEARCH_PARAM_SURVERY_ID } from "../config";
+import { getServerAuthSession } from "../auth";
+import { surveys, users } from "~/server/db/schema";
+import { env } from "~/env";
 
 const axiosInstance = axios.create({
   baseURL: env.STRIXY_BRAIN_URL,
@@ -28,7 +36,7 @@ const findOrCreateUser = async (email?: string) => {
 
   if (session?.user) return session.user;
 
-  if (!email) throw new Error('User cannot be found or created');
+  if (!email) throw new Error("User cannot be found or created");
 
   const user = await db.query.users.findFirst({
     where: eq(users.email, email),
@@ -48,7 +56,7 @@ export const prepareUpload = actionClient
   .schema(z.object({ fileName: z.string().min(1), userEmail: z.string() }))
   .action(async ({ parsedInput }) => {
     const user = await findOrCreateUser(parsedInput.userEmail);
-    if (!user) throw new Error('User not found');
+    if (!user) throw new Error("User not found");
 
     const s3Key = `${user.id}/${new Date().getTime()}/${parsedInput.fileName}`;
     const command = new PutObjectCommand({
@@ -79,11 +87,18 @@ export const listSurveys = authActionAdminClient.action(async () => {
 });
 
 export const createSurvey = actionClient
-  .schema(z.object({ name: z.string().min(1), s3Key: z.string().min(1), context: z.string().optional(), userEmail: z.string().optional() }))
+  .schema(
+    z.object({
+      name: z.string().min(1),
+      s3Key: z.string().min(1),
+      context: z.string().optional(),
+      userEmail: z.string().optional(),
+    }),
+  )
   .action(async ({ parsedInput }) => {
     const user = await findOrCreateUser(parsedInput.userEmail);
 
-    if (!user) throw new Error('User not found');
+    if (!user) throw new Error("User not found");
 
     const [newSurvey] = await db
       .insert(surveys)
@@ -92,11 +107,11 @@ export const createSurvey = actionClient
         createdById: user.id,
         s3Key: parsedInput.s3Key,
         context: parsedInput.context,
-        status: 'ENRICHING',
+        status: "ENRICHING",
       })
       .returning();
 
-    if (!newSurvey) throw new Error('Survey not found');
+    if (!newSurvey) throw new Error("Survey not found");
 
     const downloadUrl = await getSignedUrl(
       s3,
@@ -104,7 +119,7 @@ export const createSurvey = actionClient
         Key: parsedInput.s3Key,
         Bucket: Resource.BucketSurveyUploads.name,
       }),
-      { expiresIn: 7 * 24 * 60 * 60 }
+      { expiresIn: 7 * 24 * 60 * 60 },
     ); // 7 days in seconds
 
     const uploadUrl = await getSignedUrl(
@@ -113,13 +128,13 @@ export const createSurvey = actionClient
         Key: parsedInput.s3Key,
         Bucket: Resource.BucketSurveyEnriched.name,
       }),
-      { expiresIn: 7 * 24 * 60 * 60 }
+      { expiresIn: 7 * 24 * 60 * 60 },
     ); // 7 days in seconds
 
-    const webhookPath: Route = '/api/web-hooks/survey-enriched';
+    const webhookPath: Route = "/api/web-hooks/survey-enriched";
 
     // // Note: I could use trpc here but I'm not sure if it's worth it
-    const response = await axiosInstance.post('/juicer', {
+    const response = await axiosInstance.post("/juicer", {
       downloadUrl,
       uploadUrl,
       callbackUrl: `${env.APP_URL}${webhookPath}?${SEARCH_PARAM_SURVERY_ID}=${newSurvey.id}`,
@@ -127,7 +142,7 @@ export const createSurvey = actionClient
     });
 
     // eslint-disable-next-line no-console
-    console.log('response!', response.data);
+    console.log("response!", response.data);
 
     return newSurvey;
   });

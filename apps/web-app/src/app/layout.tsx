@@ -3,7 +3,6 @@ import "~/styles/globals.css";
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import { Suspense } from "react";
-import theme from "../ui/theme";
 import { TRPCReactProvider } from "~/trpc/react";
 import { ClientProviders } from "~/components/utils/client-providers";
 

@@ -1,10 +1,10 @@
-'use server';
+"use server";
 
-import { SESv2Client, SendEmailCommand } from '@aws-sdk/client-sesv2';
-import { render } from '@react-email/components';
-import { Resource } from 'sst';
-import { actionClient } from '../util/safe-action';
-import WelcomeEmail from './emails/welcome-email';
+import { SESv2Client, SendEmailCommand } from "@aws-sdk/client-sesv2";
+import { render } from "@react-email/components";
+import { Resource } from "sst";
+import { actionClient } from "../util/safe-action";
+import WelcomeEmail from "./emails/welcome-email";
 
 const client = new SESv2Client();
 
@@ -15,20 +15,20 @@ export const sendEmail = actionClient.action(async () => {
     new SendEmailCommand({
       FromEmailAddress: `simon@${Resource.EmailAlpaca.sender}`,
       Destination: {
-        ToAddresses: ['simonaverhoeven@gmail.com'],
+        ToAddresses: ["simonaverhoeven@gmail.com"],
       },
       Content: {
         Simple: {
-          Subject: { Data: 'We are processing your survey' },
+          Subject: { Data: "We are processing your survey" },
           Body: {
             Html: {
-              Charset: 'UTF-8',
+              Charset: "UTF-8",
               Data: emailHtml,
             },
           },
         },
       },
-    })
+    }),
   );
 
   // try {
@@ -58,5 +58,5 @@ export const sendEmail = actionClient.action(async () => {
   //   console.error('Error sending email!!!!', error);
   // }
   // eslint-disable-next-line no-console
-  console.log('email sent!!!');
+  console.log("email sent!!!");
 });

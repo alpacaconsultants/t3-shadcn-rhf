@@ -1,16 +1,16 @@
-import { DrizzleAdapter } from '@auth/drizzle-adapter';
-import { type NextAuthOptions, type User, getServerSession } from 'next-auth';
-import { type Adapter } from 'next-auth/adapters';
-import GoogleProvider from 'next-auth/providers/google';
-import { type JWT } from 'next-auth/jwt';
-import { type InferSelectModel } from 'drizzle-orm';
-import { env } from '~/env';
-import { db } from '~/server/db';
-import { accounts, users } from '~/server/db/schema';
+import { DrizzleAdapter } from "@auth/drizzle-adapter";
+import { type NextAuthOptions, type User, getServerSession } from "next-auth";
+import { type Adapter } from "next-auth/adapters";
+import GoogleProvider from "next-auth/providers/google";
+import { type JWT } from "next-auth/jwt";
+import { type InferSelectModel } from "drizzle-orm";
+import { env } from "~/env";
+import { db } from "~/server/db";
+import { accounts, users } from "~/server/db/schema";
 
 export type DbUser = InferSelectModel<typeof users>;
 
-type UserRole = 'admin';
+type UserRole = "admin";
 
 interface CustomUserData {
   id: string;
@@ -18,19 +18,19 @@ interface CustomUserData {
   isAdmin: boolean;
 }
 
-declare module 'next-auth/jwt' {
+declare module "next-auth/jwt" {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface JWT extends CustomUserData {}
 }
 
-declare module 'next-auth' {
+declare module "next-auth" {
   interface Session {
     user: User & CustomUserData;
   }
 }
 
 export const authOptions: NextAuthOptions = {
-  session: { strategy: 'jwt' },
+  session: { strategy: "jwt" },
   callbacks: {
     async jwt({ token, user, account }): Promise<JWT> {
       // Initial sign in
@@ -50,8 +50,10 @@ export const authOptions: NextAuthOptions = {
         });
 
         if (userWithRoles) {
-          token.roles = userWithRoles.userRoles.map((ur) => ur.roleId) as UserRole[];
-          token.isAdmin = token.roles.includes('admin');
+          token.roles = userWithRoles.userRoles.map(
+            (ur) => ur.roleId,
+          ) as UserRole[];
+          token.isAdmin = token.roles.includes("admin");
         }
         return token;
       }

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-redundant-type-constituents */
 import { createContext, useContext, useMemo } from "react";
 import {

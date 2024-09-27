@@ -40,6 +40,7 @@ export const SampleForm: FC = ({}) => {
   });
 
   const onSubmit = useCallback(async (values: FormValues) => {
+    // eslint-disable-next-line no-console
     console.log("submit", values);
   }, []);
 

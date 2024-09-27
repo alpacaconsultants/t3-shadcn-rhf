@@ -81,8 +81,6 @@ export default function SurveyUploadForm() {
     shouldUnregister: false,
   });
 
-  const values = formContext.watch();
-
   const uploadFile = useCallback(
     async (uploadUrl: string, file: File) => {
       dispatch({ type: "setUploadStatus", payload: { status: "uploading" } });

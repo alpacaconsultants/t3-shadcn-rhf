@@ -53,6 +53,7 @@ export const AddressForm: React.FC = () => {
   });
 
   const onSubmit = useCallback(async (values: AddressFormValues) => {
+    // eslint-disable-next-line no-console
     console.log("submit", values);
     // Handle form submission here
   }, []);

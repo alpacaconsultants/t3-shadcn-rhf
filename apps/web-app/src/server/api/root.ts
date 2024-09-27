@@ -1,5 +1,5 @@
-import { surveyRouter } from './routers/survey';
-import { createCallerFactory, createTRPCRouter } from '~/server/api/trpc';
+import { surveyRouter } from "./routers/survey";
+import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 
 /**
  * This is the primary router for your server.

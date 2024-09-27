@@ -1,9 +1,10 @@
 /* eslint-disable no-console */
-import { createSafeActionClient } from 'next-safe-action';
-import { z } from 'zod';
-import { getServerAuthSession } from '../auth';
+import { createSafeActionClient } from "next-safe-action";
+import { z } from "zod";
+import { getServerAuthSession } from "../auth";
 
-const DEFAULT_SERVER_ERROR_MESSAGE = 'An error occurred while executing the action.';
+const DEFAULT_SERVER_ERROR_MESSAGE =
+  "An error occurred while executing the action.";
 
 // Base client.
 export const actionClient = createSafeActionClient({
@@ -23,14 +24,14 @@ export const actionClient = createSafeActionClient({
   },
   // Define logging middleware.
 }).use(async ({ next, clientInput, metadata }) => {
-  console.log('LOGGING MIDDLEWARE');
+  console.log("LOGGING MIDDLEWARE");
 
   // Here we await the action execution.
   const result = await next({ ctx: null });
 
-  console.log('Result ->', result);
-  console.log('Client input ->', clientInput);
-  console.log('Metadata ->', metadata);
+  console.log("Result ->", result);
+  console.log("Client input ->", clientInput);
+  console.log("Metadata ->", metadata);
 
   // And then return the result of the awaited action.
   return result;
@@ -45,13 +46,13 @@ export const authActionClient = actionClient
     const session = await getServerAuthSession();
 
     if (!session) {
-      throw new Error('Session not found!');
+      throw new Error("Session not found!");
     }
 
     const userId = session.user.id;
 
     if (!userId) {
-      throw new Error('Session is not valid!');
+      throw new Error("Session is not valid!");
     }
 
     // Return the next middleware with `userId` value in the context
@@ -65,7 +66,7 @@ export const authActionAdminClient = authActionClient
   // Define authorization middleware.
   .use(async ({ next, ctx }) => {
     if (!ctx.user.isAdmin) {
-      throw new Error('Not authorized');
+      throw new Error("Not authorized");
     }
 
     // Return the next middleware with `userId` value in the context
