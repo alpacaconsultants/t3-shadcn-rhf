@@ -1,32 +1,5 @@
-import React, { type FC } from 'react';
-import { useDropzone } from 'react-dropzone';
-import { makeStyles } from 'tss-react/mui';
-import { Typography } from '@mui/material';
-
-const useStyles = makeStyles()((theme) => ({
-  dropzone: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: '20px',
-    borderWidth: 2,
-    borderRadius: 2,
-    borderColor: '#eeeeee',
-    borderStyle: 'dashed',
-    backgroundColor: '#fafafa',
-    color: '#bdbdbd',
-    outline: 'none',
-    transition: 'border .24s ease-in-out',
-    '&:hover': {
-      borderColor: theme.palette.primary.main,
-    },
-  },
-  error: {
-    borderColor: theme.palette.error.main,
-    color: theme.palette.error.main,
-  },
-}));
+import React, { type FC } from "react";
+import { useDropzone } from "react-dropzone";
 
 interface UploaderProps {
   onDrop: (acceptedFiles: File[]) => void;
@@ -35,13 +8,14 @@ interface UploaderProps {
 }
 
 export const FileUploader: FC<UploaderProps> = ({ onDrop, file, error }) => {
-  const { classes, cx } = useStyles();
-
   const { getRootProps, getInputProps } = useDropzone({ maxFiles: 1, onDrop });
 
   return (
     <section>
-      <div {...getRootProps({ className: cx(classes.dropzone, { [classes.error]: !!error }) })}>
+      <div
+        {...getRootProps()}
+        className={`flex flex-col items-center rounded-lg border-2 border-dashed bg-gray-50 p-5 text-gray-400 outline-none transition-colors duration-300 ease-in-out ${error ? "border-red-500 text-red-500" : "border-gray-300 hover:border-blue-500"} `}
+      >
         <input {...getInputProps()} />
         {file ? (
           <p>
@@ -51,7 +25,7 @@ export const FileUploader: FC<UploaderProps> = ({ onDrop, file, error }) => {
           <p>Drag n drop a file here, or click to select a file</p>
         )}
       </div>
-      {error && <Typography color='error'>{error}</Typography>}
+      {error && <p className="text-sm text-red-500">{error}</p>}
     </section>
   );
 };
