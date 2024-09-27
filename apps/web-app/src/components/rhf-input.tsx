@@ -28,7 +28,7 @@ export const RhfInput: React.FC<RhfInputProps> = (props) => {
       render={({ field }) => (
         <div
           className={cn(
-            "grid max-w-sm items-center gap-1.5",
+            "grid items-center gap-1.5",
             fullWidth ? "w-full" : "w-auto",
           )}
         >

@@ -1,4 +1,3 @@
-import { CircularProgress } from "@mui/material";
 import { type FC, type PropsWithChildren } from "react";
 import { useFormState } from "react-hook-form";
 import { ProgressButton } from "./progress-button";

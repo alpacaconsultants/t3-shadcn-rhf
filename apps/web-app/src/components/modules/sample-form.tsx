@@ -5,11 +5,11 @@ import { type FC, useCallback } from "react";
 import { useForm, type Resolver } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { nameofFactory, type ShapeOf } from "../utils/type-helpers";
-import { FormContainer } from "../ui/molecules/forms/form-container";
-import { RhfInput } from "../rhf-input";
-import FormSubmitButton from "../ui/form-submit-button";
-import { RhfTextarea } from "../rhf-text-area.tsx";
+import { nameofFactory, type ShapeOf } from "~/components/utils/type-helpers";
+import { FormContainer } from "~/components/ui/molecules/forms/form-container";
+import { RhfTextarea } from "~/components/rhf-text-area.tsx";
+import { RhfInput } from "~/components/rhf-input";
+import FormSubmitButton from "~/components/ui/form-submit-button";
 
 interface FormValues {
   email: string;
