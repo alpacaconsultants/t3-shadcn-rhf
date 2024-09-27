@@ -17,6 +17,7 @@ declare module "sst" {
     }
     "WebApp": {
       "type": "sst.aws.Nextjs"
+      "url": string
     }
   }
 }
