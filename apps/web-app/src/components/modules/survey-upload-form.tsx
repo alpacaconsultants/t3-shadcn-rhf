@@ -157,7 +157,7 @@ export default function SurveyUploadForm() {
           placeholder="Enter survey context"
           rows={4}
         />
-        <RhfFileUpload name={nameof("surveyFile")} />
+        <RhfFileUpload name={nameof("surveyFile")} label="Upload Survey" />
         {state.uploadStatus === "uploading" && (
           <Progress value={state.uploadPercentage} className="w-full" />
         )}
