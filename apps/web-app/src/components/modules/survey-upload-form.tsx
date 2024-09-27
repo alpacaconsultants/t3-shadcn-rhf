@@ -4,7 +4,10 @@ import * as React from "react";
 import { useForm, type Resolver } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useState } from "react";
+import { useImmerReducer } from "use-immer";
+import { useState, useCallback } from "react";
+import axios from "axios";
+import { RhfFileUpload } from "../ui/molecules/fields/rhf-mui-fields/RhfFileUpload";
 import { nameofFactory, type ShapeOf } from "~/components/utils/type-helpers";
 import { FormContainer } from "~/components/ui/molecules/forms/form-container";
 import { RhfInput } from "~/components/rhf-input";
@@ -12,12 +15,14 @@ import { RhfTextarea } from "~/components/rhf-text-area";
 import { RhfFileInput } from "~/components/rhf-file-input";
 import FormSubmitButton from "~/components/ui/form-submit-button";
 import { Progress } from "~/components/ui/progress";
+import { prepareUpload, createSurvey } from "~/server/data-layer/surveys";
+import { env } from "~/env";
 
 interface FormValues {
   email: string;
   surveyName: string;
   surveyContext: string;
-  surveyFile: FileList;
+  surveyFile: File | null;
 }
 
 const nameof = nameofFactory<FormValues>();
@@ -29,14 +34,45 @@ const surveyUploadSchema = Yup.object().shape({
   surveyFile: Yup.mixed().required().label("Survey File"),
 } as ShapeOf<FormValues>);
 
+interface State {
+  uploadPercentage: number;
+  uploadStatus: "idle" | "uploading" | "uploaded";
+}
+
+type Action =
+  | { type: "reset" }
+  | { type: "setUploadPercentage"; payload: { percentage: number } }
+  | { type: "setUploadStatus"; payload: { status: State["uploadStatus"] } };
+
+const initialState: State = {
+  uploadPercentage: 0,
+  uploadStatus: "idle",
+};
+
+function reducer(state: State, action: Action): State {
+  switch (action.type) {
+    case "reset":
+      return initialState;
+    case "setUploadPercentage":
+      state.uploadPercentage = action.payload.percentage;
+      break;
+    case "setUploadStatus":
+      state.uploadStatus = action.payload.status;
+      break;
+    default:
+      throw new Error("Unexpected action type");
+  }
+  return state;
+}
+
 export default function SurveyUploadForm() {
-  const [uploadProgress, setUploadProgress] = useState(0);
+  const [state, dispatch] = useImmerReducer(reducer, initialState);
 
   const defaultValues: FormValues = {
     email: "",
     surveyName: "",
     surveyContext: "",
-    surveyFile: undefined as unknown as FileList,
+    surveyFile: null,
   };
 
   const formContext = useForm({
@@ -46,16 +82,61 @@ export default function SurveyUploadForm() {
     shouldUnregister: false,
   });
 
-  const onSubmit = React.useCallback(async (values: FormValues) => {
-    console.log("submit", values);
-    // Simulate file upload
-    for (let i = 0; i <= 100; i++) {
-      await new Promise((resolve) => setTimeout(resolve, 50));
-      setUploadProgress(i);
-    }
-    // Reset progress after upload
-    setTimeout(() => setUploadProgress(0), 1000);
-  }, []);
+  const values = formContext.watch();
+
+  const uploadFile = useCallback(
+    async (uploadUrl: string, file: File) => {
+      dispatch({ type: "setUploadStatus", payload: { status: "uploading" } });
+      await axios.put(uploadUrl, file, {
+        onUploadProgress: (progressEvent) => {
+          if (!progressEvent.total) return;
+          const percentage = Math.floor(
+            Math.round((progressEvent.loaded * 100) / progressEvent.total),
+          );
+          dispatch({ type: "setUploadPercentage", payload: { percentage } });
+        },
+        method: "PUT",
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      dispatch({ type: "setUploadStatus", payload: { status: "uploaded" } });
+    },
+    [dispatch],
+  );
+
+  const onSubmit = useCallback(
+    async (values: FormValues) => {
+      const file = values.surveyFile;
+
+      if (!file) return;
+
+      // Prepare the upload URL and other metadata
+      const uploadInfo = await prepareUpload({
+        fileName: file.name,
+        userEmail: values.email,
+      });
+      if (!uploadInfo?.data) throw new Error("Upload failed");
+      const { s3Key, uploadUrl } = uploadInfo.data;
+
+      // Upload the file
+      await uploadFile(uploadUrl, file);
+
+      // Create the survey entry
+      await createSurvey({
+        name: values.surveyName,
+        s3Key,
+        context: values.surveyContext,
+        userEmail: values.email,
+      });
+
+      if (env.NEXT_PUBLIC_NODE_ENV === "development") {
+        // Allow form submission again for development purposes
+        dispatch({ type: "reset" });
+      }
+    },
+    [dispatch, uploadFile],
+  );
 
   return (
     <FormContainer formContext={formContext} onSuccess={onSubmit}>
@@ -76,9 +157,9 @@ export default function SurveyUploadForm() {
           placeholder="Enter survey context"
           rows={4}
         />
-        <RhfFileInput name={nameof("surveyFile")} label="Upload Survey" />
-        {uploadProgress > 0 && (
-          <Progress value={uploadProgress} className="w-full" />
+        <RhfFileUpload name={nameof("surveyFile")} />
+        {state.uploadStatus === "uploading" && (
+          <Progress value={state.uploadPercentage} className="w-full" />
         )}
         <FormSubmitButton>Upload Survey</FormSubmitButton>
       </div>
