@@ -1,5 +1,5 @@
 import { type FC } from "react";
-import SurveyUploadForm from "./survey-upload-form";
+import { SurveyUploadForm } from "./survey-upload-form";
 import { getMySurveys } from "~/server/data-layer/surveys";
 
 export const Surveys: FC = async () => {

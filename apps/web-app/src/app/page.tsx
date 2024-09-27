@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getServerAuthSession } from "~/server/auth";
 import { HydrateClient } from "~/trpc/server";
-import SurveyUploadForm from "~/components/modules/survey-upload-form";
+import { SurveyUploadForm } from "~/components/modules/survey-upload-form";
 
 export default async function Home() {
   const session = await getServerAuthSession();
@@ -18,7 +18,7 @@ export default async function Home() {
         {/* <NameAddressForm /> */}
         {/* <AddressForm /> */}
         {/* <AddressContactForm /> */}
-        <SurveyUploadForm />
+        <SurveyUploadForm defaultEmail={session?.user.email ?? undefined} />
         {/* <SendEmail /> */}
       </div>
     </HydrateClient>

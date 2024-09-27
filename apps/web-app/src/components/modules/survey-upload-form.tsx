@@ -5,8 +5,9 @@ import { useForm, type Resolver } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useImmerReducer } from "use-immer";
-import { useCallback } from "react";
+import { type FC, useCallback } from "react";
 import axios from "axios";
+import { de } from "date-fns/locale";
 import { RhfFileUpload } from "../rhf-file-input";
 import { nameofFactory, type ShapeOf } from "~/components/utils/type-helpers";
 import { FormContainer } from "~/components/form/form-container";
@@ -64,11 +65,17 @@ function reducer(state: State, action: Action): State {
   return state;
 }
 
-export default function SurveyUploadForm() {
+interface SurveyUploadFormProps {
+  defaultEmail?: string;
+}
+
+export const SurveyUploadForm: FC<SurveyUploadFormProps> = ({
+  defaultEmail,
+}) => {
   const [state, dispatch] = useImmerReducer(reducer, initialState);
 
   const defaultValues: FormValues = {
-    email: "",
+    email: defaultEmail ?? "",
     surveyName: "",
     surveyContext: "",
     surveyFile: null,
@@ -141,6 +148,7 @@ export default function SurveyUploadForm() {
         <RhfInput
           name={nameof("email")}
           label="Email"
+          disabled={!!defaultEmail}
           placeholder="Enter your email"
         />
         <RhfInput
@@ -162,4 +170,4 @@ export default function SurveyUploadForm() {
       </div>
     </FormContainer>
   );
-}
+};
