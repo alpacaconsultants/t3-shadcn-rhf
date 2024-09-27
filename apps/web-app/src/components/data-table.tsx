@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useState } from "react";
 import {
   type ColumnDef,
   flexRender,
@@ -12,6 +12,7 @@ import {
   type ColumnFiltersState,
   type VisibilityState,
   type ColumnSizingState,
+  filterFns as tanstackFilterFns,
 } from "@tanstack/react-table";
 
 import {
@@ -49,13 +50,11 @@ export function DataTable<TData, TValue>({
   data,
   onRowClick,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [columnSizing, setColumnSizing] = React.useState<ColumnSizingState>({});
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [columnSizing, setColumnSizing] = useState<ColumnSizingState>({});
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
   const table = useReactTable({
     data,
@@ -74,6 +73,10 @@ export function DataTable<TData, TValue>({
       columnSizing,
     },
     columnResizeMode: "onChange",
+    // Set the default filter function for all columns
+    defaultColumn: {
+      filterFn: tanstackFilterFns.includesString,
+    },
   });
 
   const footerGroups = table.getFooterGroups();
@@ -112,13 +115,18 @@ export function DataTable<TData, TValue>({
                           <ArrowUpDown className="ml-2 h-4 w-4 opacity-0 group-hover:opacity-100" />
                         )}
                       </div>
-                      <DropdownMenu>
+                      <DropdownMenu
+                        open={openMenuId === header.id}
+                        onOpenChange={(isOpen) => {
+                          setOpenMenuId(isOpen ? header.id : null);
+                        }}
+                      >
                         <DropdownMenuTrigger asChild>
                           <Button variant="ghost" size="sm">
                             <MoreHorizontal className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
+                        <DropdownMenuContent align="end" className="w-[200px]">
                           <DropdownMenuItem
                             onClick={() => header.column.toggleSorting(false)}
                           >
@@ -135,7 +143,9 @@ export function DataTable<TData, TValue>({
                           >
                             Clear filter
                           </DropdownMenuItem>
-                          <DropdownMenuItem>
+                          <DropdownMenuItem
+                            onSelect={(e) => e.preventDefault()}
+                          >
                             <Input
                               placeholder={`Filter ${header.column.id}...`}
                               value={
@@ -174,7 +184,9 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  onClick={() => onRowClick && onRowClick(row.original)}
+                  onClick={() =>
+                    onRowClick && onRowClick(row.original as TData)
+                  }
                   className={
                     onRowClick ? "cursor-pointer hover:bg-muted/50" : ""
                   }
