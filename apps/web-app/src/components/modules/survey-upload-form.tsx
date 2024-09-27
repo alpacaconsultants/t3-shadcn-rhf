@@ -9,7 +9,7 @@ import { useCallback } from "react";
 import axios from "axios";
 import { RhfFileUpload } from "../rhf-file-input";
 import { nameofFactory, type ShapeOf } from "~/components/utils/type-helpers";
-import { FormContainer } from "~/components/forms/form-container";
+import { FormContainer } from "~/components/form/form-container";
 import { RhfInput } from "~/components/rhf-input";
 import { RhfTextarea } from "~/components/rhf-text-area";
 import FormSubmitButton from "~/components/ui/form-submit-button";

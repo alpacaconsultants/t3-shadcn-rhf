@@ -4,10 +4,10 @@ import * as React from "react";
 import { type Resolver, useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { RhfInput } from "../rhf-input";
-import FormSubmitButton from "../ui/form-submit-button";
-import { nameofFactory, type ShapeOf } from "../utils/type-helpers";
-import { FormContainer } from "../forms/form-container";
+import { FormContainer } from "~/components/form/form-container";
+import { RhfInput } from "~/components/rhf-input";
+import FormSubmitButton from "~/components/ui/form-submit-button";
+import { nameofFactory, type ShapeOf } from "~/components/utils/type-helpers";
 
 interface FormValues {
   firstName: string;

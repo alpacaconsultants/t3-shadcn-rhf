@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useFormContext, Controller } from "react-hook-form";
-import { useDefaultProps } from "./forms/useDefaultProps";
+import { useDefaultProps } from "./form/useDefaultProps";
 import { Textarea } from "~/components/ui/textarea";
 import { Label } from "~/components/ui/label";
 import { cn } from "~/lib/utils";

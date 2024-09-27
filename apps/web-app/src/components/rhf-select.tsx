@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useFormContext } from "react-hook-form";
-import { useDefaultProps } from "./forms/useDefaultProps";
+import { useDefaultProps } from "./form/useDefaultProps";
 import {
   Select,
   SelectContent,
