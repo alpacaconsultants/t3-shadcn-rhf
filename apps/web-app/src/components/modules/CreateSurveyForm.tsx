@@ -23,7 +23,7 @@ import {
 } from "../ui/molecules/fields/rhf-mui-fields";
 import { RhfFileUpload } from "../ui/molecules/fields/rhf-mui-fields/RhfFileUpload";
 import { nameofFactory, type ShapeOf } from "../utils/type-helpers";
-import { FormContainer } from "../ui/molecules/forms/FormContainer";
+import { FormContainer } from "../ui/molecules/forms/form-container";
 import { createSurvey, prepareUpload } from "~/server/data-layer/surveys";
 import { env } from "~/env";
 

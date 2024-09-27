@@ -1,9 +1,8 @@
 import Link from "next/link";
 import { getServerAuthSession } from "~/server/auth";
 import { HydrateClient } from "~/trpc/server";
-import { CreateSurveyForm } from "~/components/modules/CreateSurveyForm";
 import { SendEmail } from "~/components/modules/SendEmail";
-import { SampleForm } from "~/components/modules/SampleForm";
+import { SampleForm } from "~/components/modules/sample-form";
 
 export default async function Home() {
   const session = await getServerAuthSession();

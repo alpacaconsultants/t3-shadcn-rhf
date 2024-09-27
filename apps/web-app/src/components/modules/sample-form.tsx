@@ -6,7 +6,7 @@ import { useForm, type Resolver } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { nameofFactory, type ShapeOf } from "../utils/type-helpers";
-import { FormContainer } from "../ui/molecules/forms/FormContainer";
+import { FormContainer } from "../ui/molecules/forms/form-container";
 import { RhfInput } from "../rhf-input";
 import FormSubmitButton from "../ui/form-submit-button";
 import { RhfTextarea } from "../rhf-text-area.tsx";
