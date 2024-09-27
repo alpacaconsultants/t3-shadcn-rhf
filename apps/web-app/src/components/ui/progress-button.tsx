@@ -51,8 +51,8 @@ export const ProgressButton: FC<ProgressButtonProps> = ({
             }
           : undefined
       }
-      {...rest}
       className="flex items-center justify-center gap-2"
+      {...rest}
     >
       {children}
       {isSubmitting && (

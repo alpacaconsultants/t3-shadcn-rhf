@@ -8,7 +8,7 @@ export default async function Home() {
 
   return (
     <HydrateClient>
-      <div className="flex min-h-screen flex-col items-center justify-center">
+      <div className="flex min-h-screen w-full flex-col items-center justify-center">
         <Link href={session ? "/api/auth/signout" : "/api/auth/signin"}>
           {session ? "Sign out" : "Sign in"}
         </Link>
@@ -18,7 +18,10 @@ export default async function Home() {
         {/* <NameAddressForm /> */}
         {/* <AddressForm /> */}
         {/* <AddressContactForm /> */}
+
         <SurveyUploadForm defaultEmail={session?.user.email ?? undefined} />
+
+        {/* <SurveyUploadForm defaultEmail={session?.user.email ?? undefined} /> */}
         {/* <SendEmail /> */}
       </div>
     </HydrateClient>

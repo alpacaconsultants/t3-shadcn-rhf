@@ -142,31 +142,33 @@ export const SurveyUploadForm: FC<SurveyUploadFormProps> = ({
   );
 
   return (
-    <FormContainer formContext={formContext} onSuccess={onSubmit}>
-      <div className="space-y-4">
-        <RhfInput
-          name={nameof("email")}
-          label="Email"
-          disabled={!!defaultEmail}
-          placeholder="Enter your email"
-        />
-        <RhfInput
-          name={nameof("surveyName")}
-          label="Survey Name"
-          placeholder="Enter survey name"
-        />
-        <RhfTextarea
-          name={nameof("surveyContext")}
-          label="Survey Context"
-          placeholder="Enter survey context"
-          rows={4}
-        />
-        <RhfFileUpload name={nameof("surveyFile")} label="Upload Survey" />
-        {state.uploadStatus === "uploading" && (
-          <Progress value={state.uploadPercentage} className="w-full" />
-        )}
-        <FormSubmitButton>Upload Survey</FormSubmitButton>
-      </div>
-    </FormContainer>
+    <div className="w-full max-w-screen-sm">
+      <FormContainer formContext={formContext} onSuccess={onSubmit}>
+        <div className="space-y-4">
+          <RhfInput
+            name={nameof("email")}
+            label="Email"
+            disabled={!!defaultEmail}
+            placeholder="Enter your email"
+          />
+          <RhfInput
+            name={nameof("surveyName")}
+            label="Survey Name"
+            placeholder="Enter survey name"
+          />
+          <RhfTextarea
+            name={nameof("surveyContext")}
+            label="Survey Context"
+            placeholder="Enter survey context"
+            rows={4}
+          />
+          <RhfFileUpload name={nameof("surveyFile")} label="Upload Survey" />
+          {state.uploadStatus === "uploading" && (
+            <Progress value={state.uploadPercentage} className="w-full" />
+          )}
+          <FormSubmitButton className="w-full">Submit Survey</FormSubmitButton>
+        </div>
+      </FormContainer>
+    </div>
   );
 };

@@ -34,8 +34,8 @@ export const RhfInput: React.FC<RhfInputProps> = (props) => {
       render={({ field }) => (
         <div
           className={cn(
-            "grid items-center gap-1.5",
-            fullWidth ? "w-full" : "w-auto",
+            "grid w-full items-center gap-1.5",
+            !fullWidth ? "max-w-sm" : "",
           )}
         >
           {label && <Label htmlFor={name}>{label}</Label>}

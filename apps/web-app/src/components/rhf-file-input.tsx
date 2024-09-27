@@ -13,7 +13,7 @@ interface RhfFileUploadProps {
 export const RhfFileUpload: FC<RhfFileUploadProps> = ({
   name,
   label,
-  fullWidth,
+  fullWidth = true,
 }) => {
   const { control } = useFormContext();
   const {
@@ -27,8 +27,8 @@ export const RhfFileUpload: FC<RhfFileUploadProps> = ({
   return (
     <div
       className={cn(
-        "grid items-center gap-1.5",
-        fullWidth ? "w-full" : "w-auto",
+        "grid w-full items-center gap-1.5",
+        !fullWidth ? "max-w-sm" : "",
       )}
     >
       <Label htmlFor={name}>{label}</Label>

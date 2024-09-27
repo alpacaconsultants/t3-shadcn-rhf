@@ -35,8 +35,8 @@ export const RhfTextarea: React.FC<RhfTextareaProps> = (props) => {
       render={({ field }) => (
         <div
           className={cn(
-            "grid max-w-sm items-center gap-1.5",
-            fullWidth ? "w-full" : "w-auto",
+            "grid w-full items-center gap-1.5",
+            !fullWidth ? "max-w-sm" : "",
           )}
         >
           {label && <Label htmlFor={name}>{label}</Label>}
