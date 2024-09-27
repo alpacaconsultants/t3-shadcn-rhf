@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   type ColumnDef,
   flexRender,
@@ -80,6 +80,11 @@ export function DataTable<TData, TValue>({
   });
 
   const footerGroups = table.getFooterGroups();
+
+  const hasFooter = useMemo(
+    () => columns.some((column) => "footer" in column),
+    [columns],
+  );
 
   return (
     <div className="space-y-4">
@@ -217,27 +222,29 @@ export function DataTable<TData, TValue>({
               </TableRow>
             )}
           </TableBody>
-          {footerGroups.map((footerGroup) => (
-            <tfoot key={footerGroup.id}>
-              <TableRow>
-                {footerGroup.headers.map((header) => (
-                  <TableCell
-                    key={header.id}
-                    style={{
-                      width: header.getSize(),
-                    }}
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.footer,
-                          header.getContext(),
-                        )}
-                  </TableCell>
-                ))}
-              </TableRow>
+          {hasFooter && (
+            <tfoot className="bg-muted/50 font-semibold">
+              {footerGroups.map((footerGroup) => (
+                <TableRow key={footerGroup.id}>
+                  {footerGroup.headers.map((header) => (
+                    <TableCell
+                      key={header.id}
+                      style={{
+                        width: header.getSize(),
+                      }}
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.footer,
+                            header.getContext(),
+                          )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
             </tfoot>
-          ))}
+          )}
         </Table>
       </div>
     </div>
