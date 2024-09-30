@@ -6,7 +6,7 @@ export default async function Header() {
   const session = await getServerAuthSession();
 
   return (
-    <header className="sticky top-0 z-50 flex items-center justify-between border-b bg-[#D8CCB6] bg-background px-4 py-3 shadow-md">
+    <header className="sticky top-0 z-50 flex items-center justify-between border-b bg-[#D8CCB6] px-4 py-3 shadow-md">
       <Link href="/" className="text-lg font-bold" prefetch={false}>
         STRIXY
       </Link>
