@@ -70,6 +70,10 @@ export const authOptions: NextAuthOptions = {
         isAdmin: token.isAdmin,
       },
     }),
+    async redirect({ url, baseUrl }) {
+      // If no specific redirect URL is provided, go to the base URL (home page)
+      return url.startsWith(baseUrl) ? url : baseUrl;
+    },
   },
   adapter: DrizzleAdapter(db, {
     usersTable: users,

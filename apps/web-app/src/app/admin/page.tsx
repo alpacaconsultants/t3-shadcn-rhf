@@ -1,3 +1,4 @@
+import Header from "~/components/header";
 import { SurveysTable } from "~/components/modules/surveys-table";
 
 export default async function Home() {
