@@ -11,6 +11,7 @@ Add .env and .env.dev to `apps/web-app/`
 - `yarn install`
 - `yarn build` build packages
 - `yarn dev` run locally for development (need docker desktop running)
+- Web-app on http://localhost:3000/
 
 ## Dev tools
 
