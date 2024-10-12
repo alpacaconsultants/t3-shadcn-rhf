@@ -12,10 +12,14 @@ Add .env and .env.dev to `apps/web-app/`
 - `yarn build` build packages
 - `yarn dev` run locally for development (need docker desktop running)
 
+## Dev tools
+
+- Drizzle: Local db : https://local.drizzle.studio/
+- shadcn + v0 : https://v0.dev/ (run commands from `apps/web-app/`)
+
 ## Database
 
 - `db:push` Push local schema
-- Local db on https://local.drizzle.studio/
 
 ## Deployment
 
