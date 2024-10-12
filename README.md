@@ -6,10 +6,20 @@ React Email runing on http://localhost:3001
 
 ## Getting started
 
+Add .env and .env.dev to `apps/web-app/`
+
 - `yarn install`
 - `yarn build` build packages
-- `yarn dev` run locally for development
-- `yarn deploy` deploy with SST
+- `yarn dev` run locally for development (need docker desktop running)
+
+## Database
+
+- `db:push` Push local schema
+- Local db on https://local.drizzle.studio/
+
+## Deployment
+
+- `yarn deploy:dev` deploy with SST
 
 ## Using this example
 
