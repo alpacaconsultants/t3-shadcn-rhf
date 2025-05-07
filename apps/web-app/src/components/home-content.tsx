@@ -41,7 +41,7 @@ export async function HomeContent() {
         </div>
       </header>
       <section className="text-center">
-        <h2 className="text-2xl font-semibold">Experiment it now for free!</h2>
+        <h2 className="text-2xl font-semibold">Experiment now for free!</h2>
         <p className="mt-2 text-lg">
           Upload a CSV file in any format with the survey remarks you want
           analyzed and provide a brief context. We’ll generate an AI-powered
